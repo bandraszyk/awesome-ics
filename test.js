@@ -38,17 +38,18 @@ Awesome.Calendar = function(options) {
 
 Awesome.Element = function(type, options) {
     var options     = options || Awesome.Defaults;
-    var self = this;
-    self.element = { "type" : type, properties: [], children: [] }
+    var self        = this;
+    self.type       = type;
+    self.properties = [];
+    self.children   = [];
 
     self.toString = function() {
         return JSON.stringify(self, null, 4);
     };
 
     self.format = function() {
-        return self.element.type;
+        return self.type;
     };
-
 
     self.load = function(content) {
         if (!content) { return; }
@@ -72,14 +73,14 @@ Awesome.Element = function(type, options) {
                 var type = options.regex.removePattern(line, options.regex.sectionBegin);
 
                 //-- First element in collection should not be processed
-                if (type === self.element.type && index === 0) { return; }
+                if (type === self.type && index === 0) { return; }
 
                 //-- Create direct child
-                if (type !== self.element.type && !child.object) { child.object = new Awesome.Element(type, options); }
+                if (type !== self.type && !child.element) { child.element = new Awesome.Element(type, options); }
             }
 
             //-- Add current line to child content
-            if (child.object) { child.content.push(line); }
+            if (child.element) { child.content.push(line); }
 
             //-- END element identified
             if (options.regex.sectionEnd.test(line)) {
@@ -87,20 +88,20 @@ Awesome.Element = function(type, options) {
                 var type = options.regex.removePattern(line, options.regex.sectionEnd);
 
                 // Last element in collection should not be processed
-                if (type === self.element.type && index === lines.length - 1) { return; }
+                if (type === self.type && index === lines.length - 1) { return; }
 
                 //-- Process direct child
-                if (type !== self.element.type && child.object && child.object.element.type === type) {
-                    self.element.children.push(child.getElement());
+                if (type !== self.type && child.element && child.element.type === type) {
+                    self.children.push(child.finalizeElement());
                     child = new Awesome.ElementTemporaryChild(options);
                     return;
                 }
             }
 
-            if (child.object) { return; }
+            if (child.element) { return; }
 
             //-- Extract properties
-            self.element.properties.push(new Awesome.Property(options).load(line));
+            self.properties.push(new Awesome.Property(options).load(line));
         });
 
         return self;
@@ -110,13 +111,13 @@ Awesome.Element = function(type, options) {
 Awesome.ElementTemporaryChild = function(options) {
     var options     = options || Awesome.Defaults;
     var self        = this;
-    self.object     = null;
+    self.element    = null;
     self.content    = [];
 
-    self.getElement = function() {
-        if (!self.object) { return null; }
+    self.finalizeElement = function() {
+        if (!self.element) { return null; }
 
-        return self.object.load(self.content.join(options.format.newLine));
+        return self.element.load(self.content.join(options.format.newLine));
     };
 };
 
