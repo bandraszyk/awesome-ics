@@ -92,7 +92,7 @@ Awesome.Element = function(type, options) {
 
                 //-- Process direct child
                 if (type !== self.type && child.element && child.element.type === type) {
-                    self.children.push(child.finalizeElement());
+                    self.children.push(child.finalize());
                     child = new Awesome.ElementTemporaryChild(options);
                     return;
                 }
@@ -114,7 +114,7 @@ Awesome.ElementTemporaryChild = function(options) {
     self.element    = null;
     self.content    = [];
 
-    self.finalizeElement = function() {
+    self.finalize = function() {
         if (!self.element) { return null; }
 
         return self.element.load(self.content.join(options.format.newLine));
