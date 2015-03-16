@@ -1,6 +1,6 @@
 var Awesome = {};
 
-Awesome.Util = {
+Awesome.Defaults = {
     format      :  {
         newLine     : "\n",
         separator   : ":"
@@ -9,7 +9,7 @@ Awesome.Util = {
         sectionBegin        : /^BEGIN:/i,
         sectionEnd          : /^END:/i,
         removeWhitespaces   : function(text) {
-            return Awesome.Util.regex.removePattern(text, /\s/g);
+            return Awesome.Defaults.regex.removePattern(text, /\s/g);
         },
         removePattern       : function(text, regexp) {
             return text.replace(regexp, "");
@@ -17,54 +17,74 @@ Awesome.Util = {
     }
 };
 
-Awesome.Element = function(elementType, content) {
+Awesome.Calendar = function(options) {
+    var options = options || Awesome.Defaults;
+    var self    = this;
+    self.root    = new Awesome.Element("VCALENDAR");
+
+    self.toString = function() {
+        return self.root.toString();
+    };
+
+    self.format = function() {
+        return self.root.format();
+    };
+
+    self.load = function(content) {
+        self.root.load(content);
+        return self;
+    }
+};
+
+Awesome.Element = function(type, options) {
+    var options     = options || Awesome.Defaults;
     var self = this;
-    self.element = { "type" : elementType, properties: [], children: [] }
+    self.element = { "type" : type, properties: [], children: [] }
 
     self.toString = function() {
         return JSON.stringify(self, null, 4);
     };
 
+    self.format = function() {
+        return self.element.type;
+    };
+
+
     self.load = function(content) {
+        if (!content) { return; }
+
         //-- Split content to lines and filter out empty ones
         var lines = content
-            .split(Awesome.Util.format.newLine)
+            .split(options.format.newLine)
             .filter(function(line) { return !!line; });
 
         //-- Initialize temporary variables
-        var createEmptyChild = function() {
-            return {
-                object     : null,
-                content     : [],
-                getElement  : function() { return this.object && this.object.load(this.content.join(Awesome.Util.format.newLine)); }
-            }
-        };
-        var child = createEmptyChild();
+        var child = new Awesome.ElementTemporaryChild(options);
 
         //-- Iterate the lines to read properties
         lines.forEach(function(line, index) {
             //-- Normalize the line
-            var line = Awesome.Util.regex.removeWhitespaces(line);
+            var line = options.regex.removeWhitespaces(line);
 
             //-- BEGIN element identified
-            if (Awesome.Util.regex.sectionBegin.test(line)) {
+            if (options.regex.sectionBegin.test(line)) {
                 //-- Extract type
-                var type = Awesome.Util.regex.removePattern(line, Awesome.Util.regex.sectionBegin);
+                var type = options.regex.removePattern(line, options.regex.sectionBegin);
 
                 //-- First element in collection should not be processed
                 if (type === self.element.type && index === 0) { return; }
 
                 //-- Create direct child
-                if (type !== self.element.type && !child.object) { child.object = new Awesome.Element(type); }
+                if (type !== self.element.type && !child.object) { child.object = new Awesome.Element(type, options); }
             }
 
             //-- Add current line to child content
             if (child.object) { child.content.push(line); }
 
             //-- END element identified
-            if (Awesome.Util.regex.sectionEnd.test(line)) {
+            if (options.regex.sectionEnd.test(line)) {
                 //-- Extract type
-                var type = Awesome.Util.regex.removePattern(line, Awesome.Util.regex.sectionEnd);
+                var type = options.regex.removePattern(line, options.regex.sectionEnd);
 
                 // Last element in collection should not be processed
                 if (type === self.element.type && index === lines.length - 1) { return; }
@@ -72,7 +92,7 @@ Awesome.Element = function(elementType, content) {
                 //-- Process direct child
                 if (type !== self.element.type && child.object && child.object.element.type === type) {
                     self.element.children.push(child.getElement());
-                    child = createEmptyChild();
+                    child = new Awesome.ElementTemporaryChild(options);
                     return;
                 }
             }
@@ -80,26 +100,43 @@ Awesome.Element = function(elementType, content) {
             if (child.object) { return; }
 
             //-- Extract properties
-            self.element.properties.push(line);
+            self.element.properties.push(new Awesome.Property(options).load(line));
         });
 
         return self;
     };
-
-    if (content) { self.load(content); }
 };
 
-Awesome.Calendar = function(content) {
-    var self    = this;
-    var root    = new Awesome.Element("VCALENDAR", content);
+Awesome.ElementTemporaryChild = function(options) {
+    var options     = options || Awesome.Defaults;
+    var self        = this;
+    self.object     = null;
+    self.content    = [];
+
+    self.getElement = function() {
+        if (!self.object) { return null; }
+
+        return self.object.load(self.content.join(options.format.newLine));
+    };
+};
+
+Awesome.Property = function(options) {
+    var self = this;
 
     self.toString = function() {
-        return root.toString();
+        return JSON.stringify(self, null, 4);
     };
 
-    self.format = function() {
-        return root.format();
-    }
+    self.load  = function(content) {
+        if (!content) { return; }
+
+        var propertyValues = content.split(options.format.separator);
+
+        self.name = propertyValues[0];
+        self.value = propertyValues.slice(1).join("");
+
+        return self;
+    };
 };
 
 //-- TODO: Remove test data
@@ -114,8 +151,14 @@ SUMMARY:Bastille Day Party \n \
 END:VEVENT\n \
 END:VCALENDAR\n";
 
-var calendar = new Awesome.Calendar(file);
+var calendar = new Awesome.Calendar(null).load(file);
 
 console.log(calendar.toString());
+console.log(calendar.format());
 
-module.exports = Awesome.Calendar;
+module.exports = {
+    Calendar    : Awesome.Calendar,
+    Element     : Awesome.Element,
+    Property    : Awesome.Property,
+    Defaults    : Awesome.Defaults
+};
