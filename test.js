@@ -115,9 +115,7 @@ Awesome.ElementTemporaryChild = function(options) {
     self.content    = [];
 
     self.finalize = function() {
-        if (!self.element) { return null; }
-
-        return self.element.load(self.content.join(options.format.newLine));
+        return self.element && self.element.load(self.content.join(options.format.newLine));
     };
 };
 
