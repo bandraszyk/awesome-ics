@@ -97,15 +97,13 @@ Awesome.Block = function() {
 
             //-- IF END of block then do not process rest of lines
             if (Awesome.Constants.regex.blockEnd.test(line)) {
-
                 var type = Awesome.Util.removePattern(line, Awesome.Constants.regex.blockEnd);
+                blockEnded = true;
 
                 if (type !== self.type) {
                     Awesome.Util.setError(self, util.format("Type of Awesome.Block BEGIN does not match END. Expected: %s Actual: %s", self.type, type));
-                    return;
                 }
 
-                blockEnded = true;
                 return;
             }
 
