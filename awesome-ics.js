@@ -1,146 +1,206 @@
+var util    = require("util");
 var Awesome = {};
 
-Awesome.Defaults = {
+//Definition of an object that contains Constants values used within module
+Awesome.Constants = {
     format      :  {
         newLine     : "\n",
-        separator   : ":"
+        property    : "%s:%s",
+        block       : "%s\n%s%s%s",
+        blockBegin  : "BEGIN:%s",
+        blockEnd    : "END:%s",
+        notEmpty    : "%s\n"
     },
     regex       : {
-        sectionBegin        : /^BEGIN:/i,
-        sectionEnd          : /^END:/i,
-        removeWhitespaces   : function(text) {
-            return Awesome.Defaults.regex.removePattern(text, /\s/g);
-        },
-        removePattern       : function(text, regexp) {
-            return text.replace(regexp, "");
-        }
+        blockBegin          : /^BEGIN:/i,
+        blockEnd            : /^END:/i,
+        separator           : /.+:.+/i,
+        separatorBegin      : /.+:/i,
+        separatorEnd        : /:.+/i
     }
 };
 
-Awesome.Calendar = function(options) {
-    var options = options || Awesome.Defaults;
-    var self    = this;
-    self.root    = new Awesome.Element("VCALENDAR");
+// Definition of an object that contains useful function used within module
+Awesome.Util = {
+    removeWhitespaces   : function(text) {
+        return Awesome.Util.removePattern(text, /\s/g);
+    },
+    removePattern       : function(text, regexp) {
+        return text.replace(regexp, "");
+    },
+    mapToString         : function(entry) {
+        return entry.toString();
+    },
+    setError            : function(object, message) {
+        object.error = message;
+    }
+};
 
-    self.toString = function() {
-        return self.root.toString();
-    };
+// Definition of Main Calendar object that process the ICS formatted data
+Awesome.Calendar = function() {
+    // Initialize basic variable
+    var self = this;
+    var root = new Awesome.Block();
 
-    self.format = function() {
-        return self.root.format();
-    };
-
-    self.load = function(content) {
-        self.root.load(content);
+    // Loads calendar's structure from string. Returns current instance.
+    self.loadFromText = function(content) {
+        root.loadFromText(content);
         return self;
-    }
+    };
+
+    // Converts current object to ICS format
+    self.toString = function() {
+        return root && root.toString() || "";
+    };
+
+    // Converts current object to pure JSON
+    self.toJSON = function() {
+        return root.toJSON() || {};
+    };
 };
 
-Awesome.Element = function(type, options) {
-    var options     = options || Awesome.Defaults;
+// Definition of single block element that starts with BEGIN:<type> and ends with END:<type>
+Awesome.Block = function() {
+    // Initialize basic variable and object properties
     var self        = this;
-    self.type       = type;
-    self.properties = [];
     self.children   = [];
+    self.prop       = [];
 
-    self.toString = function() {
-        return JSON.stringify(self, null, 4);
-    };
+    // Internal methods taht process
+    var processBlockContent = function(lines) {
+        if (lines.length === 0) {
+            Awesome.Util.setError(self, "Cannot load Awesome.Block, it should end with /^END:/i statement.");
+            return 0;
+        }
 
-    self.format = function() {
-        return self.type;
-    };
+        //-- A variable that stores information about the index of next line that should be processed
+        var processedIndex = -1;
+        var blockEnded = false;
 
-    self.load = function(content) {
-        if (!content) { return; }
-
-        //-- Split content to lines and filter out empty ones
-        var lines = content
-            .split(options.format.newLine)
-            .filter(function(line) { return !!line; });
-
-        //-- Initialize temporary variables
-        var child = new Awesome.ElementTemporaryChild(options);
-
-        //-- Iterate the lines to read properties
         lines.forEach(function(line, index) {
-            //-- Normalize the line
-            var line = options.regex.removeWhitespaces(line);
 
-            //-- BEGIN element identified
-            if (options.regex.sectionBegin.test(line)) {
-                //-- Extract type
-                var type = options.regex.removePattern(line, options.regex.sectionBegin);
+            line = Awesome.Util.removeWhitespaces(line);
 
-                //-- First element in collection should not be processed
-                if (type === self.type && index === 0) { return; }
+            //-- Omit the lines that should not be processed
+            if (blockEnded || processedIndex > index) { return; }
 
-                //-- Create direct child
-                if (type !== self.type && !child.element) { child.element = new Awesome.Element(type, options); }
+            //-- If BEGIN of block then create a children and process rest of content there
+            if (Awesome.Constants.regex.blockBegin.test(line)) {
+                var block = new Awesome.Block();
+                var blockContent = lines.slice(index).join(Awesome.Constants.format.newLine);
+                processedIndex = block.loadFromText(blockContent) + index;
+                self.children.push(block);
+                return;
             }
 
-            //-- Add current line to child content
-            if (child.element) { child.content.push(line); }
+            if (processedIndex < index) { processedIndex = index; }
 
-            //-- END element identified
-            if (options.regex.sectionEnd.test(line)) {
-                //-- Extract type
-                var type = options.regex.removePattern(line, options.regex.sectionEnd);
+            //-- IF END of block then do not process rest of lines
+            if (Awesome.Constants.regex.blockEnd.test(line)) {
 
-                // Last element in collection should not be processed
-                if (type === self.type && index === lines.length - 1) { return; }
+                var type = Awesome.Util.removePattern(line, Awesome.Constants.regex.blockEnd);
 
-                //-- Process direct child
-                if (type !== self.type && child.element && child.element.type === type) {
-                    self.children.push(child.finalize());
-                    child = new Awesome.ElementTemporaryChild(options);
+                if (type !== self.type) {
+                    Awesome.Util.setError(self, util.format("Type of Awesome.Block BEGIN does not match END. Expected: %s Actual: %s", self.type, type));
                     return;
                 }
+
+                blockEnded = true;
+                return;
             }
 
-            if (child.element) { return; }
-
-            //-- Extract properties
-            self.properties.push(new Awesome.Property(options).load(line));
+            self.prop.push(new Awesome.Property().loadFromText(line));
         });
 
-        return self;
+        return processedIndex + 1;
     };
-};
 
-Awesome.ElementTemporaryChild = function(options) {
-    var options     = options || Awesome.Defaults;
-    var self        = this;
-    self.element    = null;
-    self.content    = [];
+    self.loadFromText = function(content) {
+        var lines = content.split(Awesome.Constants.format.newLine);
+        var firstLine = Awesome.Util.removeWhitespaces(lines[0] || "");
 
-    self.finalize = function() {
-        return self.element && self.element.load(self.content.join(options.format.newLine));
+        if (!Awesome.Constants.regex.blockBegin.test(firstLine)) {
+            Awesome.Util.setError(self, ("Cannot load Awesome.Block, last line should start with /^BEGIN:/i in first line."));
+            return 0;
+        }
+
+        self.type = Awesome.Util.removePattern(firstLine, Awesome.Constants.regex.blockBegin);
+
+        var linesToProcess = lines.slice(1);
+        return processBlockContent(linesToProcess) + 1;
     };
-};
 
-Awesome.Property = function(options) {
-    var self = this;
-
+    // Converts current object to ICS format
     self.toString = function() {
-        return JSON.stringify(self, null, 4);
+        if (self.ERROR) { return self.error; }
+
+        var prop = "";
+
+        if (self.prop.length) {
+            prop = util.format(Awesome.Constants.format.notEmpty,
+                self.prop.map(Awesome.Util.mapToString).join(Awesome.Constants.format.newLine));
+        }
+
+        var children = "";
+
+        if (self.children.length) {
+            children = util.format(Awesome.Constants.format.notEmpty,
+                self.children.map(Awesome.Util.mapToString).join(Awesome.Constants.format.newLine));
+        }
+
+        return util.format(
+            Awesome.Constants.format.block,
+            util.format(Awesome.Constants.format.blockBegin, self.type),
+            prop,
+            children,
+            util.format(Awesome.Constants.format.blockEnd, self.type));
     };
 
-    self.load  = function(content) {
-        if (!content) { return; }
+    // Converts current object to pure JSON
+    self.toJSON = function() {
+        if (self.error) { return { error: self.error }};
 
-        var propertyValues = content.split(options.format.separator);
+        return {
+            type    : self.type,
+            prop    : self.prop.map(function(property) { return property.toJSON(); }),
+            children: self.children.map(function(child) { return child.toJSON(); })
+        };
+    };
+};
 
-        self.name = propertyValues[0];
-        self.value = propertyValues.slice(1).join("");
+// Definition of single property that is stored as <name>:<value>
+Awesome.Property = function() {
+    // Initialize basic variable and object properties
+    var self = this;
+    self.name = null;
+    self.value = null;
+
+    // Loads property's name and value from string. Returns current instance.
+    self.loadFromText = function(content) {
+        if (!Awesome.Constants.regex.separator.test(content)) {
+            self.value = content;
+            return self;
+        }
+
+        self.name   = Awesome.Util.removePattern(content, Awesome.Constants.regex.separatorEnd);
+        self.value  = Awesome.Util.removePattern(content, Awesome.Constants.regex.separatorBegin);
 
         return self;
     };
+
+    // Converts current object to ICS format
+    self.toString = function() {
+        return util.format(Awesome.Constants.format.property, self.name, self.value);
+    };
+
+    // Converts current object to pure JSON
+    self.toJSON = function() {
+        return {
+            name    : self.name,
+            value   : self.value
+        };
+    };
 };
 
-module.exports = {
-    Calendar    : Awesome.Calendar,
-    Element     : Awesome.Element,
-    Property    : Awesome.Property,
-    Defaults    : Awesome.Defaults
-};
+// Module definition
+module.exports = Awesome.Calendar;

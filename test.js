@@ -12,7 +12,7 @@ var file =
     END:VEVENT\n \
     END:VCALENDAR\n";
 
-var calendar = new awesome.Calendar().load(file);
+var calendar = new awesome().loadFromText(file);
 
+console.log(JSON.stringify(calendar.toJSON(), null, 4));
 console.log(calendar.toString());
-console.log(calendar.format());
