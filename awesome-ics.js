@@ -1,15 +1,16 @@
-var util    = require("util");
+//     awesomeIcs.js 1.0.0
+//     http://bandraszyk.github.io/awesome-ics/
+//     (c) 2015 Bandro
+//     Awesome Rating may be freely distributed under the MIT license.
 var Awesome = {};
 
 //Definition of an object that contains Constants values used within module
 Awesome.Constants = {
     format      :  {
         newLine     : "\n",
-        property    : "%s:%s",
-        block       : "%s\n%s%s%s",
-        blockBegin  : "BEGIN:%s",
-        blockEnd    : "END:%s",
-        notEmpty    : "%s\n"
+        blockBegin  : "BEGIN:",
+        blockEnd    : "END:",
+        separator   : ":"
     },
     regex       : {
         blockBegin          : /^BEGIN:/i,
@@ -101,7 +102,7 @@ Awesome.Block = function() {
                 blockEnded = true;
 
                 if (type !== self.type) {
-                    Awesome.Util.setError(self, util.format("Type of Awesome.Block BEGIN does not match END. Expected: %s Actual: %s", self.type, type));
+                    Awesome.Util.setError(self, "Type of Awesome.Block BEGIN does not match END. Expected: " + self.type + " Actual: " + type);
                 }
 
                 return;
@@ -118,7 +119,7 @@ Awesome.Block = function() {
         var firstLine = Awesome.Util.removeWhitespaces(lines[0] || "");
 
         if (!Awesome.Constants.regex.blockBegin.test(firstLine)) {
-            Awesome.Util.setError(self, ("Cannot load Awesome.Block, last line should start with /^BEGIN:/i in first line."));
+            Awesome.Util.setError(self, "Cannot load Awesome.Block, last line should start with /^BEGIN:/i in first line.");
             return 0;
         }
 
@@ -135,23 +136,17 @@ Awesome.Block = function() {
         var prop = "";
 
         if (self.prop.length) {
-            prop = util.format(Awesome.Constants.format.notEmpty,
-                self.prop.map(Awesome.Util.mapToString).join(Awesome.Constants.format.newLine));
+            prop = self.prop.map(Awesome.Util.mapToString).join(Awesome.Constants.format.newLine) + Awesome.Constants.format.newLine;
         }
 
         var children = "";
 
         if (self.children.length) {
-            children = util.format(Awesome.Constants.format.notEmpty,
-                self.children.map(Awesome.Util.mapToString).join(Awesome.Constants.format.newLine));
+            children = self.children.map(Awesome.Util.mapToString).join(Awesome.Constants.format.newLine) + Awesome.Constants.format.newLine;
         }
 
-        return util.format(
-            Awesome.Constants.format.block,
-            util.format(Awesome.Constants.format.blockBegin, self.type),
-            prop,
-            children,
-            util.format(Awesome.Constants.format.blockEnd, self.type));
+        return Awesome.Constants.format.blockBegin + self.type + Awesome.Constants.format.newLine +
+            prop + children + Awesome.Constants.format.blockEnd + self.type;
     };
 
     // Converts current object to pure JSON
@@ -188,7 +183,7 @@ Awesome.Property = function() {
 
     // Converts current object to ICS format
     self.toString = function() {
-        return util.format(Awesome.Constants.format.property, self.name, self.value);
+        return self.name + Awesome.Constants.format.separator + self.value;
     };
 
     // Converts current object to pure JSON
