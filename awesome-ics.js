@@ -195,5 +195,4 @@ Awesome.Property = function() {
     };
 };
 
-// Module definition
-module.exports = Awesome.Calendar;
+module.exports = Awesome;
