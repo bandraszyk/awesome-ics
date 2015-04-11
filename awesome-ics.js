@@ -40,6 +40,28 @@ Awesome.Util = {
     },
     setError            : function(object, message) {
         object.error = message;
+    },
+    split               : function(text, separator) {
+        var baseSplit = text.split(separator);
+        // Text within quotation marks should not be split
+
+        for (var i = 0; i < baseSplit.length;) {
+            var phrase = baseSplit[i];
+            var matchQuotationMarks = phrase.match(/"/g);
+
+            if (!matchQuotationMarks || (matchQuotationMarks.length % 2 === 0)) {
+                i++;
+            }
+            else if (i == baseSplit.length - 1) {
+                baseSplit = baseSplit.slice(-1);
+            }
+            else {
+                var joinWithNext = [ baseSplit[i], baseSplit[i+1]].join("");
+                baseSplit.splice(i, 2, joinWithNext);
+            }
+        }
+
+        return baseSplit;
     }
 };
 
@@ -187,7 +209,7 @@ Awesome.Property = function() {
         self.value  = Awesome.Util.trim(content.slice(self.name.length + 1));
 
         if (self.name.indexOf(Awesome.Constants.format.separatorParams) !== -1) {
-            var params = self.name.split(Awesome.Constants.format.separatorParams);
+            var params = Awesome.Util.split(self.name, Awesome.Constants.format.separatorParams);
             self.name = params[0];
             self.params = params.slice(1).map(function(param) { return new Awesome.PropertyParameter().loadFromText(param); });
         }
