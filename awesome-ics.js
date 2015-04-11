@@ -10,16 +10,15 @@ Awesome.Constants = {
         newLine         : "\n",
         blockBegin      : "BEGIN:",
         blockEnd        : "END:",
-        separator       : ":",
-        separatorParams : ";",
-        separatorValue  : "="
+        separatorProp   : ":",
+        separatorParam  : ";",
+        separatorValue  : "=",
+        whitespace      : " "
     },
     regex       : {
         blockBegin          : /^BEGIN:/i,
         blockEnd            : /^END:/i,
-        separator           : /.+:.+/i,
-        propertyEnd         : /:.+/i,
-        parameterEnd        : /=.+/i
+        separator           : /.+:.+/i
     }
 };
 
@@ -41,10 +40,10 @@ Awesome.Util = {
     setError            : function(object, message) {
         object.error = message;
     },
-    split               : function(text, separator) {
+    splitSafe           : function(text, separator) {
         var baseSplit = text.split(separator);
-        // Text within quotation marks should not be split
 
+        // Text within quotation marks should not be split
         for (var i = 0; i < baseSplit.length;) {
             var phrase = baseSplit[i];
             var matchQuotationMarks = phrase.match(/"/g);
@@ -61,7 +60,7 @@ Awesome.Util = {
             }
         }
 
-        return baseSplit;
+        return baseSplit.filter(function(entry) { return entry; });
     }
 };
 
@@ -95,7 +94,7 @@ Awesome.Block = function() {
     self.children   = [];
     self.prop       = [];
 
-    // Internal methods taht process
+    // Internal methods that process single content block
     var processBlockContent = function(lines) {
         if (lines.length === 0) {
             Awesome.Util.setError(self, "Cannot load Awesome.Block, it should end with /^END:/i statement.");
@@ -200,16 +199,11 @@ Awesome.Property = function() {
 
     // Loads property's name and value from string. Returns current instance.
     self.loadFromText = function(content) {
-        if (!Awesome.Constants.regex.separator.test(content)) {
-            self.value = content;
-            return self;
-        }
-
-        self.name   = Awesome.Util.removePattern(content, Awesome.Constants.regex.propertyEnd);
+        self.name   = Awesome.Util.splitSafe(content, Awesome.Constants.format.separatorProp)[0];
         self.value  = Awesome.Util.trim(content.slice(self.name.length + 1));
 
-        if (self.name.indexOf(Awesome.Constants.format.separatorParams) !== -1) {
-            var params = Awesome.Util.split(self.name, Awesome.Constants.format.separatorParams);
+        if (self.name.indexOf(Awesome.Constants.format.separatorParam) !== -1) {
+            var params = Awesome.Util.splitSafe(self.name, Awesome.Constants.format.separatorParam);
             self.name = params[0];
             self.params = params.slice(1).map(function(param) { return new Awesome.PropertyParameter().loadFromText(param); });
         }
@@ -222,11 +216,11 @@ Awesome.Property = function() {
         var name = self.name;
 
         if (self.params.length) {
-            var parameters = self.params.map(Awesome.Util.mapToString).join(Awesome.Constants.format.separatorParams);
-            name = [ name, parameters ].join(Awesome.Constants.format.separatorParams);
+            var parameters = self.params.map(Awesome.Util.mapToString).join(Awesome.Constants.format.separatorParam);
+            name = [ name, parameters ].join(Awesome.Constants.format.separatorParam);
         }
 
-        return name + Awesome.Constants.format.separator + self.value;
+        return name + Awesome.Constants.format.separatorProp + self.value;
     };
 
     // Converts current object to pure JSON
@@ -247,7 +241,7 @@ Awesome.PropertyParameter = function() {
 
     // Loads property's name and value from string. Returns current instance.
     self.loadFromText = function(content) {
-        self.name   = Awesome.Util.removePattern(content, Awesome.Constants.regex.parameterEnd);
+        self.name   = Awesome.Util.splitSafe(content, Awesome.Constants.format.separatorParam)[0];
         self.value  = Awesome.Util.trim(content.slice(self.name.length + 1));
 
         return self;
@@ -303,7 +297,7 @@ Awesome.Property.ValueType.Float = function() { };
 Awesome.Property.ValueType.Integer = function() { };
 Awesome.Property.ValueType.PeriodOfTime = function() { };
 Awesome.Property.ValueType.RecurrenceRule = function() { };
-Awesome.Property.ValueType.Text = function() { };
+Awesome.Property.ValueType.Text = function() { };               // 75 characters per line.
 Awesome.Property.ValueType.Time = function() { };
 Awesome.Property.ValueType.URI = function() { };
 Awesome.Property.ValueType.UTCOffcet = function() { };
