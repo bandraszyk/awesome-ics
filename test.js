@@ -8,7 +8,7 @@ var file =
     BEGIN:VEVENT \n \
     DTSTART:19970714T170000Z \n \
     DTEND:19970715T035959Z \n \
-    SUMMARY:Bastille Day Party \n \
+    SUMMARY:       Bastille Day : Partydsd     \n \
     END:VEVENT\n \
     END:VCALENDAR\n";
 

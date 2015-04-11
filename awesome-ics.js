@@ -23,8 +23,9 @@ Awesome.Constants = {
 
 // Definition of an object that contains useful function used within module
 Awesome.Util = {
-    removeWhitespaces   : function(text) {
-        return Awesome.Util.removePattern(text, /\s/g);
+    trim   : function(text) {
+        var trimmedBeginning =  Awesome.Util.removePattern(text, /^\s+/g);
+        return Awesome.Util.removePattern(trimmedBeginning, /\s+$/g);
     },
     removePattern       : function(text, regexp) {
         return text.replace(regexp, "");
@@ -80,7 +81,7 @@ Awesome.Block = function() {
 
         lines.forEach(function(line, index) {
 
-            line = Awesome.Util.removeWhitespaces(line);
+            line = Awesome.Util.trim(line);
 
             //-- Omit the lines that should not be processed
             if (blockEnded || processedIndex > index) { return; }
@@ -116,7 +117,7 @@ Awesome.Block = function() {
 
     self.loadFromText = function(content) {
         var lines = content.split(Awesome.Constants.format.newLine);
-        var firstLine = Awesome.Util.removeWhitespaces(lines[0] || "");
+        var firstLine = Awesome.Util.trim(lines[0] || "");
 
         if (!Awesome.Constants.regex.blockBegin.test(firstLine)) {
             Awesome.Util.setError(self, "Cannot load Awesome.Block, last line should start with /^BEGIN:/i in first line.");
@@ -176,7 +177,7 @@ Awesome.Property = function() {
         }
 
         self.name   = Awesome.Util.removePattern(content, Awesome.Constants.regex.separatorEnd);
-        self.value  = Awesome.Util.removePattern(content, Awesome.Constants.regex.separatorBegin);
+        self.value  = Awesome.Util.trim(content.slice(self.name.length + 1));
 
         return self;
     };
