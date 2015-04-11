@@ -16,32 +16,31 @@ Awesome.Constants = {
         whitespace      : " "
     },
     regex       : {
-        blockBegin          : /^BEGIN:/i,
-        blockEnd            : /^END:/i,
-        separator           : /.+:.+/i
+        blockBegin      : /^BEGIN:/i,
+        blockEnd        : /^END:/i,
+        separator       : /.+:.+/i
     }
 };
 
 // Definition of an object that contains useful function used within module
 Awesome.Util = {
-    trim   : function(text) {
-        var trimmedBeginning =  Awesome.Util.removePattern(text, /^\s+/g);
+    trim: function(text) {
+        var trimmedBeginning = Awesome.Util.removePattern(text, /^\s+/g);
         return Awesome.Util.removePattern(trimmedBeginning, /\s+$/g);
     },
-    removePattern       : function(text, regexp) {
+    removePattern: function(text, regexp) {
         return text.replace(regexp, "");
     },
-    mapToString         : function(entry) {
+    mapToString: function(entry) {
         return entry.toString();
     },
-    mapToJSON           : function(entry) {
+    mapToJSON: function(entry) {
         return entry.toJSON();
     },
-    setError            : function(object, message) {
+    setError: function(object, message) {
         object.error = message;
     },
-    mergeElements       : function(array, conditionOkCallback) {
-        // Text within quotation marks should not be split
+    mergeElements: function(array, conditionOkCallback) {
         for (var i = 0; i < array.length;) {
 
             var element = array[i];
@@ -52,22 +51,23 @@ Awesome.Util = {
                 continue;
             }
 
-            var joinWithNext = [ element, elementNext].join("");
-            array.splice(i, 2, joinWithNext);
+            array.splice(i, 2, [ element, elementNext ].join(""));
         }
 
         return array.filter(function(entry) { return entry; });
     },
-    splitSafe           : function(text, separator) {
+    splitSafe: function(text, separator) {
         return Awesome.Util.mergeElements(text.split(separator),
             function(phrase) {
+                // If current line do not contain even number of double quotation marks then lines should be treated as one
                 var matchQuotationMarks = phrase.match(/"/g);
                 return !matchQuotationMarks || (matchQuotationMarks.length % 2 === 0);
             });
     },
-    splitSafeLines      : function(text) {
+    splitSafeLines: function(text) {
         return Awesome.Util.mergeElements(text.split(Awesome.Constants.format.newLine),
             function(line, nextLine) {
+                // If next line starts with whitespace both lines should be treated as one
                 return nextLine[0] !== " ";
             });
     }
@@ -115,7 +115,6 @@ Awesome.Block = function() {
         var blockEnded = false;
 
         lines.forEach(function(line, index) {
-
             line = Awesome.Util.trim(line);
 
             //-- Omit the lines that should not be processed
@@ -167,7 +166,7 @@ Awesome.Block = function() {
 
     // Converts current object to ICS format
     self.toString = function() {
-        if (self.ERROR) { return self.error; }
+        if (self.error) { return self.error; }
 
         var prop = "";
 
