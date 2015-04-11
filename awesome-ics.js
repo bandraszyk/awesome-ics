@@ -169,7 +169,7 @@ Awesome.Property = function() {
     self.name = null;
     self.value = null;
     self.params = [];       // TODO: 3.2 Property Parameters mapping
-    self.type = null;       // TODO: 3.3 Property Value Type
+    self.valueType = null;  // TODO: 3.3 Property Value Type
 
     // Loads property's name and value from string. Returns current instance.
     self.loadFromText = function(content) {
@@ -198,21 +198,7 @@ Awesome.Property = function() {
     };
 };
 
-// TODO: 3.3 Property Value Type
-Awesome.Property.Binary = function() { };
-Awesome.Property.Boolean = function() { };
-Awesome.Property.CalendarUserAddress = function() { };
-Awesome.Property.Date = function() { };
-Awesome.Property.DateTime = function() { };
-Awesome.Property.Duration = function() { };
-Awesome.Property.Float = function() { };
-Awesome.Property.Integer = function() { };
-Awesome.Property.PeriodOfTime = function() { };
-Awesome.Property.RecurrenceRule = function() { };
-Awesome.Property.Text = function() { };
-Awesome.Property.Time = function() { };
-Awesome.Property.URI = function() { };
-Awesome.Property.UTCOffcet = function() { };
+
 
 // TODO: 3.2 Property Parameters mapping
 Awesome.Property.Params = [
@@ -238,6 +224,22 @@ Awesome.Property.Params = [
     "VALUE"
 ];
 
+// TODO: 3.3 Property Value Type
+Awesome.Property.ValueType = {};
+Awesome.Property.ValueType.Binary = function() { };
+Awesome.Property.ValueType.Boolean = function() { };
+Awesome.Property.ValueType.CalendarUserAddress = function() { };
+Awesome.Property.ValueType.Date = function() { };
+Awesome.Property.ValueType.DateTime = function() { };
+Awesome.Property.ValueType.Duration = function() { };
+Awesome.Property.ValueType.Float = function() { };
+Awesome.Property.ValueType.Integer = function() { };
+Awesome.Property.ValueType.PeriodOfTime = function() { };
+Awesome.Property.ValueType.RecurrenceRule = function() { };
+Awesome.Property.ValueType.Text = function() { };
+Awesome.Property.ValueType.Time = function() { };
+Awesome.Property.ValueType.URI = function() { };
+Awesome.Property.ValueType.UTCOffcet = function() { };
 
 
 module.exports = Awesome;
