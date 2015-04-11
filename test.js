@@ -1,19 +1,15 @@
 var Awesome = require("./awesome-ics");
+var fs      = require('fs');
 
-//-- TODO: Remove test data
-var file =
-"BEGIN:VCALENDAR\n\
-VERSION:2.0 \n\
-PRODID:-//hacksw/handcal//NONSGML v1.0//EN \n\
-BEGIN:VEVENT \n\
-DTSTART;TZID=\"America/New_York\":19970714T170000Z \n\
-DTEND:19970715T035959Z \n\
-SUMMARY:This is a multiline summary\n\
- Check it out! \n\
-END:VEVENT\n\
-END:VCALENDAR\n";
 
-var calendar = new Awesome.Calendar().loadFromText(file);
+fs.readFile("sample.ics", 'utf8', function(error, data) {
+    if (error) {
+        console.error("There was an error while loading the file: %j", error);
+        return;
+    }
 
-console.log(JSON.stringify(calendar.toJSON(), null, 4));
-console.log(calendar.toString());
+    var calendar = new Awesome.Calendar().loadFromText(data);
+    console.log(JSON.stringify(calendar.toJSON(), null, 4));
+    console.log(calendar.toString());
+});
+
