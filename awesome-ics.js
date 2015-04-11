@@ -7,10 +7,11 @@ var Awesome = {};
 //Definition of an object that contains Constants values used within module
 Awesome.Constants = {
     format      :  {
-        newLine     : "\n",
-        blockBegin  : "BEGIN:",
-        blockEnd    : "END:",
-        separator   : ":"
+        newLine         : "\n",
+        blockBegin      : "BEGIN:",
+        blockEnd        : "END:",
+        separator       : ":",
+        separatorParams : ";"
     },
     regex       : {
         blockBegin          : /^BEGIN:/i,
@@ -32,6 +33,9 @@ Awesome.Util = {
     },
     mapToString         : function(entry) {
         return entry.toString();
+    },
+    mapToJSON           : function(entry) {
+        return entry.toJSON();
     },
     setError            : function(object, message) {
         object.error = message;
@@ -152,12 +156,12 @@ Awesome.Block = function() {
 
     // Converts current object to pure JSON
     self.toJSON = function() {
-        if (self.error) { return { error: self.error }};
+        if (self.error) { return { error: self.error }; }
 
         return {
             type    : self.type,
-            prop    : self.prop.map(function(property) { return property.toJSON(); }),
-            children: self.children.map(function(child) { return child.toJSON(); })
+            prop    : self.prop.map(Awesome.Util.mapToJSON),
+            children: self.children.map(Awesome.Util.mapToJSON)
         };
     };
 };
@@ -168,7 +172,7 @@ Awesome.Property = function() {
     var self = this;
     self.name = null;
     self.value = null;
-    self.params = [];       // TODO: 3.2 Property Parameters mapping
+    self.params = [];
     self.valueType = null;  // TODO: 3.3 Property Value Type
 
     // Loads property's name and value from string. Returns current instance.
@@ -181,24 +185,58 @@ Awesome.Property = function() {
         self.name   = Awesome.Util.removePattern(content, Awesome.Constants.regex.separatorEnd);
         self.value  = Awesome.Util.trim(content.slice(self.name.length + 1));
 
+        if (self.name.indexOf(Awesome.Constants.format.separatorParams) !== -1) {
+            var params = self.name.split(Awesome.Constants.format.separatorParams);
+            self.name = params[0];
+            self.params = params.slice(1).map(function(param) { return new Awesome.PropertyParameter().loadFromText(param); });
+        }
+
         return self;
     };
 
     // Converts current object to ICS format
     self.toString = function() {
-        return self.name + Awesome.Constants.format.separator + self.value;
+        var name = self.name;
+
+        if (self.params.length) {
+            var parameters = self.params.map(Awesome.Util.mapToString).join(Awesome.Constants.format.separatorParams);
+            name = [ name, parameters].join(Awesome.Constants.format.separatorParams);
+        }
+
+        return name + Awesome.Constants.format.separator + self.value;
     };
 
     // Converts current object to pure JSON
     self.toJSON = function() {
         return {
             name    : self.name,
-            value   : self.value
+            value   : self.value,
+            params  : self.params.map(Awesome.Util.mapToJSON)
         };
     };
 };
 
+Awesome.PropertyParameter = function() {
+    // Initialize basic variable and object properties
+    var self = this;
+    self.value = null;
 
+    // Loads property's name and value from string. Returns current instance.
+    self.loadFromText = function(content) {
+        self.value = content;
+        return self;
+    };
+
+    // Converts current object to ICS format
+    self.toString = function() {
+        return self.value;
+    };
+
+    // Converts current object to pure JSON
+    self.toJSON = function() {
+        return { to_be_modified : self.value };
+    };
+};
 
 // TODO: 3.2 Property Parameters mapping
 Awesome.Property.Params = [
@@ -240,6 +278,5 @@ Awesome.Property.ValueType.Text = function() { };
 Awesome.Property.ValueType.Time = function() { };
 Awesome.Property.ValueType.URI = function() { };
 Awesome.Property.ValueType.UTCOffcet = function() { };
-
 
 module.exports = Awesome;
