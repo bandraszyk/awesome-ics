@@ -40,27 +40,36 @@ Awesome.Util = {
     setError            : function(object, message) {
         object.error = message;
     },
-    splitSafe           : function(text, separator) {
-        var baseSplit = text.split(separator);
-
+    mergeElements       : function(array, conditionOkCallback) {
         // Text within quotation marks should not be split
-        for (var i = 0; i < baseSplit.length;) {
-            var phrase = baseSplit[i];
-            var matchQuotationMarks = phrase.match(/"/g);
+        for (var i = 0; i < array.length;) {
 
-            if (!matchQuotationMarks || (matchQuotationMarks.length % 2 === 0)) {
+            var element = array[i];
+            var elementNext = array[i + 1];
+
+            if (i == array.length - 1 || (conditionOkCallback && conditionOkCallback(element, elementNext))) {
                 i++;
+                continue;
             }
-            else if (i == baseSplit.length - 1) {
-                baseSplit = baseSplit.slice(-1);
-            }
-            else {
-                var joinWithNext = [ baseSplit[i], baseSplit[i+1]].join("");
-                baseSplit.splice(i, 2, joinWithNext);
-            }
+
+            var joinWithNext = [ element, elementNext].join("");
+            array.splice(i, 2, joinWithNext);
         }
 
-        return baseSplit.filter(function(entry) { return entry; });
+        return array.filter(function(entry) { return entry; });
+    },
+    splitSafe           : function(text, separator) {
+        return Awesome.Util.mergeElements(text.split(separator),
+            function(phrase) {
+                var matchQuotationMarks = phrase.match(/"/g);
+                return !matchQuotationMarks || (matchQuotationMarks.length % 2 === 0);
+            });
+    },
+    splitSafeLines      : function(text) {
+        return Awesome.Util.mergeElements(text.split(Awesome.Constants.format.newLine),
+            function(line, nextLine) {
+                return nextLine[0] !== " ";
+            });
     }
 };
 
@@ -142,7 +151,7 @@ Awesome.Block = function() {
     };
 
     self.loadFromText = function(content) {
-        var lines = content.split(Awesome.Constants.format.newLine);
+        var lines = Awesome.Util.splitSafeLines(content);
         var firstLine = Awesome.Util.trim(lines[0] || "");
 
         if (!Awesome.Constants.regex.blockBegin.test(firstLine)) {
@@ -241,7 +250,7 @@ Awesome.PropertyParameter = function() {
 
     // Loads property's name and value from string. Returns current instance.
     self.loadFromText = function(content) {
-        self.name   = Awesome.Util.splitSafe(content, Awesome.Constants.format.separatorParam)[0];
+        self.name   = Awesome.Util.splitSafe(content, Awesome.Constants.format.separatorValue)[0];
         self.value  = Awesome.Util.trim(content.slice(self.name.length + 1));
 
         return self;
