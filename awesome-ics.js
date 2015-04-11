@@ -200,7 +200,7 @@ Awesome.Property = function() {
 
         if (self.params.length) {
             var parameters = self.params.map(Awesome.Util.mapToString).join(Awesome.Constants.format.separatorParams);
-            name = [ name, parameters].join(Awesome.Constants.format.separatorParams);
+            name = [ name, parameters ].join(Awesome.Constants.format.separatorParams);
         }
 
         return name + Awesome.Constants.format.separator + self.value;
