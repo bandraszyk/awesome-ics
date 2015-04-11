@@ -11,14 +11,15 @@ Awesome.Constants = {
         blockBegin      : "BEGIN:",
         blockEnd        : "END:",
         separator       : ":",
-        separatorParams : ";"
+        separatorParams : ";",
+        separatorValue  : "="
     },
     regex       : {
         blockBegin          : /^BEGIN:/i,
         blockEnd            : /^END:/i,
         separator           : /.+:.+/i,
-        separatorBegin      : /.+:/i,
-        separatorEnd        : /:.+/i
+        propertyEnd         : /:.+/i,
+        parameterEnd        : /=.+/i
     }
 };
 
@@ -182,7 +183,7 @@ Awesome.Property = function() {
             return self;
         }
 
-        self.name   = Awesome.Util.removePattern(content, Awesome.Constants.regex.separatorEnd);
+        self.name   = Awesome.Util.removePattern(content, Awesome.Constants.regex.propertyEnd);
         self.value  = Awesome.Util.trim(content.slice(self.name.length + 1));
 
         if (self.name.indexOf(Awesome.Constants.format.separatorParams) !== -1) {
@@ -219,22 +220,28 @@ Awesome.Property = function() {
 Awesome.PropertyParameter = function() {
     // Initialize basic variable and object properties
     var self = this;
+    self.name = null;
     self.value = null;
 
     // Loads property's name and value from string. Returns current instance.
     self.loadFromText = function(content) {
-        self.value = content;
+        self.name   = Awesome.Util.removePattern(content, Awesome.Constants.regex.parameterEnd);
+        self.value  = Awesome.Util.trim(content.slice(self.name.length + 1));
+
         return self;
     };
 
     // Converts current object to ICS format
     self.toString = function() {
-        return self.value;
+        return self.name + Awesome.Constants.format.separatorValue + self.value;
     };
 
     // Converts current object to pure JSON
     self.toJSON = function() {
-        return { to_be_modified : self.value };
+        return {
+            name    : self.name,
+            value   : self.value
+        };
     };
 };
 
