@@ -168,6 +168,8 @@ Awesome.Property = function() {
     var self = this;
     self.name = null;
     self.value = null;
+    self.params = [];       // TODO: 3.2 Property Parameters mapping
+    self.type = null;       // TODO: 3.3 Property Value Type
 
     // Loads property's name and value from string. Returns current instance.
     self.loadFromText = function(content) {
@@ -195,5 +197,47 @@ Awesome.Property = function() {
         };
     };
 };
+
+// TODO: 3.3 Property Value Type
+Awesome.Property.Binary = function() { };
+Awesome.Property.Boolean = function() { };
+Awesome.Property.CalendarUserAddress = function() { };
+Awesome.Property.Date = function() { };
+Awesome.Property.DateTime = function() { };
+Awesome.Property.Duration = function() { };
+Awesome.Property.Float = function() { };
+Awesome.Property.Integer = function() { };
+Awesome.Property.PeriodOfTime = function() { };
+Awesome.Property.RecurrenceRule = function() { };
+Awesome.Property.Text = function() { };
+Awesome.Property.Time = function() { };
+Awesome.Property.URI = function() { };
+Awesome.Property.UTCOffcet = function() { };
+
+// TODO: 3.2 Property Parameters mapping
+Awesome.Property.Params = [
+    "ALTREP",
+    "CN",
+    "CUTYPE",
+    "DELEGATED-FROM",
+    "DELEGATED-TO",
+    "DIR",
+    "ENCODING",
+    "FMTTYPE",
+    "FBTYPE",
+    "LANGUAGE",
+    "MEMBER",
+    "PARTSTAT",
+    "RANGE",
+    "RELATED",
+    "RELTYPE",
+    "ROLE",
+    "RSVP",
+    "SENT-BY",
+    "TZID",
+    "VALUE"
+];
+
+
 
 module.exports = Awesome;
