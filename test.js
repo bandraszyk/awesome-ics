@@ -1,4 +1,4 @@
-var Awesome = require("./awesome-ics");
+var Awesome = require("./src/awesome-ics");
 var fs      = require('fs');
 
 
