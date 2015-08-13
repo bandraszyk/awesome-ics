@@ -1,4 +1,4 @@
-var Awesome = require("./dist/awesome-ics");
+var AwesomeICS = require("./src/es5/awesome-ics");
 var fs      = require('fs');
 
 
@@ -8,7 +8,8 @@ fs.readFile("sample.ics", 'utf8', function(error, data) {
         return;
     }
 
-    var calendar = new Awesome.Calendar().loadFromText(data);
+    console.log(data);
+    var calendar = new AwesomeICS.Calendar(data);
     console.log(JSON.stringify(calendar.toJSON(), null, 4));
     console.log(calendar.toString());
 });

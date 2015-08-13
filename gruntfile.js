@@ -1,8 +1,22 @@
 module.exports = function (grunt) {
     require("load-grunt-tasks")(grunt);
-    grunt.loadNpmTasks("grunt-stripcomments")
+    grunt.loadNpmTasks("grunt-babel")
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
+        babel: {
+            options: {
+                sourceMap: false
+            },
+            dist: {
+                files: {
+                    "src/es5/awesome-ics.js": "src/es6/awesome-ics.js",
+                    "src/es5/block.js"      : "src/es6/block.js",
+                    "src/es5/property.js"   : "src/es6/property.js",
+                    "src/es5/constants.js"  : "src/es6/constants.js",
+                    "src/es5/util.js"       : "src/es6/util.js"
+                }
+            }
+        },
         concat: {
             options: {
                 separator: '\r\n'
@@ -44,5 +58,6 @@ module.exports = function (grunt) {
             }
         }
     });
-    grunt.registerTask("default", ["concat", "uglify", "comments"]);
+    grunt.registerTask("default", ["babel"]);
+    grunt.registerTask("old", ["concat", "uglify", "comments"])
 };
