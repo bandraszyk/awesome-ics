@@ -9,7 +9,14 @@ module.exports = function (grunt) {
             },
             library : {
                 files: {
-                    "dist/awesome-ics.js": ["src/awesome-ics.js"],
+                    "dist/awesome-ics.js": ["src/awesome-ics.js",
+                                            "src/constants.js",
+                                            "src/util.js",
+                                            "src/calendar.js",
+                                            "src/block.js",
+                                            "src/property.js",
+                                            "src/property.parameter.js",
+                                            "src/property.value.js"]
                 }
             }
         },
