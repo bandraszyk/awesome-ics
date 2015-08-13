@@ -9,35 +9,14 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    "src/es5/awesome-ics.js": "src/es6/awesome-ics.js",
-                    "src/es5/block.js"      : "src/es6/block.js",
-                    "src/es5/property.js"   : "src/es6/property.js",
-                    "src/es5/constants.js"  : "src/es6/constants.js",
-                    "src/es5/util.js"       : "src/es6/util.js"
-                }
-            }
-        },
-        concat: {
-            options: {
-                separator: '\r\n'
-            },
-            library : {
-                files: {
-                    "dist/awesome-ics.js": ["src/awesome-ics.js",
-                                            "src/constants.js",
-                                            "src/util.js",
-                                            "src/calendar.js",
-                                            "src/block.js",
-                                            "src/property.js",
-                                            "src/property.parameter.js",
-                                            "src/property.value.js"]
-                }
-            }
-        },
-        uglify: {
-            library: {
-                files: {
-                    'dist/awesome-ics.min.js': ["dist/awesome-ics.js"]
+                    "dist/awesome-ics.js"        : "src/es6/awesome-ics.js",
+                    "dist/block.js"              : "src/es6/block.js",
+                    "dist/property.js"           : "src/es6/property.js",
+                    "dist/property-parameter.js" : "src/es6/property-parameter.js",
+                    "dist/property-value.js"     : "src/es6/property-value.js",
+                    "dist/property-valueType.js" : "src/es6/property-valueType.js",
+                    "dist/constants.js"          : "src/es6/constants.js",
+                    "dist/util.js"               : "src/es6/util.js"
                 }
             }
         },
@@ -48,16 +27,9 @@ module.exports = function (grunt) {
                     multiline: true
                 },
                 src: [ "dist/*.js" ]
-            },
-            css: {
-                options: {
-                    singleline: true,
-                    multiline: true
-                },
-                src: [ "dist/*.css" ]
             }
         }
     });
-    grunt.registerTask("default", ["babel"]);
-    grunt.registerTask("old", ["concat", "uglify", "comments"])
+    grunt.registerTask("default", [ "babel", "uglify" ]);
+    grunt.registerTask("old", ["concat", "comments"])
 };

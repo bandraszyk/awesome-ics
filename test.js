@@ -1,4 +1,4 @@
-var AwesomeICS = require("./src/es5/awesome-ics");
+var AwesomeICS = require("./dist/awesome-ics");
 var fs      = require('fs');
 
 
