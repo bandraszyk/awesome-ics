@@ -9,13 +9,13 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    "dist/awesome-ics.js"        : "src/es6/awesome-ics.js",
-                    "dist/block.js"              : "src/es6/block.js",
-                    "dist/property.js"           : "src/es6/property.js",
-                    "dist/property-parameter.js" : "src/es6/property-parameter.js",
-                    "dist/property-value.js"     : "src/es6/property-value.js",
-                    "dist/constants.js"          : "src/es6/constants.js",
-                    "dist/util.js"               : "src/es6/util.js"
+                    "dist/awesome-ics.js"        : "src/awesome-ics.js",
+                    "dist/block.js"              : "src/block.js",
+                    "dist/property.js"           : "src/property.js",
+                    "dist/property-parameter.js" : "src/property-parameter.js",
+                    "dist/property-value.js"     : "src/property-value.js",
+                    "dist/constants.js"          : "src/constants.js",
+                    "dist/util.js"               : "src/util.js"
                 }
             }
         },

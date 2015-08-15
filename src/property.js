@@ -10,7 +10,7 @@ export class Property {
         this.name       = splitSafe(content, format.separatorProp)[0];
         this.value      = trim(content.slice(this.name.length + 1));
 
-        var parameters = splitSafe(this.name, format.separatorParam);
+        let parameters = splitSafe(this.name, format.separatorParam);
 
         if (this.name.indexOf(format.separatorParam) !== -1) {
             this.name = parameters[0];
@@ -20,10 +20,10 @@ export class Property {
         this.value = getValue(this.name, this.parameters, this.value);
     }
     toString() {
-        var name = this.name;
+        let name = this.name;
 
         if (this.parameters.length) {
-            var parameters = this.parameters.map(mapToString).join(format.separatorParam);
+            let parameters = this.parameters.map(mapToString).join(format.separatorParam);
             name = [ name, parameters ].join(format.separatorParam);
         }
 

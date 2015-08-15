@@ -19,31 +19,21 @@ function trim(text) {
     return removePattern(trimmedBeginning, /\s+$/g);
 }
 
-;
-
 function removePattern(text, regexp) {
     return text.replace(regexp, "");
 }
-
-;
 
 function mapToString(entry) {
     return entry.toString();
 }
 
-;
-
 function mapToJSON(entry) {
     return entry.toJSON();
 }
 
-;
-
 function setError(object, message) {
     object.error = message;
 }
-
-;
 
 function mergeElements(array, conditionOkCallback) {
     for (var i = 0; i < array.length;) {

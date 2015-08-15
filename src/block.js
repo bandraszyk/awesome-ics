@@ -12,9 +12,9 @@ export class Block {
         this.type       = "BLOCK";
 
         //-- Read the content
-        var lines = splitSafeLines(content);
-        var blockBegin = trim(lines.shift() || "");
-        var blockEnd = trim(lines.pop() || "");
+        let lines = splitSafeLines(content);
+        let blockBegin = trim(lines.shift() || "");
+        let blockEnd = trim(lines.pop() || "");
 
         //-- Validate block start
         if (!regex.blockBegin.test(blockBegin)) { return setError(this, "Cannot load Block element, first line should match /^BEGIN:/i."); }
