@@ -6,10 +6,10 @@ import { mapToJSON, mapToString, splitSafeLines, setError, trim, removePattern }
 
 export class Block {
     constructor(content) {
+        this.original   = content;
         this.properties = [];
         this.blocks     = [];
         this.type       = "BLOCK";
-        this.original   = content;
 
         //-- Read the content
         var lines = splitSafeLines(content);

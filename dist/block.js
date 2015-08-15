@@ -22,10 +22,10 @@ var Block = (function () {
 
         _classCallCheck(this, Block);
 
+        this.original = content;
         this.properties = [];
         this.blocks = [];
         this.type = "BLOCK";
-        this.original = content;
 
         //-- Read the content
         var lines = (0, _util.splitSafeLines)(content);

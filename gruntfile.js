@@ -14,7 +14,6 @@ module.exports = function (grunt) {
                     "dist/property.js"           : "src/es6/property.js",
                     "dist/property-parameter.js" : "src/es6/property-parameter.js",
                     "dist/property-value.js"     : "src/es6/property-value.js",
-                    "dist/property-valueType.js" : "src/es6/property-valueType.js",
                     "dist/constants.js"          : "src/es6/constants.js",
                     "dist/util.js"               : "src/es6/util.js"
                 }
@@ -30,6 +29,6 @@ module.exports = function (grunt) {
             }
         }
     });
-    grunt.registerTask("default", [ "babel", "uglify" ]);
+    grunt.registerTask("default", [ "babel" ]);
     grunt.registerTask("old", ["concat", "comments"])
 };
