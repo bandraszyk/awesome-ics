@@ -30,5 +30,4 @@ module.exports = function (grunt) {
         }
     });
     grunt.registerTask("default", [ "babel" ]);
-    grunt.registerTask("old", ["concat", "comments"])
 };
