@@ -8,7 +8,7 @@ export class Property {
         this.original   = content;
         this.parameters = [];
         this.name       = splitSafe(content, format.separatorProp)[0];
-        this.value      = trim(content.slice(this.name.length + 1));
+        this.value      = content.slice(this.name.length + 1);
 
         let parameters = splitSafe(this.name, format.separatorParam);
 

@@ -87,7 +87,7 @@ var Block = (function () {
         key: "toString",
         value: function toString() {
             if (this.error) {
-                return "";
+                return this.error;
             }
 
             var properties = "";

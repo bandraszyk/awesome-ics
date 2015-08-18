@@ -57,7 +57,7 @@ export class Block {
         });
     }
     toString() {
-        if (this.error) {return ""; }
+        if (this.error) { return this.error; }
 
         let properties  = "";
         let blocks    = "";

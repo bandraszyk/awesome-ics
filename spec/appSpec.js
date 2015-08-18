@@ -10,9 +10,11 @@ describe("awesome ics", function() {
 
 	tests.forEach(function(item) {  
 		it(item.name, function() {
-			var icsFile = fs.readFileSync(item.ics, 'utf8');
+			var icsFile = fs.readFileSync(item.ics, 'utf8').replace(/\r/g, "");
 			var calendar = new AwesomeICS.Calendar(icsFile);
-			expect(calendar.toString()).toBe(icsFile);
+
+			expect(JSON.stringify(calendar.toString()))
+				.toEqual(JSON.stringify(icsFile));
 		});
 	});
 });

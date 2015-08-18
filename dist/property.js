@@ -23,7 +23,7 @@ var Property = (function () {
         this.original = content;
         this.parameters = [];
         this.name = (0, _util.splitSafe)(content, _constants.format.separatorProp)[0];
-        this.value = (0, _util.trim)(content.slice(this.name.length + 1));
+        this.value = content.slice(this.name.length + 1);
 
         var parameters = (0, _util.splitSafe)(this.name, _constants.format.separatorParam);
 

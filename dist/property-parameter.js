@@ -21,7 +21,7 @@ var PropertyParameter = (function () {
         this.original = content;
 
         this.name = (0, _util.splitSafe)(content, _constants.format.separatorValue)[0];
-        this.value = (0, _util.trim)(content.slice(this.name.length + 1));
+        this.value = content.slice(this.name.length + 1);
     }
 
     _createClass(PropertyParameter, [{

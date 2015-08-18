@@ -4,6 +4,6 @@ PRODID:-//hacksw/handcal//NONSGML v1.0//EN
 BEGIN:VEVENT
 DTSTART;TZID="America/New_York":19970714T170000Z
 DTEND:19970715T035959Z
-SUMMARY:This is a multiline summary!
+SUMMARY: This is a multiline summary!
 END:VEVENT
 END:VCALENDAR
