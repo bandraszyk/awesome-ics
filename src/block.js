@@ -39,10 +39,11 @@ export class Block {
             if (regex.blockBegin.test(line)) { blockCounter++; }
 
             //-- Decrease the block counter for block end
-            if (regex.blockEnd.test(line)) { blockCounter--; block.push(line); }
+            if (regex.blockEnd.test(line)) { blockCounter--; }
 
             //-- Process as new child block
             if (blockCounter === 0 && block.length > 0) {
+                block.push(line);
                 this.blocks.push(new Block(block.join(format.newLine)));
                 block = [];
                 return;

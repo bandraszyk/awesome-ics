@@ -62,11 +62,12 @@ var Block = (function () {
 
             //-- Decrease the block counter for block end
             if (_constants.regex.blockEnd.test(line)) {
-                blockCounter--;block.push(line);
+                blockCounter--;
             }
 
             //-- Process as new child block
             if (blockCounter === 0 && block.length > 0) {
+                block.push(line);
                 _this.blocks.push(new Block(block.join(_constants.format.newLine)));
                 block = [];
                 return;
