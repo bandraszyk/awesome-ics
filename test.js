@@ -1,3 +1,4 @@
+var jasmine = require("jasmine");
 var AwesomeICS = require("./dist/awesome-ics");
 var fs      = require('fs');
 
