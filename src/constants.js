@@ -5,7 +5,9 @@ export const format = {
     separatorProp   : ":",
     separatorParam  : ";",
     separatorValue  : "=",
-    whitespace      : " "
+    whitespace      : " ",
+    lineMaxLength   : 75,
+    multilineBegin  : " "
 };
 
 export const regex = {

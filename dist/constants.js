@@ -10,7 +10,9 @@ var format = {
     separatorProp: ":",
     separatorParam: ";",
     separatorValue: "=",
-    whitespace: " "
+    whitespace: " ",
+    lineMaxLength: 75,
+    multilineBegin: " "
 };
 
 exports.format = format;

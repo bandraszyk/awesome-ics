@@ -54,8 +54,6 @@ function mergeElements(array, conditionOkCallback) {
     });
 }
 
-;
-
 function splitSafe(text, separator) {
     return mergeElements(text.split(separator), function (phrase) {
         // If current line do not contain even number of double quotation marks then lines should be treated as one
@@ -64,13 +62,9 @@ function splitSafe(text, separator) {
     });
 }
 
-;
-
 function splitSafeLines(text) {
     return mergeElements(text.split(_constants.format.newLine), function (line, nextLine) {
         // If next line starts with whitespace both lines should be treated as one
         return nextLine[0] !== " ";
     });
 }
-
-;

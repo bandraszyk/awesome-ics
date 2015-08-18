@@ -1,5 +1,5 @@
 import { format } from "./constants";
-import { splitSafe, trim } from "./util";
+import { splitSafe } from "./util";
 
 const propertyTypes = [
     "ALTREP",
@@ -26,10 +26,9 @@ const propertyTypes = [
 
 export class PropertyParameter {
     constructor(content) {
-        this.original = content;
-
-        this.name   = splitSafe(content, format.separatorValue)[0];
-        this.value  = content.slice(this.name.length + 1);
+        this.original   = content;
+        this.name       = splitSafe(content, format.separatorValue)[0];
+        this.value      = content.slice(this.name.length + 1);
     }
     toString() {
         return [ this.name, this.value ].join(format.separatorValue);

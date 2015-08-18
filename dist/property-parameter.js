@@ -19,7 +19,6 @@ var PropertyParameter = (function () {
         _classCallCheck(this, PropertyParameter);
 
         this.original = content;
-
         this.name = (0, _util.splitSafe)(content, _constants.format.separatorValue)[0];
         this.value = content.slice(this.name.length + 1);
     }

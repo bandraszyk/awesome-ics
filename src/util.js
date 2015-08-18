@@ -36,7 +36,8 @@ export function mergeElements(array, conditionOkCallback) {
     }
 
     return array.filter(function(entry) { return entry; });
-};
+}
+
 export function splitSafe(text, separator) {
     return mergeElements(text.split(separator),
         function(phrase) {
@@ -44,7 +45,7 @@ export function splitSafe(text, separator) {
             let matchQuotationMarks = phrase.match(/"/g);
             return !matchQuotationMarks || (matchQuotationMarks.length % 2 === 0);
         });
-};
+}
 
 export function splitSafeLines(text) {
     return mergeElements(text.split(format.newLine),
@@ -52,4 +53,4 @@ export function splitSafeLines(text) {
             // If next line starts with whitespace both lines should be treated as one
             return nextLine[0] !== " ";
         });
-};
+}

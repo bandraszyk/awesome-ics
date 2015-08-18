@@ -1,4 +1,4 @@
-import { splitSafe, trim, mapToJSON, mapToString } from "./util";
+import { splitSafe, mapToJSON, mapToString } from "./util";
 import { format } from "./constants";
 import { PropertyParameter } from "./property-parameter";
 import { getValue } from "./property-value";
@@ -13,7 +13,7 @@ export class Property {
         let parameters = splitSafe(this.name, format.separatorParam);
 
         if (this.name.indexOf(format.separatorParam) !== -1) {
-            this.name = parameters[0];
+            this.name       = parameters[0];
             this.parameters = parameters.slice(1).map(function(paramContent) { return new PropertyParameter(paramContent); });
         }
 
@@ -27,7 +27,17 @@ export class Property {
             name = [ name, parameters ].join(format.separatorParam);
         }
 
-        return name + format.separatorProp + this.value;
+        let value = name + format.separatorProp + this.value;
+        let returnValue = value.slice(0, format.lineMaxLength - 1);
+        let rest = value.slice(format.lineMaxLength);
+
+        while(rest.length) {
+            rest = format.multilineBegin + rest;
+            returnValue = returnValue.concat(format.newLine + rest.slice(0, format.lineMaxLength - 1));
+            rest = rest.slice(format.lineMaxLength);
+        }
+
+        return returnValue;
     }
     toJSON() {
         return {
