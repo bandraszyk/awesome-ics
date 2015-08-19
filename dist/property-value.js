@@ -149,11 +149,6 @@ var Geo = (function (_Value8) {
         value: function toString() {
             return this.value.latitude.toString() + _constants.format.separatorGeo + this.value.longitude.toString();
         }
-    }, {
-        key: "toJSON",
-        value: function toJSON() {
-            return this.value;
-        }
     }]);
 
     return Geo;

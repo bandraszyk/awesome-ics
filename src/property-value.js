@@ -70,9 +70,6 @@ class Geo extends Value {
     toString() {
         return this.value.latitude.toString() + format.separatorGeo + this.value.longitude.toString();
     }
-    toJSON() {
-        return this.value;
-    }
 }
 
 class Integer extends Value {
