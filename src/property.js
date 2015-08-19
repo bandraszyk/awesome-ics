@@ -27,7 +27,7 @@ export class Property {
             name = [ name, parameters ].join(format.separatorParam);
         }
 
-        let value = name + format.separatorProp + this.value;
+        let value = name + format.separatorProp + this.value.toString();
         let returnValue = value.slice(0, format.lineMaxLength - 1);
         let rest = value.slice(format.lineMaxLength);
 
@@ -41,9 +41,9 @@ export class Property {
     }
     toJSON() {
         return {
-            name    : this.name,
-            value   : this.value,
-            params  : this.parameters.map(mapToJSON)
+            name        : this.name,
+            parameters  : this.parameters.map(mapToJSON),
+            value       : mapToJSON(this.value)
         };
     }
 }

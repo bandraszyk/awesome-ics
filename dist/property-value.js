@@ -14,22 +14,25 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var _constants = require("./constants");
+
 var Value = (function () {
     function Value(content) {
         _classCallCheck(this, Value);
 
         this.original = content;
+        this.value = content;
     }
 
     _createClass(Value, [{
         key: "toString",
         value: function toString() {
-            return this.original;
+            return this.value.toString();
         }
     }, {
         key: "toJSON",
         value: function toJSON() {
-            return this.original;
+            return this.value;
         }
     }]);
 
@@ -132,7 +135,26 @@ var Geo = (function (_Value8) {
         _classCallCheck(this, Geo);
 
         _get(Object.getPrototypeOf(Geo.prototype), "constructor", this).call(this, content);
+
+        var coordinates = content.split(_constants.format.separatorGeo);
+
+        this.value = {
+            latitude: parseFloat(coordinates[0]),
+            longitude: parseFloat(coordinates[1])
+        };
     }
+
+    _createClass(Geo, [{
+        key: "toString",
+        value: function toString() {
+            return this.value.latitude.toString() + _constants.format.separatorGeo + this.value.longitude.toString();
+        }
+    }, {
+        key: "toJSON",
+        value: function toJSON() {
+            return this.value;
+        }
+    }]);
 
     return Geo;
 })(Value);

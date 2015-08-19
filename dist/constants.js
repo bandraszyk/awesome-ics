@@ -10,6 +10,7 @@ var format = {
     separatorProp: ":",
     separatorParam: ";",
     separatorValue: "=",
+    separatorGeo: ";",
     whitespace: " ",
     lineMaxLength: 75,
     multilineBegin: " "

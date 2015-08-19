@@ -47,7 +47,7 @@ var Property = (function () {
                 name = [name, parameters].join(_constants.format.separatorParam);
             }
 
-            var value = name + _constants.format.separatorProp + this.value;
+            var value = name + _constants.format.separatorProp + this.value.toString();
             var returnValue = value.slice(0, _constants.format.lineMaxLength - 1);
             var rest = value.slice(_constants.format.lineMaxLength);
 
@@ -64,8 +64,8 @@ var Property = (function () {
         value: function toJSON() {
             return {
                 name: this.name,
-                value: this.value,
-                params: this.parameters.map(_util.mapToJSON)
+                parameters: this.parameters.map(_util.mapToJSON),
+                value: (0, _util.mapToJSON)(this.value)
             };
         }
     }]);

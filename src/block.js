@@ -71,9 +71,9 @@ export class Block {
         if (this.error) { return { error: this.error }; }
 
         return {
-            type    : this.type,
-            prop    : this.properties.map(mapToJSON),
-            blocks  : this.blocks.map(mapToJSON)
+            type        : this.type,
+            properties  : this.properties.map(mapToJSON),
+            blocks      : this.blocks.map(mapToJSON)
         }
     }
 }

@@ -5,6 +5,7 @@ export const format = {
     separatorProp   : ":",
     separatorParam  : ";",
     separatorValue  : "=",
+    separatorGeo    : ";",
     whitespace      : " ",
     lineMaxLength   : 75,
     multilineBegin  : " "

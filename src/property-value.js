@@ -1,12 +1,15 @@
+import { format } from "./constants";
+
 class Value {
     constructor(content) {
-        this.original = content;
+        this.original   = content;
+        this.value      = content;
     }
     toString() {
-        return this.original;
+        return this.value.toString();
     }
     toJSON() {
-        return this.original;
+        return this.value;
     }
 }
 
@@ -56,6 +59,19 @@ export class Float extends Value {
 class Geo extends Value {
     constructor(content) {
         super(content);
+
+        let coordinates = content.split(format.separatorGeo);
+
+        this.value = {
+            latitude    : parseFloat(coordinates[0]),
+            longitude   : parseFloat(coordinates[1])
+        };
+    }
+    toString() {
+        return this.value.latitude.toString() + format.separatorGeo + this.value.longitude.toString();
+    }
+    toJSON() {
+        return this.value;
     }
 }
 

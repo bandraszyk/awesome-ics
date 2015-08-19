@@ -111,7 +111,7 @@ var Block = (function () {
 
             return {
                 type: this.type,
-                prop: this.properties.map(_util.mapToJSON),
+                properties: this.properties.map(_util.mapToJSON),
                 blocks: this.blocks.map(_util.mapToJSON)
             };
         }
