@@ -6,7 +6,8 @@ describe("library", function() {
 
     it ("should convert geo-coordinates", function() {
         //-- Arrange
-        var icsFile = fs.readFileSync("./spec/ics/geo.ics", "utf8").replace(/\r/g, "");
+        var icsFile = fs.readFileSync("./spec/ics/geo.ics", "utf8")
+            .replace(/\r/g, "").trim();
 
         //-- Act
         var calendar = new AwesomeICS.Calendar(icsFile);
@@ -19,7 +20,8 @@ describe("library", function() {
 
     it ("should convert back geo-coordinates", function() {
         //-- Arrange
-        var icsFile = fs.readFileSync("./spec/ics/geo.ics", "utf8").replace(/\r/g, "");
+        var icsFile = fs.readFileSync("./spec/ics/geo.ics", "utf8")
+            .replace(/\r/g, "").trim();
 
         //-- Act
         var calendar = new AwesomeICS.Calendar(icsFile);

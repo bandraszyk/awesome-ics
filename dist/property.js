@@ -48,12 +48,12 @@ var Property = (function () {
             }
 
             var value = name + _constants.format.separatorProp + this.value.toString();
-            var returnValue = value.slice(0, _constants.format.lineMaxLength - 1);
+            var returnValue = value.slice(0, _constants.format.lineMaxLength);
             var rest = value.slice(_constants.format.lineMaxLength);
 
             while (rest.length) {
                 rest = _constants.format.multilineBegin + rest;
-                returnValue = returnValue.concat(_constants.format.newLine + rest.slice(0, _constants.format.lineMaxLength - 1));
+                returnValue = returnValue.concat(_constants.format.newLine + rest.slice(0, _constants.format.lineMaxLength));
                 rest = rest.slice(_constants.format.lineMaxLength);
             }
 

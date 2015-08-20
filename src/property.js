@@ -28,12 +28,12 @@ export class Property {
         }
 
         let value = name + format.separatorProp + this.value.toString();
-        let returnValue = value.slice(0, format.lineMaxLength - 1);
+        let returnValue = value.slice(0, format.lineMaxLength);
         let rest = value.slice(format.lineMaxLength);
 
         while(rest.length) {
             rest = format.multilineBegin + rest;
-            returnValue = returnValue.concat(format.newLine + rest.slice(0, format.lineMaxLength - 1));
+            returnValue = returnValue.concat(format.newLine + rest.slice(0, format.lineMaxLength));
             rest = rest.slice(format.lineMaxLength);
         }
 

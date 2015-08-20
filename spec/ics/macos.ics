@@ -31,7 +31,6 @@ DTSTART;TZID=Europe/Warsaw:20150804T090000
 DTSTAMP:20150818T183903Z
 LOCATION:Somewhere in deep space
 SEQUENCE:0
-DESCRIPTION:It is far far away\,\nor not\,2\n Who knows? It is far far awa
- y\,\nor not\, \nWho knows?
+DESCRIPTION:It is far far away\,\nor not\,2\n Who knows?
 END:VEVENT
 END:VCALENDAR

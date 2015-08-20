@@ -7,7 +7,7 @@ export const format = {
     separatorValue  : "=",
     separatorGeo    : ";",
     whitespace      : " ",
-    lineMaxLength   : 75,
+    lineMaxLength   : 72,
     multilineBegin  : " "
 };
 

@@ -21,36 +21,42 @@ export function setError(object, message) {
     object.error = message;
 }
 
-export function mergeElements(array, conditionOkCallback) {
-    for (let i = 0; i < array.length;) {
+export function splitSafe(text, separator) {
+    let parts = text.split(separator);
 
-        let element = array[i];
-        let elementNext = array[i + 1];
+    if (parts.length === 1) { return parts; }
 
-        if (i == array.length - 1 || (conditionOkCallback && conditionOkCallback(element, elementNext))) {
-            i++;
-            continue;
-        }
+    for (let currentLineIndex = 0; currentLineIndex < parts.length - 1; currentLineIndex++) {
+        let line = parts[currentLineIndex];
+        let matchQuotationMarks = line.match(/"/g);
+        let shouldBeContinued = !matchQuotationMarks || (matchQuotationMarks.length % 2 === 0);
 
-        array.splice(i, 2, [ element, elementNext ].join(""));
+        if (shouldBeContinued) { continue; }
+
+        //-- Merge with previous line and remove from array current element
+        parts[currentLineIndex] = [ line, parts[currentLineIndex + 1] ].join(separator);
+        parts.splice(currentLineIndex + 1, 1);
     }
 
-    return array.filter(function(entry) { return entry; });
-}
-
-export function splitSafe(text, separator) {
-    return mergeElements(text.split(separator),
-        function(phrase) {
-            // If current line do not contain even number of double quotation marks then lines should be treated as one
-            let matchQuotationMarks = phrase.match(/"/g);
-            return !matchQuotationMarks || (matchQuotationMarks.length % 2 === 0);
-        });
+    return parts;
 }
 
 export function splitSafeLines(text) {
-    return mergeElements(text.split(format.newLine),
-        function(line, nextLine) {
-            // If next line starts with whitespace both lines should be treated as one
-            return nextLine[0] !== " ";
-        });
+    let lines = text.split(format.newLine);
+
+    for (let currentLineIndex = 1; currentLineIndex < lines.length;) {
+        let line = lines[currentLineIndex];
+        let isContinuation = line[0] === format.multilineBegin;
+
+        if (isContinuation) {
+            //-- Merge with previous line and remove from array current element
+            lines[currentLineIndex - 1] = [ lines[currentLineIndex - 1], line.slice(1) ].join("");
+            lines.splice(currentLineIndex, 1);
+            continue;
+        }
+
+        currentLineIndex++;
+    }
+
+    return lines.filter(function(line) { return line; });
 }

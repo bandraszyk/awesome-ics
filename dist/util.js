@@ -8,7 +8,6 @@ exports.removePattern = removePattern;
 exports.mapToString = mapToString;
 exports.mapToJSON = mapToJSON;
 exports.setError = setError;
-exports.mergeElements = mergeElements;
 exports.splitSafe = splitSafe;
 exports.splitSafeLines = splitSafeLines;
 
@@ -35,36 +34,48 @@ function setError(object, message) {
     object.error = message;
 }
 
-function mergeElements(array, conditionOkCallback) {
-    for (var i = 0; i < array.length;) {
+function splitSafe(text, separator) {
+    var parts = text.split(separator);
 
-        var element = array[i];
-        var elementNext = array[i + 1];
+    if (parts.length === 1) {
+        return parts;
+    }
 
-        if (i == array.length - 1 || conditionOkCallback && conditionOkCallback(element, elementNext)) {
-            i++;
+    for (var currentLineIndex = 0; currentLineIndex < parts.length - 1; currentLineIndex++) {
+        var line = parts[currentLineIndex];
+        var matchQuotationMarks = line.match(/"/g);
+        var shouldBeContinued = !matchQuotationMarks || matchQuotationMarks.length % 2 === 0;
+
+        if (shouldBeContinued) {
             continue;
         }
 
-        array.splice(i, 2, [element, elementNext].join(""));
+        //-- Merge with previous line and remove from array current element
+        parts[currentLineIndex] = [line, parts[currentLineIndex + 1]].join(separator);
+        parts.splice(currentLineIndex + 1, 1);
     }
 
-    return array.filter(function (entry) {
-        return entry;
-    });
-}
-
-function splitSafe(text, separator) {
-    return mergeElements(text.split(separator), function (phrase) {
-        // If current line do not contain even number of double quotation marks then lines should be treated as one
-        var matchQuotationMarks = phrase.match(/"/g);
-        return !matchQuotationMarks || matchQuotationMarks.length % 2 === 0;
-    });
+    return parts;
 }
 
 function splitSafeLines(text) {
-    return mergeElements(text.split(_constants.format.newLine), function (line, nextLine) {
-        // If next line starts with whitespace both lines should be treated as one
-        return nextLine[0] !== " ";
+    var lines = text.split(_constants.format.newLine);
+
+    for (var currentLineIndex = 1; currentLineIndex < lines.length;) {
+        var line = lines[currentLineIndex];
+        var isContinuation = line[0] === _constants.format.multilineBegin;
+
+        if (isContinuation) {
+            //-- Merge with previous line and remove from array current element
+            lines[currentLineIndex - 1] = [lines[currentLineIndex - 1], line.slice(1)].join("");
+            lines.splice(currentLineIndex, 1);
+            continue;
+        }
+
+        currentLineIndex++;
+    }
+
+    return lines.filter(function (line) {
+        return line;
     });
 }
