@@ -7,8 +7,9 @@ var jsdiff		= require('diff');
 var customMatchers = {
 	toBeAwesome: function (util, customEqualityTesters) { return {
 		compare: function (actual, expected) {
-			if (expected === undefined)
+			if (typeof expected == 'undefined') {
 				expected = '';
+			}
 
 			var result = { message: '', pass: true };
 
