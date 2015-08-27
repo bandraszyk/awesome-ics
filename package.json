@@ -13,5 +13,8 @@
     "load-grunt-tasks": "^1.0.0",
     "jasmine": "2.3.0",
     "traceur": "0.0.91"
+  },
+  "devDependencies": {
+    "diff": "^2.0.2"
   }
 }

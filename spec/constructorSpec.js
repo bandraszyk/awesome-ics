@@ -1,8 +1,46 @@
 
 var AwesomeICS	= require('../dist/awesome-ics');
 var fs			= require('fs');
+var jsdiff		= require('diff');
+
+//-- Define custom matchers
+var customMatchers = {
+	toBeAwesome: function (util, customEqualityTesters) { return {
+		compare: function (actual, expected) {
+			if (typeof expected == 'undefined') {
+				expected = '';
+			}
+
+			var result = { message: '', pass: true };
+
+			//-- Match
+			result.pass = (actual === expected);
+
+			//-- Message
+			if (!result.pass) {
+				//-- Get differences
+				var diff = jsdiff.diffLines(JSON.parse(actual), JSON.parse(expected));
+				//-- Prepare message
+				for (var i = 0; i < diff.length; i++) {
+					result.message += 
+						diff[i].added ? '+++' : 
+						diff[i].removed ? '---' : '';
+					result.message += diff[i].value;
+				}
+			}	
+
+			return result;
+		}
+	}} 
+}
+
 
 describe("library", function() {
+
+	beforeEach(function() {
+		//-- Register custom matcher
+		jasmine.addMatchers(customMatchers);
+	});
 
 	it("should convert back basic ics", function() {
 		//-- Arrange
@@ -13,7 +51,7 @@ describe("library", function() {
 		var calendar = new AwesomeICS.Calendar(icsFile);
 
 		//-- Assert
-		expect(JSON.stringify(calendar.toString())).toEqual(JSON.stringify(icsFile));
+		expect(JSON.stringify(calendar.toString())).toBeAwesome(JSON.stringify(icsFile));
 	});
 
 	it("should convert back MacOS generated ics", function() {
@@ -25,7 +63,7 @@ describe("library", function() {
 		var calendar = new AwesomeICS.Calendar(icsFile);
 
 		//-- Assert
-		expect(JSON.stringify(calendar.toString())).toEqual(JSON.stringify(icsFile));
+		expect(JSON.stringify(calendar.toString())).toBeAwesome(JSON.stringify(icsFile));
 	});
 
 	it("should convert back ics with multiline description", function() {
@@ -37,6 +75,6 @@ describe("library", function() {
 		var calendar = new AwesomeICS.Calendar(icsFile);
 
 		//-- Assert
-		expect(JSON.stringify(calendar.toString())).toEqual(JSON.stringify(icsFile));
+		expect(JSON.stringify(calendar.toString())).toBeAwesome(JSON.stringify(icsFile));
 	});
 });
