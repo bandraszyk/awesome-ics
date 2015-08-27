@@ -3,8 +3,8 @@ var AwesomeICS	= require('../dist/awesome-ics');
 var fs			= require('fs');
 var jsdiff		= require('diff');
 
-//-- Define custom marchers
-var customMachers = {
+//-- Define custom matchers
+var customMatchers = {
 	toBeAwesome: function (util, customEqualityTesters) { return {
 		compare: function (actual, expected) {
 			if (expected === undefined)
@@ -38,7 +38,7 @@ describe("library", function() {
 
 	beforeEach(function() {
 		//-- Register custom matcher
-		jasmine.addMatchers(customMachers);
+		jasmine.addMatchers(customMatchers);
 	});
 
 	it("should convert back basic ics", function() {
