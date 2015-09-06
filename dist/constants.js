@@ -12,12 +12,15 @@ var format = {
     separatorValue: "=",
     separatorGeo: ";",
     separatorMulti: ",",
+    separatorDateTime: "T",
     whitespace: " ",
     lineMaxLength: 72,
     multilineBegin: " ",
     values: {
         date: "YYYYMMDD",
-        time: "HHmmSS"
+        time: "HHmmSS",
+        timeUTC: "Z",
+        UTCOffset: "ZZ"
     }
 };
 

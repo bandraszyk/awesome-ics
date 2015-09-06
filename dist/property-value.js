@@ -70,7 +70,7 @@ var MultipleValue = (function () {
     }, {
         key: "toJSON",
         value: function toJSON() {
-            return this.values;
+            return this.values.map(_util.mapToJSON);
         }
     }]);
 
@@ -86,6 +86,7 @@ var Binary = (function (_Value) {
         _classCallCheck(this, Binary);
 
         _get(Object.getPrototypeOf(Binary.prototype), "constructor", this).call(this, content);
+        // TODO: Implement behaviour
     }
 
     return Binary;
@@ -100,7 +101,15 @@ var Boolean = (function (_Value2) {
         _classCallCheck(this, Boolean);
 
         _get(Object.getPrototypeOf(Boolean.prototype), "constructor", this).call(this, content);
+        this.value = JSON.parse(content.toLowerCase());
     }
+
+    _createClass(Boolean, [{
+        key: "toString",
+        value: function toString() {
+            return this.value.toString().toUpperCase();
+        }
+    }]);
 
     return Boolean;
 })(Value);
@@ -114,6 +123,7 @@ var CalendarUserAddress = (function (_Value3) {
         _classCallCheck(this, CalendarUserAddress);
 
         _get(Object.getPrototypeOf(CalendarUserAddress.prototype), "constructor", this).call(this, content);
+        // TODO: Implement behaviour
     }
 
     return CalendarUserAddress;
@@ -150,7 +160,28 @@ var DateTime = (function (_Value5) {
         _classCallCheck(this, DateTime);
 
         _get(Object.getPrototypeOf(DateTime.prototype), "constructor", this).call(this, content);
+        var parts = content.split(_constants.format.separatorDateTime);
+
+        this.value = {
+            date: new Date(parts[0]),
+            time: new Time(parts[1])
+        };
     }
+
+    _createClass(DateTime, [{
+        key: "toString",
+        value: function toString() {
+            return this.value.date.toString() + _constants.format.separatorDateTime + this.value.time.toString();
+        }
+    }, {
+        key: "toJSON",
+        value: function toJSON() {
+            return {
+                date: this.value.date.toJSON(),
+                time: this.value.time.toJSON()
+            };
+        }
+    }]);
 
     return DateTime;
 })(Value);
@@ -164,6 +195,7 @@ var Duration = (function (_Value6) {
         _classCallCheck(this, Duration);
 
         _get(Object.getPrototypeOf(Duration.prototype), "constructor", this).call(this, content);
+        // TODO: Implement behaviour
     }
 
     return Duration;
@@ -178,6 +210,7 @@ var Float = (function (_Value7) {
         _classCallCheck(this, Float);
 
         _get(Object.getPrototypeOf(Float.prototype), "constructor", this).call(this, content);
+        this.value = parseFloat(content);
     }
 
     return Float;
@@ -196,8 +229,8 @@ var Geo = (function (_Value8) {
         var coordinates = content.split(_constants.format.separatorGeo);
 
         this.value = {
-            latitude: parseFloat(coordinates[0]),
-            longitude: parseFloat(coordinates[1])
+            latitude: new Float(coordinates[0]),
+            longitude: new Float(coordinates[1])
         };
     }
 
@@ -205,6 +238,14 @@ var Geo = (function (_Value8) {
         key: "toString",
         value: function toString() {
             return this.value.latitude.toString() + _constants.format.separatorGeo + this.value.longitude.toString();
+        }
+    }, {
+        key: "toJSON",
+        value: function toJSON() {
+            return {
+                latitude: this.value.latitude.toJSON(),
+                longitude: this.value.longitude.toJSON()
+            };
         }
     }]);
 
@@ -220,6 +261,7 @@ var Integer = (function (_Value9) {
         _classCallCheck(this, Integer);
 
         _get(Object.getPrototypeOf(Integer.prototype), "constructor", this).call(this, content);
+        this.value = parseInt(content);
     }
 
     return Integer;
@@ -248,6 +290,7 @@ var RecurrenceRule = (function (_Value11) {
         _classCallCheck(this, RecurrenceRule);
 
         _get(Object.getPrototypeOf(RecurrenceRule.prototype), "constructor", this).call(this, content);
+        // TODO: Implement behaviour
     }
 
     return RecurrenceRule;
@@ -276,7 +319,26 @@ var Time = (function (_Value13) {
         _classCallCheck(this, Time);
 
         _get(Object.getPrototypeOf(Time.prototype), "constructor", this).call(this, content);
+        this.value = {
+            time: (0, _moment2["default"])(content.slice(0, 6), _constants.format.values.time),
+            isFixed: content.slice(-1) !== _constants.format.values.timeUTC
+        };
     }
+
+    _createClass(Time, [{
+        key: "toString",
+        value: function toString() {
+            return this.value.time.format(_constants.format.values.time) + (!this.value.isFixed && _constants.format.values.timeUTC || "");
+        }
+    }, {
+        key: "toJSON",
+        value: function toJSON() {
+            return {
+                isFixed: this.value.isFixed,
+                time: this.value.time
+            };
+        }
+    }]);
 
     return Time;
 })(Value);
@@ -304,9 +366,18 @@ var UTCOffset = (function (_Value15) {
         _classCallCheck(this, UTCOffset);
 
         _get(Object.getPrototypeOf(UTCOffset.prototype), "constructor", this).call(this, content);
+        this.value = (0, _moment2["default"])().utcOffset(content);
     }
 
     //-- Define multiple values
+
+    _createClass(UTCOffset, [{
+        key: "toString",
+        value: function toString() {
+            return this.value.format(_constants.format.values.UTCOffset);
+        }
+    }]);
+
     return UTCOffset;
 })(Value);
 

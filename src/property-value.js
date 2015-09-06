@@ -23,25 +23,31 @@ export class MultipleValue {
         return this.values.map(mapToString).join(format.separatorMulti);
     }
     toJSON() {
-        return this.values;
+        return this.values.map(mapToJSON);
     }
 }
 
 export class Binary extends Value {
     constructor(content) {
         super(content);
+        // TODO: Implement behaviour
     }
 }
 
 export class Boolean extends Value {
     constructor(content) {
         super(content);
+        this.value = JSON.parse(content.toLowerCase());
+    }
+    toString() {
+        return this.value.toString().toUpperCase();
     }
 }
 
 export class CalendarUserAddress extends Value {
     constructor(content) {
         super(content);
+        // TODO: Implement behaviour
     }
 }
 
@@ -58,18 +64,36 @@ export class Date extends Value {
 export class DateTime extends Value {
     constructor(content) {
         super(content);
+        let parts = content.split(format.separatorDateTime);
+
+        this.value = {
+            date: new Date(parts[0]),
+            time: new Time(parts[1])
+        };
+    }
+    toString() {
+        return this.value.date.toString() + format.separatorDateTime + this.value.time.toString();
+    }
+    toJSON() {
+        return {
+            date: this.value.date.toJSON(),
+            time: this.value.time.toJSON()
+        }
     }
 }
+
 
 export class Duration extends Value {
     constructor(content) {
         super(content);
+        // TODO: Implement behaviour
     }
 }
 
 export class Float extends Value {
     constructor(content) {
         super(content);
+        this.value = parseFloat(content);
     }
 }
 
@@ -80,18 +104,25 @@ export class Geo extends Value {
         let coordinates = content.split(format.separatorGeo);
 
         this.value = {
-            latitude    : parseFloat(coordinates[0]),
-            longitude   : parseFloat(coordinates[1])
+            latitude    : new Float(coordinates[0]),
+            longitude   : new Float(coordinates[1])
         };
     }
     toString() {
         return this.value.latitude.toString() + format.separatorGeo + this.value.longitude.toString();
+    }
+    toJSON() {
+        return {
+            latitude    : this.value.latitude.toJSON(),
+            longitude   : this.value.longitude.toJSON()
+        }
     }
 }
 
 export class Integer extends Value {
     constructor(content) {
         super(content);
+        this.value = parseInt(content);
     }
 }
 
@@ -104,6 +135,7 @@ export class PeriodOfTime extends Value {
 export class RecurrenceRule extends Value {
     constructor(content) {
         super(content);
+        // TODO: Implement behaviour
     }
 }
 
@@ -116,6 +148,19 @@ export class Text extends Value {
 export class Time extends Value {
     constructor(content) {
         super(content);
+        this.value = {
+            time: moment(content.slice(0, 6), format.values.time),
+            isFixed: content.slice(-1) !== format.values.timeUTC
+        };
+    }
+    toString() {
+        return this.value.time.format(format.values.time) + (!this.value.isFixed && format.values.timeUTC || "");
+    }
+    toJSON() {
+        return {
+            isFixed : this.value.isFixed,
+            time    : this.value.time
+        }
     }
 }
 
@@ -128,6 +173,10 @@ export class URI extends Value {
 export class UTCOffset extends Value {
     constructor(content) {
         super(content);
+        this.value = moment().utcOffset(content);
+    }
+    toString() {
+        return this.value.format(format.values.UTCOffset);
     }
 }
 
