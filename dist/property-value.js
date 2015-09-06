@@ -306,10 +306,19 @@ var UTCOffset = (function (_Value15) {
         _get(Object.getPrototypeOf(UTCOffset.prototype), "constructor", this).call(this, content);
     }
 
+    //-- Define multiple values
     return UTCOffset;
 })(Value);
 
 exports.UTCOffset = UTCOffset;
+Date.isMultiple = true;
+DateTime.isMultiple = true;
+Duration.isMultiple = true;
+Float.isMultiple = true;
+Integer.isMultiple = true;
+PeriodOfTime.isMultiple = true;
+Time.isMultiple = true;
+Text.isMultiple = false;
 
 var valueMapping = {
     "CALSCALE": Text,
@@ -371,16 +380,6 @@ var valueMultipleMapping = {
     "TIME": MultipleValue,
     "TEXT": Text
 };
-
-//-- Define multiple values
-Date.isMultiple = true;
-DateTime.isMultiple = true;
-Duration.isMultiple = true;
-Float.isMultiple = true;
-Integer.isMultiple = true;
-PeriodOfTime.isMultiple = true;
-Time.isMultiple = true;
-Text.isMultiple = false;
 
 var valueParameterMapping = {
     "BINARY": Binary,

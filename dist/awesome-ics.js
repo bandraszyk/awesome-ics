@@ -12,6 +12,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var _block = require("./block");
 
+var _property = require("./property");
+
+var _propertyParameter = require("./property-parameter");
+
+var _propertyValue = require("./property-value");
+
 //-- Definition of calendar
 
 var Calendar = (function (_Block) {
@@ -27,3 +33,28 @@ var Calendar = (function (_Block) {
 })(_block.Block);
 
 exports.Calendar = Calendar;
+var Elements = {
+    Block: _block.Block,
+    Property: _property.Property,
+    PropertyParameter: _propertyParameter.PropertyParameter,
+    PropertyValue: {
+        Value: _propertyValue.Value,
+        MultipleValue: _propertyValue.MultipleValue,
+        Binary: _propertyValue.Binary,
+        Boolean: _propertyValue.Boolean,
+        CalendarUserAddress: _propertyValue.CalendarUserAddress,
+        Date: _propertyValue.Date,
+        DateTime: _propertyValue.DateTime,
+        Duration: _propertyValue.Duration,
+        Float: _propertyValue.Float,
+        Geo: _propertyValue.Geo,
+        Integer: _propertyValue.Integer,
+        PeriodOfTime: _propertyValue.PeriodOfTime,
+        RecurrenceRule: _propertyValue.RecurrenceRule,
+        Text: _propertyValue.Text,
+        Time: _propertyValue.Time,
+        URI: _propertyValue.URI,
+        UTCOffset: _propertyValue.UTCOffset
+    }
+};
+exports.Elements = Elements;

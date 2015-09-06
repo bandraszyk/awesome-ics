@@ -131,6 +131,16 @@ export class UTCOffset extends Value {
     }
 }
 
+//-- Define multiple values
+Date.isMultiple         = true;
+DateTime.isMultiple     = true;
+Duration.isMultiple     = true;
+Float.isMultiple        = true;
+Integer.isMultiple      = true;
+PeriodOfTime.isMultiple = true;
+Time.isMultiple         = true;
+Text.isMultiple         = false;
+
 const valueMapping = {
     "CALSCALE"          : Text,
     "METHOD"            : Text,
@@ -191,16 +201,6 @@ const valueMultipleMapping = {
     "TIME"              : MultipleValue,
     "TEXT"              : Text
 };
-
-//-- Define multiple values
-Date.isMultiple         = true;
-DateTime.isMultiple     = true;
-Duration.isMultiple     = true;
-Float.isMultiple        = true;
-Integer.isMultiple      = true;
-PeriodOfTime.isMultiple = true;
-Time.isMultiple         = true;
-Text.isMultiple         = false;
 
 const valueParameterMapping = {
     "BINARY"            : Binary,
