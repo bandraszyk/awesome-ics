@@ -11,9 +11,14 @@ var format = {
     separatorParam: ";",
     separatorValue: "=",
     separatorGeo: ";",
+    separatorMulti: ",",
     whitespace: " ",
     lineMaxLength: 72,
-    multilineBegin: " "
+    multilineBegin: " ",
+    values: {
+        date: "YYYYMMDD",
+        time: "HHmmSS"
+    }
 };
 
 exports.format = format;

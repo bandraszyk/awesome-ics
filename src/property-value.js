@@ -1,6 +1,8 @@
 import { format } from "./constants";
+import { mapToJSON, mapToString, splitSafe } from "./util";
+import moment from "moment";
 
-class Value {
+export class Value {
     constructor(content) {
         this.original   = content;
         this.value      = content;
@@ -13,27 +15,43 @@ class Value {
     }
 }
 
-class Binary extends Value {
+export class MultipleValue {
+    constructor(content, mapping) {
+        this.values = [] = splitSafe(content, format.separatorMulti).map(function(singleContent) { return new mapping(singleContent); });
+    }
+    toString() {
+        return this.values.map(mapToString).join(format.separatorMulti);
+    }
+    toJSON() {
+        return this.values;
+    }
+}
+
+export class Binary extends Value {
     constructor(content) {
         super(content);
     }
 }
 
-class Boolean extends Value {
+export class Boolean extends Value {
     constructor(content) {
         super(content);
     }
 }
 
-class CalendarUserAddress extends Value {
+export class CalendarUserAddress extends Value {
     constructor(content) {
         super(content);
     }
 }
 
-class Date extends Value {
+export class Date extends Value {
     constructor(content) {
         super(content);
+        this.value = moment.utc(content, format.values.date);
+    }
+    toString() {
+        return this.value.format(format.values.date);
     }
 }
 
@@ -43,7 +61,7 @@ export class DateTime extends Value {
     }
 }
 
-class Duration extends Value {
+export class Duration extends Value {
     constructor(content) {
         super(content);
     }
@@ -55,8 +73,7 @@ export class Float extends Value {
     }
 }
 
-// TWO floats separated by ,
-class Geo extends Value {
+export class Geo extends Value {
     constructor(content) {
         super(content);
 
@@ -72,43 +89,43 @@ class Geo extends Value {
     }
 }
 
-class Integer extends Value {
+export class Integer extends Value {
     constructor(content) {
         super(content);
     }
 }
 
-class PeriodOfTime extends Value {
+export class PeriodOfTime extends Value {
     constructor(content) {
         super(content);
     }
 }
 
-class RecurrenceRule extends Value {
+export class RecurrenceRule extends Value {
     constructor(content) {
         super(content);
     }
 }
 
-class Text extends Value {
-    constructor(content) {
-        super(content);
-    }
-} // 75 characters per line.
-
-class Time extends Value {
+export class Text extends Value {
     constructor(content) {
         super(content);
     }
 }
 
-class URI extends Value {
+export class Time extends Value {
     constructor(content) {
         super(content);
     }
 }
 
-class UTCOffset extends Value {
+export class URI extends Value {
+    constructor(content) {
+        super(content);
+    }
+}
+
+export class UTCOffset extends Value {
     constructor(content) {
         super(content);
     }
@@ -164,6 +181,27 @@ const valueMapping = {
     "DEFAULT"           : Text
 };
 
+const valueMultipleMapping = {
+    "DATE"              : MultipleValue,
+    "DATE-TIME"         : MultipleValue,
+    "DURATION"          : MultipleValue,
+    "FLOAT"             : MultipleValue,
+    "INTEGER"           : MultipleValue,
+    "PERIOD"            : MultipleValue,
+    "TIME"              : MultipleValue,
+    "TEXT"              : Text
+};
+
+//-- Define multiple values
+Date.isMultiple         = true;
+DateTime.isMultiple     = true;
+Duration.isMultiple     = true;
+Float.isMultiple        = true;
+Integer.isMultiple      = true;
+PeriodOfTime.isMultiple = true;
+Time.isMultiple         = true;
+Text.isMultiple         = false;
+
 const valueParameterMapping = {
     "BINARY"            : Binary,
     "BOOLEAN"           : Boolean,
@@ -192,11 +230,16 @@ function getValueParameter(propertyParameters) {
 }
 
 export function getValue(propertyName, propertyValue, propertyParameters) {
-    var mapping = valueParameterMapping[(getValueParameter(propertyParameters) || {}).value]
+    let mapping = valueParameterMapping[(getValueParameter(propertyParameters) || {}).value]
         || valueMapping[propertyName]
         || valueMapping["DEFAULT"];
+    let containsMultipleSeparator = propertyValue && splitSafe(propertyValue, (format.separatorMulti)).length > 1;
 
     mapping = Array.isArray(mapping) ? mapping[0] : mapping;
+
+    if (mapping.isMultiple === true && containsMultipleSeparator) {
+        return new MultipleValue(propertyValue, mapping);
+    }
 
     return new mapping(propertyValue);
 }

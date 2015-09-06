@@ -18,7 +18,7 @@ var customMatchers = {
 
                 //-- Prepare message
                 for (var i = 0; i < differences.length; i++) {
-                    result.message += differences[i].added ? "+++" : differences[i].removed ? "---" : "";
+                    result.message += differences[i].added ? "+++ " : differences[i].removed ? "--- " : "";
                     result.message += differences[i].value;
                 }
             }

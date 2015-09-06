@@ -10,11 +10,21 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 exports.getValue = getValue;
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
+
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var _constants = require("./constants");
+
+var _util = require("./util");
+
+var _moment = require("moment");
+
+var _moment2 = _interopRequireDefault(_moment);
 
 var Value = (function () {
     function Value(content) {
@@ -39,6 +49,36 @@ var Value = (function () {
     return Value;
 })();
 
+exports.Value = Value;
+
+var MultipleValue = (function () {
+    function MultipleValue(content, mapping) {
+        var _splitSafe$map, _splitSafe$map2;
+
+        _classCallCheck(this, MultipleValue);
+
+        this.values = (_splitSafe$map = (0, _util.splitSafe)(content, _constants.format.separatorMulti).map(function (singleContent) {
+            return new mapping(singleContent);
+        }), _splitSafe$map2 = _toArray(_splitSafe$map), _splitSafe$map);
+    }
+
+    _createClass(MultipleValue, [{
+        key: "toString",
+        value: function toString() {
+            return this.values.map(_util.mapToString).join(_constants.format.separatorMulti);
+        }
+    }, {
+        key: "toJSON",
+        value: function toJSON() {
+            return this.values;
+        }
+    }]);
+
+    return MultipleValue;
+})();
+
+exports.MultipleValue = MultipleValue;
+
 var Binary = (function (_Value) {
     _inherits(Binary, _Value);
 
@@ -50,6 +90,8 @@ var Binary = (function (_Value) {
 
     return Binary;
 })(Value);
+
+exports.Binary = Binary;
 
 var Boolean = (function (_Value2) {
     _inherits(Boolean, _Value2);
@@ -63,6 +105,8 @@ var Boolean = (function (_Value2) {
     return Boolean;
 })(Value);
 
+exports.Boolean = Boolean;
+
 var CalendarUserAddress = (function (_Value3) {
     _inherits(CalendarUserAddress, _Value3);
 
@@ -75,6 +119,8 @@ var CalendarUserAddress = (function (_Value3) {
     return CalendarUserAddress;
 })(Value);
 
+exports.CalendarUserAddress = CalendarUserAddress;
+
 var Date = (function (_Value4) {
     _inherits(Date, _Value4);
 
@@ -82,10 +128,20 @@ var Date = (function (_Value4) {
         _classCallCheck(this, Date);
 
         _get(Object.getPrototypeOf(Date.prototype), "constructor", this).call(this, content);
+        this.value = _moment2["default"].utc(content, _constants.format.values.date);
     }
+
+    _createClass(Date, [{
+        key: "toString",
+        value: function toString() {
+            return this.value.format(_constants.format.values.date);
+        }
+    }]);
 
     return Date;
 })(Value);
+
+exports.Date = Date;
 
 var DateTime = (function (_Value5) {
     _inherits(DateTime, _Value5);
@@ -113,6 +169,8 @@ var Duration = (function (_Value6) {
     return Duration;
 })(Value);
 
+exports.Duration = Duration;
+
 var Float = (function (_Value7) {
     _inherits(Float, _Value7);
 
@@ -122,7 +180,6 @@ var Float = (function (_Value7) {
         _get(Object.getPrototypeOf(Float.prototype), "constructor", this).call(this, content);
     }
 
-    // TWO floats separated by ,
     return Float;
 })(Value);
 
@@ -154,6 +211,8 @@ var Geo = (function (_Value8) {
     return Geo;
 })(Value);
 
+exports.Geo = Geo;
+
 var Integer = (function (_Value9) {
     _inherits(Integer, _Value9);
 
@@ -165,6 +224,8 @@ var Integer = (function (_Value9) {
 
     return Integer;
 })(Value);
+
+exports.Integer = Integer;
 
 var PeriodOfTime = (function (_Value10) {
     _inherits(PeriodOfTime, _Value10);
@@ -178,6 +239,8 @@ var PeriodOfTime = (function (_Value10) {
     return PeriodOfTime;
 })(Value);
 
+exports.PeriodOfTime = PeriodOfTime;
+
 var RecurrenceRule = (function (_Value11) {
     _inherits(RecurrenceRule, _Value11);
 
@@ -190,6 +253,8 @@ var RecurrenceRule = (function (_Value11) {
     return RecurrenceRule;
 })(Value);
 
+exports.RecurrenceRule = RecurrenceRule;
+
 var Text = (function (_Value12) {
     _inherits(Text, _Value12);
 
@@ -199,10 +264,10 @@ var Text = (function (_Value12) {
         _get(Object.getPrototypeOf(Text.prototype), "constructor", this).call(this, content);
     }
 
-    // 75 characters per line.
-
     return Text;
 })(Value);
+
+exports.Text = Text;
 
 var Time = (function (_Value13) {
     _inherits(Time, _Value13);
@@ -216,6 +281,8 @@ var Time = (function (_Value13) {
     return Time;
 })(Value);
 
+exports.Time = Time;
+
 var URI = (function (_Value14) {
     _inherits(URI, _Value14);
 
@@ -228,6 +295,8 @@ var URI = (function (_Value14) {
     return URI;
 })(Value);
 
+exports.URI = URI;
+
 var UTCOffset = (function (_Value15) {
     _inherits(UTCOffset, _Value15);
 
@@ -239,6 +308,8 @@ var UTCOffset = (function (_Value15) {
 
     return UTCOffset;
 })(Value);
+
+exports.UTCOffset = UTCOffset;
 
 var valueMapping = {
     "CALSCALE": Text,
@@ -290,6 +361,27 @@ var valueMapping = {
     "DEFAULT": Text
 };
 
+var valueMultipleMapping = {
+    "DATE": MultipleValue,
+    "DATE-TIME": MultipleValue,
+    "DURATION": MultipleValue,
+    "FLOAT": MultipleValue,
+    "INTEGER": MultipleValue,
+    "PERIOD": MultipleValue,
+    "TIME": MultipleValue,
+    "TEXT": Text
+};
+
+//-- Define multiple values
+Date.isMultiple = true;
+DateTime.isMultiple = true;
+Duration.isMultiple = true;
+Float.isMultiple = true;
+Integer.isMultiple = true;
+PeriodOfTime.isMultiple = true;
+Time.isMultiple = true;
+Text.isMultiple = false;
+
 var valueParameterMapping = {
     "BINARY": Binary,
     "BOOLEAN": Boolean,
@@ -321,8 +413,13 @@ function getValueParameter(propertyParameters) {
 
 function getValue(propertyName, propertyValue, propertyParameters) {
     var mapping = valueParameterMapping[(getValueParameter(propertyParameters) || {}).value] || valueMapping[propertyName] || valueMapping["DEFAULT"];
+    var containsMultipleSeparator = propertyValue && (0, _util.splitSafe)(propertyValue, _constants.format.separatorMulti).length > 1;
 
     mapping = Array.isArray(mapping) ? mapping[0] : mapping;
+
+    if (mapping.isMultiple === true && containsMultipleSeparator) {
+        return new MultipleValue(propertyValue, mapping);
+    }
 
     return new mapping(propertyValue);
 }

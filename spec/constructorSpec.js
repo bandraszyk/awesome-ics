@@ -43,4 +43,16 @@ describe("library", function() {
 		//-- Assert
 		expect(JSON.stringify(calendar.toString())).noDiffBetween(JSON.stringify(icsFile));
 	});
+
+	it("should convert back ics with multiple values", function() {
+		//-- Arrange
+		var icsFile = fs.readFileSync("./spec/ics/multiple.ics", 'utf8')
+			.replace(/\r/g, "").trim();
+
+		//-- Act
+		var calendar = new AwesomeICS.Calendar(icsFile);
+
+		//-- Assert
+		expect(JSON.stringify(calendar.toString())).noDiffBetween(JSON.stringify(icsFile));
+	});
 });
