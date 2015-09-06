@@ -34,7 +34,7 @@ var Property = (function () {
             });
         }
 
-        this.value = (0, _propertyValue.getValue)(this.name, this.parameters, this.value);
+        this.value = (0, _propertyValue.getValue)(this.name, this.value, this.parameters);
     }
 
     _createClass(Property, [{

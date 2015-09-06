@@ -17,7 +17,7 @@ export class Property {
             this.parameters = parameters.slice(1).map(function(paramContent) { return new PropertyParameter(paramContent); });
         }
 
-        this.value = getValue(this.name, this.parameters, this.value);
+        this.value = getValue(this.name, this.value, this.parameters);
     }
     toString() {
         let name = this.name;

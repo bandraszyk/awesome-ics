@@ -290,13 +290,39 @@ var valueMapping = {
     "DEFAULT": Text
 };
 
-function getValue(propertyName, propertyParameters, propertyValue) {
-    var mapping = valueMapping[propertyName] || valueMapping["DEFAULT"];
+var valueParameterMapping = {
+    "BINARY": Binary,
+    "BOOLEAN": Boolean,
+    "CAL-ADDRESS": URI,
+    "DATE": Date,
+    "DATE-TIME": DateTime,
+    "DURATION": Duration,
+    "FLOAT": Float,
+    "INTEGER": Integer,
+    "PERIOD": PeriodOfTime,
+    "RECUR": RecurrenceRule,
+    "TEXT": Text,
+    "TIME": Time,
+    "URI": URI,
+    "UTC-OFFSET": UTCOffset
+};
 
-    if (Array.isArray(mapping)) {
-        // TODO: map with the use of params
-        mapping = mapping[0];
+function getValueParameter(propertyParameters) {
+    if (!propertyParameters) {
+        return;
     }
+
+    for (var i = 0; i < propertyParameters.length; i++) {
+        if (propertyParameters[i].name === "VALUE") {
+            return propertyParameters[i];
+        }
+    }
+}
+
+function getValue(propertyName, propertyValue, propertyParameters) {
+    var mapping = valueParameterMapping[(getValueParameter(propertyParameters) || {}).value] || valueMapping[propertyName] || valueMapping["DEFAULT"];
+
+    mapping = Array.isArray(mapping) ? mapping[0] : mapping;
 
     return new mapping(propertyValue);
 }
