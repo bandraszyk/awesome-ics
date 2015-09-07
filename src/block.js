@@ -1,7 +1,4 @@
-//-- Definition of single block element that starts with BEGIN:<type> and ends with END:<type>
-
 import { Property } from "./property";
-import { format, regex } from "./constants";
 import { mapToJSON, mapToString, splitSafeLines, setError, trim, removePattern } from "./util";
 
 export class Block {
@@ -11,24 +8,26 @@ export class Block {
         this.blocks     = [];
         this.type       = "BLOCK";
 
+        if (!this.original) { return; }
+
         //-- Read the content
-        let lines = splitSafeLines(content);
+        let lines = splitSafeLines(content, Block.__format);
         let blockBegin = trim(lines.shift() || "");
         let blockEnd = trim(lines.pop() || "");
 
         //-- Validate block start
-        if (!regex.blockBegin.test(blockBegin)) { return setError(this, "Cannot load Block element, first line should match /^BEGIN:/i."); }
+        if (!Block.__format.regexBlockBegin.test(blockBegin)) { return setError(this, "Cannot load Block element, first line should match /^BEGIN:/i."); }
 
         //-- Validate block end
-        if (!regex.blockEnd.test(blockEnd)) { return setError(this, "Cannot load Block elements, last line should match /^END:/i."); }
+        if (!Block.__format.regexBlockEnd.test(blockEnd)) { return setError(this, "Cannot load Block elements, last line should match /^END:/i."); }
 
         //-- Validate the name
-        if (removePattern(blockBegin, regex.blockBegin) !== removePattern(blockEnd, regex.blockEnd)) {
+        if (removePattern(blockBegin, Block.__format.regexBlockBegin) !== removePattern(blockEnd, Block.__format.regexBlockEnd)) {
             return setError(this, "Cannot load Block elements, block doesn't have and end.");
         }
 
         //-- Set the name
-        this.type = removePattern(blockBegin, regex.blockBegin);
+        this.type = removePattern(blockBegin, Block.__format.regexBlockBegin);
 
         let block           = [];
         let blockCounter    = 0;
@@ -36,15 +35,15 @@ export class Block {
         //-- Process the lines
         lines.forEach(line => {
             //-- Increase the block counter for block begin
-            if (regex.blockBegin.test(line)) { blockCounter++; }
+            if (Block.__format.regexBlockBegin.test(line)) { blockCounter++; }
 
             //-- Decrease the block counter for block end
-            if (regex.blockEnd.test(line)) { blockCounter--; }
+            if (Block.__format.regexBlockEnd.test(line)) { blockCounter--; }
 
             //-- Process as new child block
             if (blockCounter === 0 && block.length > 0) {
                 block.push(line);
-                this.blocks.push(new Block(block.join(format.newLine)));
+                this.blocks.push(new Block(block.join(Block.__format.newLine)));
                 block = [];
                 return;
             }
@@ -62,10 +61,10 @@ export class Block {
         let properties  = "";
         let blocks    = "";
 
-        if (this.properties.length) { properties = this.properties.map(mapToString).join(format.newLine) + format.newLine; }
-        if (this.blocks.length) { blocks = this.blocks.map(mapToString).join(format.newLine) + format.newLine; }
+        if (this.properties.length) { properties = this.properties.map(mapToString).join(Block.__format.newLine) + Block.__format.newLine; }
+        if (this.blocks.length) { blocks = this.blocks.map(mapToString).join(Block.__format.newLine) + Block.__format.newLine; }
 
-        return `${format.blockBegin}${this.type}${format.newLine}${properties}${blocks}${format.blockEnd}${this.type}`;
+        return `${Block.__format.blockBegin}${this.type}${Block.__format.newLine}${properties}${blocks}${Block.__format.blockEnd}${this.type}`;
     }
     toJSON() {
         if (this.error) { return { error: this.error }; }
@@ -76,4 +75,13 @@ export class Block {
             blocks      : this.blocks.map(mapToJSON)
         }
     }
+}
+
+Block.__format = {
+    regexBlockBegin : /^BEGIN:/i,
+    regexBlockEnd   : /^END:/i,
+    blockBegin      : "BEGIN:",
+    blockEnd        : "END:",
+    newLine         : "\n",
+    multiLineBegin  : " "
 }

@@ -1,4 +1,3 @@
-import { format } from "./constants";
 import { splitSafe } from "./util";
 
 const propertyTypes = [
@@ -27,11 +26,16 @@ const propertyTypes = [
 export class PropertyParameter {
     constructor(content) {
         this.original   = content;
-        this.name       = splitSafe(content, format.separatorValue)[0];
+        this.name       = ""
+        this.value      = "";
+
+        if (!this.original) { return; }
+
+        this.name       = splitSafe(content, PropertyParameter.__format.separator)[0];
         this.value      = content.slice(this.name.length + 1);
     }
     toString() {
-        return [ this.name, this.value ].join(format.separatorValue);
+        return [ this.name, this.value ].join(PropertyParameter.__format.separator);
     }
     toJSON() {
         return {
@@ -40,3 +44,7 @@ export class PropertyParameter {
         };
     }
 }
+
+PropertyParameter.__format = {
+    separator: "="
+};

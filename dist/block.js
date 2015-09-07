@@ -1,5 +1,3 @@
-//-- Definition of single block element that starts with BEGIN:<type> and ends with END:<type>
-
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11,8 +9,6 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var _property = require("./property");
-
-var _constants = require("./constants");
 
 var _util = require("./util");
 
@@ -27,28 +23,32 @@ var Block = (function () {
         this.blocks = [];
         this.type = "BLOCK";
 
+        if (!this.original) {
+            return;
+        }
+
         //-- Read the content
-        var lines = (0, _util.splitSafeLines)(content);
+        var lines = (0, _util.splitSafeLines)(content, Block.__format);
         var blockBegin = (0, _util.trim)(lines.shift() || "");
         var blockEnd = (0, _util.trim)(lines.pop() || "");
 
         //-- Validate block start
-        if (!_constants.regex.blockBegin.test(blockBegin)) {
+        if (!Block.__format.regexBlockBegin.test(blockBegin)) {
             return (0, _util.setError)(this, "Cannot load Block element, first line should match /^BEGIN:/i.");
         }
 
         //-- Validate block end
-        if (!_constants.regex.blockEnd.test(blockEnd)) {
+        if (!Block.__format.regexBlockEnd.test(blockEnd)) {
             return (0, _util.setError)(this, "Cannot load Block elements, last line should match /^END:/i.");
         }
 
         //-- Validate the name
-        if ((0, _util.removePattern)(blockBegin, _constants.regex.blockBegin) !== (0, _util.removePattern)(blockEnd, _constants.regex.blockEnd)) {
+        if ((0, _util.removePattern)(blockBegin, Block.__format.regexBlockBegin) !== (0, _util.removePattern)(blockEnd, Block.__format.regexBlockEnd)) {
             return (0, _util.setError)(this, "Cannot load Block elements, block doesn't have and end.");
         }
 
         //-- Set the name
-        this.type = (0, _util.removePattern)(blockBegin, _constants.regex.blockBegin);
+        this.type = (0, _util.removePattern)(blockBegin, Block.__format.regexBlockBegin);
 
         var block = [];
         var blockCounter = 0;
@@ -56,19 +56,19 @@ var Block = (function () {
         //-- Process the lines
         lines.forEach(function (line) {
             //-- Increase the block counter for block begin
-            if (_constants.regex.blockBegin.test(line)) {
+            if (Block.__format.regexBlockBegin.test(line)) {
                 blockCounter++;
             }
 
             //-- Decrease the block counter for block end
-            if (_constants.regex.blockEnd.test(line)) {
+            if (Block.__format.regexBlockEnd.test(line)) {
                 blockCounter--;
             }
 
             //-- Process as new child block
             if (blockCounter === 0 && block.length > 0) {
                 block.push(line);
-                _this.blocks.push(new Block(block.join(_constants.format.newLine)));
+                _this.blocks.push(new Block(block.join(Block.__format.newLine)));
                 block = [];
                 return;
             }
@@ -94,13 +94,13 @@ var Block = (function () {
             var blocks = "";
 
             if (this.properties.length) {
-                properties = this.properties.map(_util.mapToString).join(_constants.format.newLine) + _constants.format.newLine;
+                properties = this.properties.map(_util.mapToString).join(Block.__format.newLine) + Block.__format.newLine;
             }
             if (this.blocks.length) {
-                blocks = this.blocks.map(_util.mapToString).join(_constants.format.newLine) + _constants.format.newLine;
+                blocks = this.blocks.map(_util.mapToString).join(Block.__format.newLine) + Block.__format.newLine;
             }
 
-            return "" + _constants.format.blockBegin + this.type + _constants.format.newLine + properties + blocks + _constants.format.blockEnd + this.type;
+            return "" + Block.__format.blockBegin + this.type + Block.__format.newLine + properties + blocks + Block.__format.blockEnd + this.type;
         }
     }, {
         key: "toJSON",
@@ -121,3 +121,12 @@ var Block = (function () {
 })();
 
 exports.Block = Block;
+
+Block.__format = {
+    regexBlockBegin: /^BEGIN:/i,
+    regexBlockEnd: /^END:/i,
+    blockBegin: "BEGIN:",
+    blockEnd: "END:",
+    newLine: "\n",
+    multiLineBegin: " "
+};

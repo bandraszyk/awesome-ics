@@ -1,8 +1,14 @@
 
 var AwesomeICS	= require('../dist/awesome-ics');
+var _util		= require("./_util")
 var fs			= require('fs');
 
 describe("library", function() {
+
+    beforeEach(function() {
+        _util.applyCustomMatcher(jasmine);
+    });
+
 
     it ("should convert geo-coordinates", function() {
         //-- Arrange
@@ -27,6 +33,6 @@ describe("library", function() {
         var calendar = new AwesomeICS.Calendar(icsFile);
 
         //-- Assert
-        expect(JSON.stringify(calendar.toString())).toEqual(JSON.stringify(icsFile));
+        expect(JSON.stringify(calendar.toString())).noDiffBetween(JSON.stringify(icsFile));
     });
 });

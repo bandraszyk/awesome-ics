@@ -14,7 +14,6 @@ module.exports = function (grunt) {
                     "dist/property.js"           : "src/property.js",
                     "dist/property-parameter.js" : "src/property-parameter.js",
                     "dist/property-value.js"     : "src/property-value.js",
-                    "dist/constants.js"          : "src/constants.js",
                     "dist/util.js"               : "src/util.js"
                 }
             }

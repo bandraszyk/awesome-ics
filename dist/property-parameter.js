@@ -8,8 +8,6 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _constants = require("./constants");
-
 var _util = require("./util");
 
 var propertyTypes = ["ALTREP", "CN", "CUTYPE", "DELEGATED-FROM", "DELEGATED-TO", "DIR", "ENCODING", "FMTTYPE", "FBTYPE", "LANGUAGE", "MEMBER", "PARTSTAT", "RANGE", "RELATED", "RELTYPE", "ROLE", "RSVP", "SENT-BY", "TZID", "VALUE"];
@@ -19,14 +17,21 @@ var PropertyParameter = (function () {
         _classCallCheck(this, PropertyParameter);
 
         this.original = content;
-        this.name = (0, _util.splitSafe)(content, _constants.format.separatorValue)[0];
+        this.name = "";
+        this.value = "";
+
+        if (!this.original) {
+            return;
+        }
+
+        this.name = (0, _util.splitSafe)(content, PropertyParameter.__format.separator)[0];
         this.value = content.slice(this.name.length + 1);
     }
 
     _createClass(PropertyParameter, [{
         key: "toString",
         value: function toString() {
-            return [this.name, this.value].join(_constants.format.separatorValue);
+            return [this.name, this.value].join(PropertyParameter.__format.separator);
         }
     }, {
         key: "toJSON",
@@ -42,3 +47,7 @@ var PropertyParameter = (function () {
 })();
 
 exports.PropertyParameter = PropertyParameter;
+
+PropertyParameter.__format = {
+    separator: "="
+};

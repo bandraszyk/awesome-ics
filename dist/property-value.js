@@ -18,8 +18,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _constants = require("./constants");
-
 var _util = require("./util");
 
 var _moment = require("moment");
@@ -57,7 +55,7 @@ var MultipleValue = (function () {
 
         _classCallCheck(this, MultipleValue);
 
-        this.values = (_splitSafe$map = (0, _util.splitSafe)(content, _constants.format.separatorMulti).map(function (singleContent) {
+        this.values = (_splitSafe$map = (0, _util.splitSafe)(content, MultipleValue.__format.separator).map(function (singleContent) {
             return new mapping(singleContent);
         }), _splitSafe$map2 = _toArray(_splitSafe$map), _splitSafe$map);
     }
@@ -65,7 +63,7 @@ var MultipleValue = (function () {
     _createClass(MultipleValue, [{
         key: "toString",
         value: function toString() {
-            return this.values.map(_util.mapToString).join(_constants.format.separatorMulti);
+            return this.values.map(_util.mapToString).join(MultipleValue.__format.separator);
         }
     }, {
         key: "toJSON",
@@ -78,6 +76,10 @@ var MultipleValue = (function () {
 })();
 
 exports.MultipleValue = MultipleValue;
+
+MultipleValue.__format = {
+    separator: ","
+};
 
 var Binary = (function (_Value) {
     _inherits(Binary, _Value);
@@ -138,13 +140,13 @@ var Date = (function (_Value4) {
         _classCallCheck(this, Date);
 
         _get(Object.getPrototypeOf(Date.prototype), "constructor", this).call(this, content);
-        this.value = _moment2["default"].utc(content, _constants.format.values.date);
+        this.value = _moment2["default"].utc(content, Date.__format.date);
     }
 
     _createClass(Date, [{
         key: "toString",
         value: function toString() {
-            return this.value.format(_constants.format.values.date);
+            return this.value.format(Date.__format.date);
         }
     }]);
 
@@ -153,6 +155,10 @@ var Date = (function (_Value4) {
 
 exports.Date = Date;
 
+Date.__format = {
+    date: "YYYYMMDD"
+};
+
 var DateTime = (function (_Value5) {
     _inherits(DateTime, _Value5);
 
@@ -160,7 +166,7 @@ var DateTime = (function (_Value5) {
         _classCallCheck(this, DateTime);
 
         _get(Object.getPrototypeOf(DateTime.prototype), "constructor", this).call(this, content);
-        var parts = content.split(_constants.format.separatorDateTime);
+        var parts = content.split(DateTime.__format.separator);
 
         this.value = {
             date: new Date(parts[0]),
@@ -171,7 +177,7 @@ var DateTime = (function (_Value5) {
     _createClass(DateTime, [{
         key: "toString",
         value: function toString() {
-            return this.value.date.toString() + _constants.format.separatorDateTime + this.value.time.toString();
+            return this.value.date.toString() + DateTime.__format.separator + this.value.time.toString();
         }
     }, {
         key: "toJSON",
@@ -187,6 +193,10 @@ var DateTime = (function (_Value5) {
 })(Value);
 
 exports.DateTime = DateTime;
+
+DateTime.__format = {
+    separator: "T"
+};
 
 var Duration = (function (_Value6) {
     _inherits(Duration, _Value6);
@@ -226,7 +236,7 @@ var Geo = (function (_Value8) {
 
         _get(Object.getPrototypeOf(Geo.prototype), "constructor", this).call(this, content);
 
-        var coordinates = content.split(_constants.format.separatorGeo);
+        var coordinates = content.split(Geo.__format.separator);
 
         this.value = {
             latitude: new Float(coordinates[0]),
@@ -237,7 +247,7 @@ var Geo = (function (_Value8) {
     _createClass(Geo, [{
         key: "toString",
         value: function toString() {
-            return this.value.latitude.toString() + _constants.format.separatorGeo + this.value.longitude.toString();
+            return this.value.latitude.toString() + Geo.__format.separator + this.value.longitude.toString();
         }
     }, {
         key: "toJSON",
@@ -253,6 +263,10 @@ var Geo = (function (_Value8) {
 })(Value);
 
 exports.Geo = Geo;
+
+Geo.__format = {
+    separator: ";"
+};
 
 var Integer = (function (_Value9) {
     _inherits(Integer, _Value9);
@@ -320,15 +334,15 @@ var Time = (function (_Value13) {
 
         _get(Object.getPrototypeOf(Time.prototype), "constructor", this).call(this, content);
         this.value = {
-            time: (0, _moment2["default"])(content.slice(0, 6), _constants.format.values.time),
-            isFixed: content.slice(-1) !== _constants.format.values.timeUTC
+            time: (0, _moment2["default"])(content.slice(0, 6), Time.__format.time),
+            isFixed: content.slice(-1) !== Time.__format.timeUTC
         };
     }
 
     _createClass(Time, [{
         key: "toString",
         value: function toString() {
-            return this.value.time.format(_constants.format.values.time) + (!this.value.isFixed && _constants.format.values.timeUTC || "");
+            return this.value.time.format(Time.__format.time) + (!this.value.isFixed && Time.__format.timeUTC || "");
         }
     }, {
         key: "toJSON",
@@ -344,6 +358,11 @@ var Time = (function (_Value13) {
 })(Value);
 
 exports.Time = Time;
+
+Time.__format = {
+    time: "HHmmSS",
+    timeUTC: "Z"
+};
 
 var URI = (function (_Value14) {
     _inherits(URI, _Value14);
@@ -369,12 +388,10 @@ var UTCOffset = (function (_Value15) {
         this.value = (0, _moment2["default"])().utcOffset(content);
     }
 
-    //-- Define multiple values
-
     _createClass(UTCOffset, [{
         key: "toString",
         value: function toString() {
-            return this.value.format(_constants.format.values.UTCOffset);
+            return this.value.format(UTCOffset.__format.offset);
         }
     }]);
 
@@ -382,6 +399,12 @@ var UTCOffset = (function (_Value15) {
 })(Value);
 
 exports.UTCOffset = UTCOffset;
+
+UTCOffset.__format = {
+    offset: "ZZ"
+};
+
+//-- Define multiple values
 Date.isMultiple = true;
 DateTime.isMultiple = true;
 Duration.isMultiple = true;
@@ -483,7 +506,7 @@ function getValueParameter(propertyParameters) {
 
 function getValue(propertyName, propertyValue, propertyParameters) {
     var mapping = valueParameterMapping[(getValueParameter(propertyParameters) || {}).value] || valueMapping[propertyName] || valueMapping["DEFAULT"];
-    var containsMultipleSeparator = propertyValue && (0, _util.splitSafe)(propertyValue, _constants.format.separatorMulti).length > 1;
+    var containsMultipleSeparator = propertyValue && (0, _util.splitSafe)(propertyValue, MultipleValue.__format.separator).length > 1;
 
     mapping = Array.isArray(mapping) ? mapping[0] : mapping;
 

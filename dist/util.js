@@ -11,8 +11,6 @@ exports.setError = setError;
 exports.splitSafe = splitSafe;
 exports.splitSafeLines = splitSafeLines;
 
-var _constants = require("./constants");
-
 function trim(text) {
     var trimmedBeginning = removePattern(text, /^\s+/g);
     return removePattern(trimmedBeginning, /\s+$/g);
@@ -58,12 +56,12 @@ function splitSafe(text, separator) {
     return parts;
 }
 
-function splitSafeLines(text) {
-    var lines = text.split(_constants.format.newLine);
+function splitSafeLines(text, format) {
+    var lines = text.split(format && format.newLine || "\n");
 
     for (var currentLineIndex = 1; currentLineIndex < lines.length;) {
         var line = lines[currentLineIndex];
-        var isContinuation = line[0] === _constants.format.multilineBegin;
+        var isContinuation = line[0] === (format && format.multiLineBegin || " ");
 
         if (isContinuation) {
             //-- Merge with previous line and remove from array current element

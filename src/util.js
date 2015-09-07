@@ -1,5 +1,3 @@
-import { format } from "./constants";
-
 export function trim(text) {
     let trimmedBeginning = removePattern(text, /^\s+/g);
     return removePattern(trimmedBeginning, /\s+$/g);
@@ -41,12 +39,12 @@ export function splitSafe(text, separator) {
     return parts;
 }
 
-export function splitSafeLines(text) {
-    let lines = text.split(format.newLine);
+export function splitSafeLines(text, format) {
+    let lines = text.split(format && format.newLine || "\n");
 
     for (let currentLineIndex = 1; currentLineIndex < lines.length;) {
         let line = lines[currentLineIndex];
-        let isContinuation = line[0] === format.multilineBegin;
+        let isContinuation = line[0] === (format && format.multiLineBegin || " ");
 
         if (isContinuation) {
             //-- Merge with previous line and remove from array current element

@@ -10,8 +10,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var _util = require("./util");
 
-var _constants = require("./constants");
-
 var _propertyParameter = require("./property-parameter");
 
 var _propertyValue = require("./property-value");
@@ -22,12 +20,19 @@ var Property = (function () {
 
         this.original = content;
         this.parameters = [];
-        this.name = (0, _util.splitSafe)(content, _constants.format.separatorProp)[0];
+        this.name = "";
+        this.value = "";
+
+        if (!this.original) {
+            return;
+        }
+
+        this.name = (0, _util.splitSafe)(content, Property.__format.separatorProperty)[0];
         this.value = content.slice(this.name.length + 1);
 
-        var parameters = (0, _util.splitSafe)(this.name, _constants.format.separatorParam);
+        var parameters = (0, _util.splitSafe)(this.name, Property.__format.separatorParameter);
 
-        if (this.name.indexOf(_constants.format.separatorParam) !== -1) {
+        if (this.name.indexOf(Property.__format.separatorParameter) !== -1) {
             this.name = parameters[0];
             this.parameters = parameters.slice(1).map(function (paramContent) {
                 return new _propertyParameter.PropertyParameter(paramContent);
@@ -43,18 +48,18 @@ var Property = (function () {
             var name = this.name;
 
             if (this.parameters.length) {
-                var parameters = this.parameters.map(_util.mapToString).join(_constants.format.separatorParam);
-                name = [name, parameters].join(_constants.format.separatorParam);
+                var parameters = this.parameters.map(_util.mapToString).join(Property.__format.separatorParameter);
+                name = [name, parameters].join(Property.__format.separatorParameter);
             }
 
-            var value = name + _constants.format.separatorProp + this.value.toString();
-            var returnValue = value.slice(0, _constants.format.lineMaxLength);
-            var rest = value.slice(_constants.format.lineMaxLength);
+            var value = name + Property.__format.separatorProperty + this.value.toString();
+            var returnValue = value.slice(0, Property.__format.lineMaxLength);
+            var rest = value.slice(Property.__format.lineMaxLength);
 
             while (rest.length) {
-                rest = _constants.format.multilineBegin + rest;
-                returnValue = returnValue.concat(_constants.format.newLine + rest.slice(0, _constants.format.lineMaxLength));
-                rest = rest.slice(_constants.format.lineMaxLength);
+                rest = " " + rest;
+                returnValue = returnValue.concat(Property.__format.newLine + rest.slice(0, Property.__format.lineMaxLength));
+                rest = rest.slice(Property.__format.lineMaxLength);
             }
 
             return returnValue;
@@ -74,3 +79,11 @@ var Property = (function () {
 })();
 
 exports.Property = Property;
+
+Property.__format = {
+    separatorProperty: ":",
+    separatorParameter: ";",
+    lineMaxLength: 72,
+    newLine: "\n",
+    multiLineBegin: " "
+};

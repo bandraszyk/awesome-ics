@@ -1,4 +1,3 @@
-import { format } from "./constants";
 import { mapToJSON, mapToString, splitSafe } from "./util";
 import moment from "moment";
 
@@ -17,15 +16,19 @@ export class Value {
 
 export class MultipleValue {
     constructor(content, mapping) {
-        this.values = [] = splitSafe(content, format.separatorMulti).map(function(singleContent) { return new mapping(singleContent); });
+        this.values = [] = splitSafe(content, MultipleValue.__format.separator).map(function(singleContent) { return new mapping(singleContent); });
     }
     toString() {
-        return this.values.map(mapToString).join(format.separatorMulti);
+        return this.values.map(mapToString).join(MultipleValue.__format.separator);
     }
     toJSON() {
         return this.values.map(mapToJSON);
     }
 }
+
+MultipleValue.__format = {
+    separator: ","
+};
 
 export class Binary extends Value {
     constructor(content) {
@@ -54,17 +57,21 @@ export class CalendarUserAddress extends Value {
 export class Date extends Value {
     constructor(content) {
         super(content);
-        this.value = moment.utc(content, format.values.date);
+        this.value = moment.utc(content, Date.__format.date);
     }
     toString() {
-        return this.value.format(format.values.date);
+        return this.value.format(Date.__format.date);
     }
 }
+
+Date.__format = {
+    date: "YYYYMMDD"
+};
 
 export class DateTime extends Value {
     constructor(content) {
         super(content);
-        let parts = content.split(format.separatorDateTime);
+        let parts = content.split(DateTime.__format.separator);
 
         this.value = {
             date: new Date(parts[0]),
@@ -72,7 +79,7 @@ export class DateTime extends Value {
         };
     }
     toString() {
-        return this.value.date.toString() + format.separatorDateTime + this.value.time.toString();
+        return this.value.date.toString() + DateTime.__format.separator + this.value.time.toString();
     }
     toJSON() {
         return {
@@ -82,6 +89,9 @@ export class DateTime extends Value {
     }
 }
 
+DateTime.__format = {
+    separator: "T"
+};
 
 export class Duration extends Value {
     constructor(content) {
@@ -101,7 +111,7 @@ export class Geo extends Value {
     constructor(content) {
         super(content);
 
-        let coordinates = content.split(format.separatorGeo);
+        let coordinates = content.split(Geo.__format.separator);
 
         this.value = {
             latitude    : new Float(coordinates[0]),
@@ -109,7 +119,7 @@ export class Geo extends Value {
         };
     }
     toString() {
-        return this.value.latitude.toString() + format.separatorGeo + this.value.longitude.toString();
+        return this.value.latitude.toString() + Geo.__format.separator + this.value.longitude.toString();
     }
     toJSON() {
         return {
@@ -118,6 +128,10 @@ export class Geo extends Value {
         }
     }
 }
+
+Geo.__format = {
+    separator: ";"
+};
 
 export class Integer extends Value {
     constructor(content) {
@@ -149,12 +163,12 @@ export class Time extends Value {
     constructor(content) {
         super(content);
         this.value = {
-            time: moment(content.slice(0, 6), format.values.time),
-            isFixed: content.slice(-1) !== format.values.timeUTC
+            time    : moment(content.slice(0, 6), Time.__format.time),
+            isFixed : content.slice(-1) !== Time.__format.timeUTC
         };
     }
     toString() {
-        return this.value.time.format(format.values.time) + (!this.value.isFixed && format.values.timeUTC || "");
+        return this.value.time.format(Time.__format.time) + (!this.value.isFixed && Time.__format.timeUTC || "");
     }
     toJSON() {
         return {
@@ -163,6 +177,11 @@ export class Time extends Value {
         }
     }
 }
+
+Time.__format = {
+    time    : "HHmmSS",
+    timeUTC : "Z"
+};
 
 export class URI extends Value {
     constructor(content) {
@@ -176,9 +195,13 @@ export class UTCOffset extends Value {
         this.value = moment().utcOffset(content);
     }
     toString() {
-        return this.value.format(format.values.UTCOffset);
+        return this.value.format(UTCOffset.__format.offset);
     }
 }
+
+UTCOffset.__format = {
+    offset: "ZZ"
+};
 
 //-- Define multiple values
 Date.isMultiple         = true;
@@ -282,7 +305,7 @@ export function getValue(propertyName, propertyValue, propertyParameters) {
     let mapping = valueParameterMapping[(getValueParameter(propertyParameters) || {}).value]
         || valueMapping[propertyName]
         || valueMapping["DEFAULT"];
-    let containsMultipleSeparator = propertyValue && splitSafe(propertyValue, (format.separatorMulti)).length > 1;
+    let containsMultipleSeparator = propertyValue && splitSafe(propertyValue, (MultipleValue.__format.separator)).length > 1;
 
     mapping = Array.isArray(mapping) ? mapping[0] : mapping;
 
