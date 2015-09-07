@@ -18,10 +18,13 @@ var Block = (function () {
 
         _classCallCheck(this, Block);
 
+        //-- Get rid of invalid characters
+        content = content && content.replace(/\r/g, "").trim();
+
         this.original = content;
         this.properties = [];
         this.blocks = [];
-        this.type = "BLOCK";
+        this.type = "";
 
         if (!this.original) {
             return;

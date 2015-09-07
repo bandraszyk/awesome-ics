@@ -58,4 +58,4 @@ Property.__format = {
     lineMaxLength       : 72,
     newLine             : "\n",
     multiLineBegin      : " "
-}
+};

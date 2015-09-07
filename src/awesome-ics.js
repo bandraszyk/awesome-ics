@@ -2,7 +2,7 @@ import { Block } from "./block";
 import { Property } from "./property";
 import { PropertyParameter } from "./property-parameter";
 
-import { Value, MultipleValue, Binary, Boolean, CalendarUserAddress, Date, DateTime, Duration,
+import { PropertyValue, PropertyMultipleValue, Binary, Boolean, CalendarUserAddress, Date, DateTime, Duration,
          Float, Geo, Integer, PeriodOfTime, RecurrenceRule, Text, Time, URI, UTCOffset } from "./property-value";
 
 //-- Definition of calendar
@@ -17,8 +17,8 @@ export const Elements = {
     Property            : Property,
     PropertyParameter   : PropertyParameter,
     PropertyValue       : {
-        Value               : Value,
-        MultipleValue       : MultipleValue,
+        Value               : PropertyValue,
+        MultipleValue       : PropertyMultipleValue,
         Binary              : Binary,
         Boolean             : Boolean,
         CalendarUserAddress : CalendarUserAddress,

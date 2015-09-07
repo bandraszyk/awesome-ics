@@ -1,7 +1,7 @@
 import { mapToJSON, mapToString, splitSafe } from "./util";
 import moment from "moment";
 
-export class Value {
+export class PropertyValue {
     constructor(content) {
         this.original   = content;
         this.value      = content;
@@ -14,30 +14,30 @@ export class Value {
     }
 }
 
-export class MultipleValue {
+export class PropertyMultipleValue {
     constructor(content, mapping) {
-        this.values = [] = splitSafe(content, MultipleValue.__format.separator).map(function(singleContent) { return new mapping(singleContent); });
+        this.values = [] = splitSafe(content, PropertyMultipleValue.__format.separator).map(function(singleContent) { return new mapping(singleContent); });
     }
     toString() {
-        return this.values.map(mapToString).join(MultipleValue.__format.separator);
+        return this.values.map(mapToString).join(PropertyMultipleValue.__format.separator);
     }
     toJSON() {
         return this.values.map(mapToJSON);
     }
 }
 
-MultipleValue.__format = {
+PropertyMultipleValue.__format = {
     separator: ","
 };
 
-export class Binary extends Value {
+export class Binary extends PropertyValue {
     constructor(content) {
         super(content);
         // TODO: Implement behaviour
     }
 }
 
-export class Boolean extends Value {
+export class Boolean extends PropertyValue {
     constructor(content) {
         super(content);
         this.value = JSON.parse(content.toLowerCase());
@@ -47,14 +47,14 @@ export class Boolean extends Value {
     }
 }
 
-export class CalendarUserAddress extends Value {
+export class CalendarUserAddress extends PropertyValue {
     constructor(content) {
         super(content);
         // TODO: Implement behaviour
     }
 }
 
-export class Date extends Value {
+export class Date extends PropertyValue {
     constructor(content) {
         super(content);
         this.value = moment.utc(content, Date.__format.date);
@@ -68,7 +68,7 @@ Date.__format = {
     date: "YYYYMMDD"
 };
 
-export class DateTime extends Value {
+export class DateTime extends PropertyValue {
     constructor(content) {
         super(content);
         let parts = content.split(DateTime.__format.separator);
@@ -93,21 +93,21 @@ DateTime.__format = {
     separator: "T"
 };
 
-export class Duration extends Value {
+export class Duration extends PropertyValue {
     constructor(content) {
         super(content);
         // TODO: Implement behaviour
     }
 }
 
-export class Float extends Value {
+export class Float extends PropertyValue {
     constructor(content) {
         super(content);
         this.value = parseFloat(content);
     }
 }
 
-export class Geo extends Value {
+export class Geo extends PropertyValue {
     constructor(content) {
         super(content);
 
@@ -133,33 +133,33 @@ Geo.__format = {
     separator: ";"
 };
 
-export class Integer extends Value {
+export class Integer extends PropertyValue {
     constructor(content) {
         super(content);
         this.value = parseInt(content);
     }
 }
 
-export class PeriodOfTime extends Value {
+export class PeriodOfTime extends PropertyValue {
     constructor(content) {
         super(content);
     }
 }
 
-export class RecurrenceRule extends Value {
+export class RecurrenceRule extends PropertyValue {
     constructor(content) {
         super(content);
         // TODO: Implement behaviour
     }
 }
 
-export class Text extends Value {
+export class Text extends PropertyValue {
     constructor(content) {
         super(content);
     }
 }
 
-export class Time extends Value {
+export class Time extends PropertyValue {
     constructor(content) {
         super(content);
         this.value = {
@@ -183,13 +183,13 @@ Time.__format = {
     timeUTC : "Z"
 };
 
-export class URI extends Value {
+export class URI extends PropertyValue {
     constructor(content) {
         super(content);
     }
 }
 
-export class UTCOffset extends Value {
+export class UTCOffset extends PropertyValue {
     constructor(content) {
         super(content);
         this.value = moment().utcOffset(content);
@@ -264,13 +264,13 @@ const valueMapping = {
 };
 
 const valueMultipleMapping = {
-    "DATE"              : MultipleValue,
-    "DATE-TIME"         : MultipleValue,
-    "DURATION"          : MultipleValue,
-    "FLOAT"             : MultipleValue,
-    "INTEGER"           : MultipleValue,
-    "PERIOD"            : MultipleValue,
-    "TIME"              : MultipleValue,
+    "DATE"              : PropertyMultipleValue,
+    "DATE-TIME"         : PropertyMultipleValue,
+    "DURATION"          : PropertyMultipleValue,
+    "FLOAT"             : PropertyMultipleValue,
+    "INTEGER"           : PropertyMultipleValue,
+    "PERIOD"            : PropertyMultipleValue,
+    "TIME"              : PropertyMultipleValue,
     "TEXT"              : Text
 };
 
@@ -305,12 +305,12 @@ export function getValue(propertyName, propertyValue, propertyParameters) {
     let mapping = valueParameterMapping[(getValueParameter(propertyParameters) || {}).value]
         || valueMapping[propertyName]
         || valueMapping["DEFAULT"];
-    let containsMultipleSeparator = propertyValue && splitSafe(propertyValue, (MultipleValue.__format.separator)).length > 1;
+    let containsMultipleSeparator = propertyValue && splitSafe(propertyValue, (PropertyMultipleValue.__format.separator)).length > 1;
 
     mapping = Array.isArray(mapping) ? mapping[0] : mapping;
 
     if (mapping.isMultiple === true && containsMultipleSeparator) {
-        return new MultipleValue(propertyValue, mapping);
+        return new PropertyMultipleValue(propertyValue, mapping);
     }
 
     return new mapping(propertyValue);

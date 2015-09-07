@@ -3,10 +3,13 @@ import { mapToJSON, mapToString, splitSafeLines, setError, trim, removePattern }
 
 export class Block {
     constructor(content) {
+        //-- Get rid of invalid characters
+        content = content && content.replace(/\r/g, "").trim();
+
         this.original   = content;
         this.properties = [];
         this.blocks     = [];
-        this.type       = "BLOCK";
+        this.type       = "";
 
         if (!this.original) { return; }
 
@@ -84,4 +87,4 @@ Block.__format = {
     blockEnd        : "END:",
     newLine         : "\n",
     multiLineBegin  : " "
-}
+};

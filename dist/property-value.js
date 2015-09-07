@@ -24,15 +24,15 @@ var _moment = require("moment");
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var Value = (function () {
-    function Value(content) {
-        _classCallCheck(this, Value);
+var PropertyValue = (function () {
+    function PropertyValue(content) {
+        _classCallCheck(this, PropertyValue);
 
         this.original = content;
         this.value = content;
     }
 
-    _createClass(Value, [{
+    _createClass(PropertyValue, [{
         key: "toString",
         value: function toString() {
             return this.value.toString();
@@ -44,26 +44,26 @@ var Value = (function () {
         }
     }]);
 
-    return Value;
+    return PropertyValue;
 })();
 
-exports.Value = Value;
+exports.PropertyValue = PropertyValue;
 
-var MultipleValue = (function () {
-    function MultipleValue(content, mapping) {
+var PropertyMultipleValue = (function () {
+    function PropertyMultipleValue(content, mapping) {
         var _splitSafe$map, _splitSafe$map2;
 
-        _classCallCheck(this, MultipleValue);
+        _classCallCheck(this, PropertyMultipleValue);
 
-        this.values = (_splitSafe$map = (0, _util.splitSafe)(content, MultipleValue.__format.separator).map(function (singleContent) {
+        this.values = (_splitSafe$map = (0, _util.splitSafe)(content, PropertyMultipleValue.__format.separator).map(function (singleContent) {
             return new mapping(singleContent);
         }), _splitSafe$map2 = _toArray(_splitSafe$map), _splitSafe$map);
     }
 
-    _createClass(MultipleValue, [{
+    _createClass(PropertyMultipleValue, [{
         key: "toString",
         value: function toString() {
-            return this.values.map(_util.mapToString).join(MultipleValue.__format.separator);
+            return this.values.map(_util.mapToString).join(PropertyMultipleValue.__format.separator);
         }
     }, {
         key: "toJSON",
@@ -72,17 +72,17 @@ var MultipleValue = (function () {
         }
     }]);
 
-    return MultipleValue;
+    return PropertyMultipleValue;
 })();
 
-exports.MultipleValue = MultipleValue;
+exports.PropertyMultipleValue = PropertyMultipleValue;
 
-MultipleValue.__format = {
+PropertyMultipleValue.__format = {
     separator: ","
 };
 
-var Binary = (function (_Value) {
-    _inherits(Binary, _Value);
+var Binary = (function (_PropertyValue) {
+    _inherits(Binary, _PropertyValue);
 
     function Binary(content) {
         _classCallCheck(this, Binary);
@@ -92,12 +92,12 @@ var Binary = (function (_Value) {
     }
 
     return Binary;
-})(Value);
+})(PropertyValue);
 
 exports.Binary = Binary;
 
-var Boolean = (function (_Value2) {
-    _inherits(Boolean, _Value2);
+var Boolean = (function (_PropertyValue2) {
+    _inherits(Boolean, _PropertyValue2);
 
     function Boolean(content) {
         _classCallCheck(this, Boolean);
@@ -114,12 +114,12 @@ var Boolean = (function (_Value2) {
     }]);
 
     return Boolean;
-})(Value);
+})(PropertyValue);
 
 exports.Boolean = Boolean;
 
-var CalendarUserAddress = (function (_Value3) {
-    _inherits(CalendarUserAddress, _Value3);
+var CalendarUserAddress = (function (_PropertyValue3) {
+    _inherits(CalendarUserAddress, _PropertyValue3);
 
     function CalendarUserAddress(content) {
         _classCallCheck(this, CalendarUserAddress);
@@ -129,12 +129,12 @@ var CalendarUserAddress = (function (_Value3) {
     }
 
     return CalendarUserAddress;
-})(Value);
+})(PropertyValue);
 
 exports.CalendarUserAddress = CalendarUserAddress;
 
-var Date = (function (_Value4) {
-    _inherits(Date, _Value4);
+var Date = (function (_PropertyValue4) {
+    _inherits(Date, _PropertyValue4);
 
     function Date(content) {
         _classCallCheck(this, Date);
@@ -151,7 +151,7 @@ var Date = (function (_Value4) {
     }]);
 
     return Date;
-})(Value);
+})(PropertyValue);
 
 exports.Date = Date;
 
@@ -159,8 +159,8 @@ Date.__format = {
     date: "YYYYMMDD"
 };
 
-var DateTime = (function (_Value5) {
-    _inherits(DateTime, _Value5);
+var DateTime = (function (_PropertyValue5) {
+    _inherits(DateTime, _PropertyValue5);
 
     function DateTime(content) {
         _classCallCheck(this, DateTime);
@@ -190,7 +190,7 @@ var DateTime = (function (_Value5) {
     }]);
 
     return DateTime;
-})(Value);
+})(PropertyValue);
 
 exports.DateTime = DateTime;
 
@@ -198,8 +198,8 @@ DateTime.__format = {
     separator: "T"
 };
 
-var Duration = (function (_Value6) {
-    _inherits(Duration, _Value6);
+var Duration = (function (_PropertyValue6) {
+    _inherits(Duration, _PropertyValue6);
 
     function Duration(content) {
         _classCallCheck(this, Duration);
@@ -209,12 +209,12 @@ var Duration = (function (_Value6) {
     }
 
     return Duration;
-})(Value);
+})(PropertyValue);
 
 exports.Duration = Duration;
 
-var Float = (function (_Value7) {
-    _inherits(Float, _Value7);
+var Float = (function (_PropertyValue7) {
+    _inherits(Float, _PropertyValue7);
 
     function Float(content) {
         _classCallCheck(this, Float);
@@ -224,12 +224,12 @@ var Float = (function (_Value7) {
     }
 
     return Float;
-})(Value);
+})(PropertyValue);
 
 exports.Float = Float;
 
-var Geo = (function (_Value8) {
-    _inherits(Geo, _Value8);
+var Geo = (function (_PropertyValue8) {
+    _inherits(Geo, _PropertyValue8);
 
     function Geo(content) {
         _classCallCheck(this, Geo);
@@ -260,7 +260,7 @@ var Geo = (function (_Value8) {
     }]);
 
     return Geo;
-})(Value);
+})(PropertyValue);
 
 exports.Geo = Geo;
 
@@ -268,8 +268,8 @@ Geo.__format = {
     separator: ";"
 };
 
-var Integer = (function (_Value9) {
-    _inherits(Integer, _Value9);
+var Integer = (function (_PropertyValue9) {
+    _inherits(Integer, _PropertyValue9);
 
     function Integer(content) {
         _classCallCheck(this, Integer);
@@ -279,12 +279,12 @@ var Integer = (function (_Value9) {
     }
 
     return Integer;
-})(Value);
+})(PropertyValue);
 
 exports.Integer = Integer;
 
-var PeriodOfTime = (function (_Value10) {
-    _inherits(PeriodOfTime, _Value10);
+var PeriodOfTime = (function (_PropertyValue10) {
+    _inherits(PeriodOfTime, _PropertyValue10);
 
     function PeriodOfTime(content) {
         _classCallCheck(this, PeriodOfTime);
@@ -293,12 +293,12 @@ var PeriodOfTime = (function (_Value10) {
     }
 
     return PeriodOfTime;
-})(Value);
+})(PropertyValue);
 
 exports.PeriodOfTime = PeriodOfTime;
 
-var RecurrenceRule = (function (_Value11) {
-    _inherits(RecurrenceRule, _Value11);
+var RecurrenceRule = (function (_PropertyValue11) {
+    _inherits(RecurrenceRule, _PropertyValue11);
 
     function RecurrenceRule(content) {
         _classCallCheck(this, RecurrenceRule);
@@ -308,12 +308,12 @@ var RecurrenceRule = (function (_Value11) {
     }
 
     return RecurrenceRule;
-})(Value);
+})(PropertyValue);
 
 exports.RecurrenceRule = RecurrenceRule;
 
-var Text = (function (_Value12) {
-    _inherits(Text, _Value12);
+var Text = (function (_PropertyValue12) {
+    _inherits(Text, _PropertyValue12);
 
     function Text(content) {
         _classCallCheck(this, Text);
@@ -322,12 +322,12 @@ var Text = (function (_Value12) {
     }
 
     return Text;
-})(Value);
+})(PropertyValue);
 
 exports.Text = Text;
 
-var Time = (function (_Value13) {
-    _inherits(Time, _Value13);
+var Time = (function (_PropertyValue13) {
+    _inherits(Time, _PropertyValue13);
 
     function Time(content) {
         _classCallCheck(this, Time);
@@ -355,7 +355,7 @@ var Time = (function (_Value13) {
     }]);
 
     return Time;
-})(Value);
+})(PropertyValue);
 
 exports.Time = Time;
 
@@ -364,8 +364,8 @@ Time.__format = {
     timeUTC: "Z"
 };
 
-var URI = (function (_Value14) {
-    _inherits(URI, _Value14);
+var URI = (function (_PropertyValue14) {
+    _inherits(URI, _PropertyValue14);
 
     function URI(content) {
         _classCallCheck(this, URI);
@@ -374,12 +374,12 @@ var URI = (function (_Value14) {
     }
 
     return URI;
-})(Value);
+})(PropertyValue);
 
 exports.URI = URI;
 
-var UTCOffset = (function (_Value15) {
-    _inherits(UTCOffset, _Value15);
+var UTCOffset = (function (_PropertyValue15) {
+    _inherits(UTCOffset, _PropertyValue15);
 
     function UTCOffset(content) {
         _classCallCheck(this, UTCOffset);
@@ -396,7 +396,7 @@ var UTCOffset = (function (_Value15) {
     }]);
 
     return UTCOffset;
-})(Value);
+})(PropertyValue);
 
 exports.UTCOffset = UTCOffset;
 
@@ -465,13 +465,13 @@ var valueMapping = {
 };
 
 var valueMultipleMapping = {
-    "DATE": MultipleValue,
-    "DATE-TIME": MultipleValue,
-    "DURATION": MultipleValue,
-    "FLOAT": MultipleValue,
-    "INTEGER": MultipleValue,
-    "PERIOD": MultipleValue,
-    "TIME": MultipleValue,
+    "DATE": PropertyMultipleValue,
+    "DATE-TIME": PropertyMultipleValue,
+    "DURATION": PropertyMultipleValue,
+    "FLOAT": PropertyMultipleValue,
+    "INTEGER": PropertyMultipleValue,
+    "PERIOD": PropertyMultipleValue,
+    "TIME": PropertyMultipleValue,
     "TEXT": Text
 };
 
@@ -506,12 +506,12 @@ function getValueParameter(propertyParameters) {
 
 function getValue(propertyName, propertyValue, propertyParameters) {
     var mapping = valueParameterMapping[(getValueParameter(propertyParameters) || {}).value] || valueMapping[propertyName] || valueMapping["DEFAULT"];
-    var containsMultipleSeparator = propertyValue && (0, _util.splitSafe)(propertyValue, MultipleValue.__format.separator).length > 1;
+    var containsMultipleSeparator = propertyValue && (0, _util.splitSafe)(propertyValue, PropertyMultipleValue.__format.separator).length > 1;
 
     mapping = Array.isArray(mapping) ? mapping[0] : mapping;
 
     if (mapping.isMultiple === true && containsMultipleSeparator) {
-        return new MultipleValue(propertyValue, mapping);
+        return new PropertyMultipleValue(propertyValue, mapping);
     }
 
     return new mapping(propertyValue);

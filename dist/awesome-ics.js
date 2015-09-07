@@ -38,8 +38,8 @@ var Elements = {
     Property: _property.Property,
     PropertyParameter: _propertyParameter.PropertyParameter,
     PropertyValue: {
-        Value: _propertyValue.Value,
-        MultipleValue: _propertyValue.MultipleValue,
+        Value: _propertyValue.PropertyValue,
+        MultipleValue: _propertyValue.PropertyMultipleValue,
         Binary: _propertyValue.Binary,
         Boolean: _propertyValue.Boolean,
         CalendarUserAddress: _propertyValue.CalendarUserAddress,
