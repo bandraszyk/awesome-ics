@@ -14,8 +14,8 @@ describe("Property", function() {
 		//-- Assert
 		expect(property.original).toBeUndefined();
 		expect(property.parameters.length).toEqual(0);
-		expect(property.name).toEqual("");
-		expect(property.value).toEqual("");
+		expect(property.name).toBeNull();
+		expect(property.value).toBeNull();
 	});
 
 	it("should contain original content", function() {

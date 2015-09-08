@@ -1,7 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 var _util		= require("./_util");
 
-describe("Property Value", function() {
+describe("Property Value Text", function() {
     beforeEach(function() { _util.applyCustomMatcher(jasmine); });
 
     it("should be empty", function() {
@@ -9,7 +9,7 @@ describe("Property Value", function() {
         var content = undefined;
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Value(content);
+        var property = new AwesomeICS.Elements.PropertyValue.Text(content);
 
         //-- Assert
         expect(property.original).toBeUndefined();
@@ -21,7 +21,7 @@ describe("Property Value", function() {
         var content = "Property_Value";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Value(content);
+        var property = new AwesomeICS.Elements.PropertyValue.Text(content);
 
         //-- Assert
         expect(property.original).toEqual(content);
@@ -32,7 +32,7 @@ describe("Property Value", function() {
         var content = "Property_Value";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Value(content);
+        var property = new AwesomeICS.Elements.PropertyValue.Text(content);
 
         //-- Assert
         expect(property.value).toEqual("Property_Value");
@@ -43,7 +43,7 @@ describe("Property Value", function() {
         var content = "Property_Value";
 
         //-- property
-        var property = new AwesomeICS.Elements.PropertyValue.Value(content);
+        var property = new AwesomeICS.Elements.PropertyValue.Text(content);
 
         //-- Assert
         expect(property.toString()).toEqual(content);

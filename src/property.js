@@ -6,10 +6,10 @@ export class Property {
     constructor(content) {
         this.original   = content;
         this.parameters = [];
-        this.name       = "";
-        this.value      = "";
+        this.name       = null;
+        this.value      = null;
 
-        if (!this.original) { return; }
+        if (!content) { return; }
 
         this.name       = splitSafe(content, Property.__format.separatorProperty)[0];
         this.value      = content.slice(this.name.length + 1);

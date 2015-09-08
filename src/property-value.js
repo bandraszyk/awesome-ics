@@ -4,10 +4,10 @@ import moment from "moment";
 export class PropertyValue {
     constructor(content) {
         this.original   = content;
-        this.value      = content;
+        this.value      = content || null;
     }
     toString() {
-        return this.value.toString();
+        return this.value && this.value.toString();
     }
     toJSON() {
         return this.value;
@@ -16,7 +16,12 @@ export class PropertyValue {
 
 export class PropertyMultipleValue {
     constructor(content, mapping) {
-        this.values = [] = splitSafe(content, PropertyMultipleValue.__format.separator).map(function(singleContent) { return new mapping(singleContent); });
+        this.original = content;
+        this.values = [];
+
+        if (!content) { return; }
+
+        this.values = splitSafe(content, PropertyMultipleValue.__format.separator).map(function(singleContent) { return new mapping(singleContent); });
     }
     toString() {
         return this.values.map(mapToString).join(PropertyMultipleValue.__format.separator);
@@ -40,10 +45,18 @@ export class Binary extends PropertyValue {
 export class Boolean extends PropertyValue {
     constructor(content) {
         super(content);
-        this.value = JSON.parse(content.toLowerCase());
+
+        if (!content) { return; }
+
+        try {
+            this.value = JSON.parse(content.toLowerCase());
+        }
+        catch(error) {
+            this.value = null;
+        }
     }
     toString() {
-        return this.value.toString().toUpperCase();
+        return this.value && this.value.toString().toUpperCase();
     }
 }
 
@@ -57,10 +70,13 @@ export class CalendarUserAddress extends PropertyValue {
 export class Date extends PropertyValue {
     constructor(content) {
         super(content);
+
+        if (!content) { return; }
+
         this.value = moment.utc(content, Date.__format.date);
     }
     toString() {
-        return this.value.format(Date.__format.date);
+        return this.value && this.value.format(Date.__format.date);
     }
 }
 
@@ -103,6 +119,9 @@ export class Duration extends PropertyValue {
 export class Float extends PropertyValue {
     constructor(content) {
         super(content);
+
+        if (!content) { return; }
+
         this.value = parseFloat(content);
     }
 }
@@ -110,6 +129,8 @@ export class Float extends PropertyValue {
 export class Geo extends PropertyValue {
     constructor(content) {
         super(content);
+
+        if (!content) { return; }
 
         let coordinates = content.split(Geo.__format.separator);
 
@@ -136,6 +157,9 @@ Geo.__format = {
 export class Integer extends PropertyValue {
     constructor(content) {
         super(content);
+
+        if (!content) { return; }
+
         this.value = parseInt(content);
     }
 }
@@ -143,6 +167,7 @@ export class Integer extends PropertyValue {
 export class PeriodOfTime extends PropertyValue {
     constructor(content) {
         super(content);
+        // TODO: Implement behaviour
     }
 }
 
@@ -162,6 +187,9 @@ export class Text extends PropertyValue {
 export class Time extends PropertyValue {
     constructor(content) {
         super(content);
+
+        if (!content) { return; }
+
         this.value = {
             time    : moment(content.slice(0, 6), Time.__format.time),
             isFixed : content.slice(-1) !== Time.__format.timeUTC
@@ -169,12 +197,6 @@ export class Time extends PropertyValue {
     }
     toString() {
         return this.value.time.format(Time.__format.time) + (!this.value.isFixed && Time.__format.timeUTC || "");
-    }
-    toJSON() {
-        return {
-            isFixed : this.value.isFixed,
-            time    : this.value.time
-        }
     }
 }
 
@@ -195,7 +217,7 @@ export class UTCOffset extends PropertyValue {
         this.value = moment().utcOffset(content);
     }
     toString() {
-        return this.value.format(UTCOffset.__format.offset);
+        return this.value && this.value.format(UTCOffset.__format.offset);
     }
 }
 

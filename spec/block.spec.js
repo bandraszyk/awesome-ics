@@ -15,6 +15,7 @@ describe("Block", function() {
         expect(block.original).toBeUndefined();
         expect(block.properties.length).toEqual(0);
         expect(block.blocks.length).toEqual(0);
+        expect(block.type).toBeNull();
     });
 
     it("should contain original content", function() {

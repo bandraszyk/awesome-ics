@@ -1,7 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 var _util		= require("./_util");
 
-describe("Property Value", function() {
+describe("Property Value Integer", function() {
     beforeEach(function() { _util.applyCustomMatcher(jasmine); });
 
     it("should be empty", function() {
@@ -9,7 +9,7 @@ describe("Property Value", function() {
         var content = undefined;
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Value(content);
+        var property = new AwesomeICS.Elements.PropertyValue.Integer(content);
 
         //-- Assert
         expect(property.original).toBeUndefined();
@@ -18,10 +18,10 @@ describe("Property Value", function() {
 
     it("should contain original value", function() {
         //-- Arrange
-        var content = "Property_Value";
+        var content = "7";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Value(content);
+        var property = new AwesomeICS.Elements.PropertyValue.Integer(content);
 
         //-- Assert
         expect(property.original).toEqual(content);
@@ -29,21 +29,32 @@ describe("Property Value", function() {
 
     it("should contain value", function() {
         //-- Arrange
-        var content = "Property_Value";
+        var content = "7";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Value(content);
+        var property = new AwesomeICS.Elements.PropertyValue.Integer(content);
 
         //-- Assert
-        expect(property.value).toEqual("Property_Value");
+        expect(property.value).toEqual(7);
+    });
+
+    it("should be NaN", function() {
+        //-- Arrange
+        var content = "AWESOME";
+
+        //-- Act
+        var property = new AwesomeICS.Elements.PropertyValue.Integer(content);
+
+        //-- Assert
+        expect(property.value).toEqual(NaN);
     });
 
     it("should return same string value", function() {
         //-- Arrange
-        var content = "Property_Value";
+        var content = "7";
 
         //-- property
-        var property = new AwesomeICS.Elements.PropertyValue.Value(content);
+        var property = new AwesomeICS.Elements.PropertyValue.Integer(content);
 
         //-- Assert
         expect(property.toString()).toEqual(content);

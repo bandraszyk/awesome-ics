@@ -12,8 +12,6 @@ exports.getValue = getValue;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
-
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -29,13 +27,13 @@ var PropertyValue = (function () {
         _classCallCheck(this, PropertyValue);
 
         this.original = content;
-        this.value = content;
+        this.value = content || null;
     }
 
     _createClass(PropertyValue, [{
         key: "toString",
         value: function toString() {
-            return this.value.toString();
+            return this.value && this.value.toString();
         }
     }, {
         key: "toJSON",
@@ -51,13 +49,18 @@ exports.PropertyValue = PropertyValue;
 
 var PropertyMultipleValue = (function () {
     function PropertyMultipleValue(content, mapping) {
-        var _splitSafe$map, _splitSafe$map2;
-
         _classCallCheck(this, PropertyMultipleValue);
 
-        this.values = (_splitSafe$map = (0, _util.splitSafe)(content, PropertyMultipleValue.__format.separator).map(function (singleContent) {
+        this.original = content;
+        this.values = [];
+
+        if (!content) {
+            return;
+        }
+
+        this.values = (0, _util.splitSafe)(content, PropertyMultipleValue.__format.separator).map(function (singleContent) {
             return new mapping(singleContent);
-        }), _splitSafe$map2 = _toArray(_splitSafe$map), _splitSafe$map);
+        });
     }
 
     _createClass(PropertyMultipleValue, [{
@@ -103,13 +106,22 @@ var Boolean = (function (_PropertyValue2) {
         _classCallCheck(this, Boolean);
 
         _get(Object.getPrototypeOf(Boolean.prototype), "constructor", this).call(this, content);
-        this.value = JSON.parse(content.toLowerCase());
+
+        if (!content) {
+            return;
+        }
+
+        try {
+            this.value = JSON.parse(content.toLowerCase());
+        } catch (error) {
+            this.value = null;
+        }
     }
 
     _createClass(Boolean, [{
         key: "toString",
         value: function toString() {
-            return this.value.toString().toUpperCase();
+            return this.value && this.value.toString().toUpperCase();
         }
     }]);
 
@@ -140,13 +152,18 @@ var Date = (function (_PropertyValue4) {
         _classCallCheck(this, Date);
 
         _get(Object.getPrototypeOf(Date.prototype), "constructor", this).call(this, content);
+
+        if (!content) {
+            return;
+        }
+
         this.value = _moment2["default"].utc(content, Date.__format.date);
     }
 
     _createClass(Date, [{
         key: "toString",
         value: function toString() {
-            return this.value.format(Date.__format.date);
+            return this.value && this.value.format(Date.__format.date);
         }
     }]);
 
@@ -220,6 +237,11 @@ var Float = (function (_PropertyValue7) {
         _classCallCheck(this, Float);
 
         _get(Object.getPrototypeOf(Float.prototype), "constructor", this).call(this, content);
+
+        if (!content) {
+            return;
+        }
+
         this.value = parseFloat(content);
     }
 
@@ -235,6 +257,10 @@ var Geo = (function (_PropertyValue8) {
         _classCallCheck(this, Geo);
 
         _get(Object.getPrototypeOf(Geo.prototype), "constructor", this).call(this, content);
+
+        if (!content) {
+            return;
+        }
 
         var coordinates = content.split(Geo.__format.separator);
 
@@ -275,6 +301,11 @@ var Integer = (function (_PropertyValue9) {
         _classCallCheck(this, Integer);
 
         _get(Object.getPrototypeOf(Integer.prototype), "constructor", this).call(this, content);
+
+        if (!content) {
+            return;
+        }
+
         this.value = parseInt(content);
     }
 
@@ -290,6 +321,7 @@ var PeriodOfTime = (function (_PropertyValue10) {
         _classCallCheck(this, PeriodOfTime);
 
         _get(Object.getPrototypeOf(PeriodOfTime.prototype), "constructor", this).call(this, content);
+        // TODO: Implement behaviour
     }
 
     return PeriodOfTime;
@@ -333,6 +365,11 @@ var Time = (function (_PropertyValue13) {
         _classCallCheck(this, Time);
 
         _get(Object.getPrototypeOf(Time.prototype), "constructor", this).call(this, content);
+
+        if (!content) {
+            return;
+        }
+
         this.value = {
             time: (0, _moment2["default"])(content.slice(0, 6), Time.__format.time),
             isFixed: content.slice(-1) !== Time.__format.timeUTC
@@ -343,14 +380,6 @@ var Time = (function (_PropertyValue13) {
         key: "toString",
         value: function toString() {
             return this.value.time.format(Time.__format.time) + (!this.value.isFixed && Time.__format.timeUTC || "");
-        }
-    }, {
-        key: "toJSON",
-        value: function toJSON() {
-            return {
-                isFixed: this.value.isFixed,
-                time: this.value.time
-            };
         }
     }]);
 
@@ -391,7 +420,7 @@ var UTCOffset = (function (_PropertyValue15) {
     _createClass(UTCOffset, [{
         key: "toString",
         value: function toString() {
-            return this.value.format(UTCOffset.__format.offset);
+            return this.value && this.value.format(UTCOffset.__format.offset);
         }
     }]);
 

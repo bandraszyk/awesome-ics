@@ -9,9 +9,9 @@ export class Block {
         this.original   = content;
         this.properties = [];
         this.blocks     = [];
-        this.type       = "";
+        this.type       = null;
 
-        if (!this.original) { return; }
+        if (!content) { return; }
 
         //-- Read the content
         let lines = splitSafeLines(content, Block.__format);

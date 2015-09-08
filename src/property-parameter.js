@@ -26,10 +26,10 @@ const propertyTypes = [
 export class PropertyParameter {
     constructor(content) {
         this.original   = content;
-        this.name       = ""
-        this.value      = "";
+        this.name       = null;
+        this.value      = null;
 
-        if (!this.original) { return; }
+        if (!content) { return; }
 
         this.name       = splitSafe(content, PropertyParameter.__format.separator)[0];
         this.value      = content.slice(this.name.length + 1);

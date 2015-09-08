@@ -20,10 +20,10 @@ var Property = (function () {
 
         this.original = content;
         this.parameters = [];
-        this.name = "";
-        this.value = "";
+        this.name = null;
+        this.value = null;
 
-        if (!this.original) {
+        if (!content) {
             return;
         }
 

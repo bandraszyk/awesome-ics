@@ -17,10 +17,10 @@ var PropertyParameter = (function () {
         _classCallCheck(this, PropertyParameter);
 
         this.original = content;
-        this.name = "";
-        this.value = "";
+        this.name = null;
+        this.value = null;
 
-        if (!this.original) {
+        if (!content) {
             return;
         }
 
