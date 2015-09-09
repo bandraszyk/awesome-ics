@@ -47,8 +47,6 @@ function splitSafe(text, separator) {
         if (shouldBeContinued) {
             continue;
         }
-
-        //-- Merge with previous line and remove from array current element
         parts[currentLineIndex] = [line, parts[currentLineIndex + 1]].join(separator);
         parts.splice(currentLineIndex + 1, 1);
     }
@@ -64,7 +62,6 @@ function splitSafeLines(text, format) {
         var isContinuation = line[0] === (format && format.multiLineBegin || " ");
 
         if (isContinuation) {
-            //-- Merge with previous line and remove from array current element
             lines[currentLineIndex - 1] = [lines[currentLineIndex - 1], line.slice(1)].join("");
             lines.splice(currentLineIndex, 1);
             continue;

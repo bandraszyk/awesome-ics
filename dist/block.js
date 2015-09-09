@@ -17,8 +17,6 @@ var Block = (function () {
         var _this = this;
 
         _classCallCheck(this, Block);
-
-        //-- Get rid of invalid characters
         content = content && content.replace(/\r/g, "").trim();
 
         this.original = content;
@@ -29,59 +27,38 @@ var Block = (function () {
         if (!content) {
             return;
         }
-
-        //-- Read the content
         var lines = (0, _util.splitSafeLines)(content, Block.__format);
         var blockBegin = (0, _util.trim)(lines.shift() || "");
         var blockEnd = (0, _util.trim)(lines.pop() || "");
-
-        //-- Validate block start
         if (!Block.__format.regexBlockBegin.test(blockBegin)) {
             return (0, _util.setError)(this, "Cannot load Block element, first line should match /^BEGIN:/i.");
         }
-
-        //-- Validate block end
         if (!Block.__format.regexBlockEnd.test(blockEnd)) {
             return (0, _util.setError)(this, "Cannot load Block elements, last line should match /^END:/i.");
         }
-
-        //-- Validate the name
         if ((0, _util.removePattern)(blockBegin, Block.__format.regexBlockBegin) !== (0, _util.removePattern)(blockEnd, Block.__format.regexBlockEnd)) {
             return (0, _util.setError)(this, "Cannot load Block elements, block doesn't have and end.");
         }
-
-        //-- Set the name
         this.type = (0, _util.removePattern)(blockBegin, Block.__format.regexBlockBegin);
 
         var block = [];
         var blockCounter = 0;
-
-        //-- Process the lines
         lines.forEach(function (line) {
-            //-- Increase the block counter for block begin
             if (Block.__format.regexBlockBegin.test(line)) {
                 blockCounter++;
             }
-
-            //-- Decrease the block counter for block end
             if (Block.__format.regexBlockEnd.test(line)) {
                 blockCounter--;
             }
-
-            //-- Process as new child block
             if (blockCounter === 0 && block.length > 0) {
                 block.push(line);
                 _this.blocks.push(new Block(block.join(Block.__format.newLine)));
                 block = [];
                 return;
             }
-
-            //-- Process child blocks' content
             if (blockCounter > 0) {
                 return block.push(line);
             }
-
-            //-- Add as property
             _this.properties.push(new _property.Property(line));
         });
     }

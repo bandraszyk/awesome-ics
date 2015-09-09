@@ -1,6 +1,10 @@
 module.exports = function (grunt) {
     require("load-grunt-tasks")(grunt);
-    grunt.loadNpmTasks("grunt-babel")
+
+    grunt.loadNpmTasks("grunt-babel");
+    grunt.loadNpmTasks("grunt-contrib-jasmine");
+    grunt.loadNpmTasks("grunt-jasmine-nodejs");
+
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
         babel: {
@@ -26,7 +30,40 @@ module.exports = function (grunt) {
                 },
                 src: [ "dist/*.js" ]
             }
+        },
+        jasmine_nodejs: {
+            src: [ "dist/*.js" ],
+
+            options: {
+                specNameSuffix: "spec.js",
+                topOnFailure: false,
+                // configure one or more built-in reporters
+                reporters: {
+                    console: {
+                        colors: true,
+                        cleanStack: 1,       // (0|false)|(1|true)|2|3
+                        verbosity: 4,        // (0|false)|1|2|3|(4|true)
+                        listStyle: "indent", // "flat"|"indent"
+                        activity: false
+                    }
+                }
+            },
+            your_target: {
+                // target specific options
+                options: {
+                    useHelpers: true
+                },
+                // spec files
+                specs: [
+                    "spec/**",
+                    "test/core/**"
+                ]
+            }
         }
     });
-    grunt.registerTask("default", [ "babel" ]);
+
+    grunt.registerTask("default", [ "build" ]);
+    grunt.registerTask("build", [ "babel", "comments" ]);
+    grunt.registerTask("test", [ "jasmine_nodejs" ]);
+    grunt.registerTask("publish", [ "build", "test" ]);
 };

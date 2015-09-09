@@ -91,7 +91,6 @@ var Binary = (function (_PropertyValue) {
         _classCallCheck(this, Binary);
 
         _get(Object.getPrototypeOf(Binary.prototype), "constructor", this).call(this, content);
-        // TODO: Implement behaviour
     }
 
     return Binary;
@@ -137,7 +136,6 @@ var CalendarUserAddress = (function (_PropertyValue3) {
         _classCallCheck(this, CalendarUserAddress);
 
         _get(Object.getPrototypeOf(CalendarUserAddress.prototype), "constructor", this).call(this, content);
-        // TODO: Implement behaviour
     }
 
     return CalendarUserAddress;
@@ -183,6 +181,12 @@ var DateTime = (function (_PropertyValue5) {
         _classCallCheck(this, DateTime);
 
         _get(Object.getPrototypeOf(DateTime.prototype), "constructor", this).call(this, content);
+        this.value = { date: null, time: null };
+
+        if (!content) {
+            return;
+        }
+
         var parts = content.split(DateTime.__format.separator);
 
         this.value = {
@@ -222,7 +226,6 @@ var Duration = (function (_PropertyValue6) {
         _classCallCheck(this, Duration);
 
         _get(Object.getPrototypeOf(Duration.prototype), "constructor", this).call(this, content);
-        // TODO: Implement behaviour
     }
 
     return Duration;
@@ -257,6 +260,7 @@ var Geo = (function (_PropertyValue8) {
         _classCallCheck(this, Geo);
 
         _get(Object.getPrototypeOf(Geo.prototype), "constructor", this).call(this, content);
+        this.value = { latitude: null, longitude: null };
 
         if (!content) {
             return;
@@ -273,14 +277,18 @@ var Geo = (function (_PropertyValue8) {
     _createClass(Geo, [{
         key: "toString",
         value: function toString() {
-            return this.value.latitude.toString() + Geo.__format.separator + this.value.longitude.toString();
+            if (!this.value || !this.value.latitude || !this.value.latitude) {
+                return "";
+            }
+
+            return "" + this.value.latitude + Geo.__format.separator + this.value.longitude;
         }
     }, {
         key: "toJSON",
         value: function toJSON() {
-            return {
-                latitude: this.value.latitude.toJSON(),
-                longitude: this.value.longitude.toJSON()
+            return this.value && {
+                latitude: this.value.latitude && this.value.latitude.toJSON(),
+                longitude: this.value.longitude && this.value.longitude.toJSON()
             };
         }
     }]);
@@ -321,7 +329,6 @@ var PeriodOfTime = (function (_PropertyValue10) {
         _classCallCheck(this, PeriodOfTime);
 
         _get(Object.getPrototypeOf(PeriodOfTime.prototype), "constructor", this).call(this, content);
-        // TODO: Implement behaviour
     }
 
     return PeriodOfTime;
@@ -336,7 +343,6 @@ var RecurrenceRule = (function (_PropertyValue11) {
         _classCallCheck(this, RecurrenceRule);
 
         _get(Object.getPrototypeOf(RecurrenceRule.prototype), "constructor", this).call(this, content);
-        // TODO: Implement behaviour
     }
 
     return RecurrenceRule;
@@ -365,6 +371,8 @@ var Time = (function (_PropertyValue13) {
         _classCallCheck(this, Time);
 
         _get(Object.getPrototypeOf(Time.prototype), "constructor", this).call(this, content);
+
+        this.value = { time: null, isFixed: null };
 
         if (!content) {
             return;
@@ -414,6 +422,11 @@ var UTCOffset = (function (_PropertyValue15) {
         _classCallCheck(this, UTCOffset);
 
         _get(Object.getPrototypeOf(UTCOffset.prototype), "constructor", this).call(this, content);
+
+        if (!content) {
+            return;
+        }
+
         this.value = (0, _moment2["default"])().utcOffset(content);
     }
 
@@ -432,8 +445,6 @@ exports.UTCOffset = UTCOffset;
 UTCOffset.__format = {
     offset: "ZZ"
 };
-
-//-- Define multiple values
 Date.isMultiple = true;
 DateTime.isMultiple = true;
 Duration.isMultiple = true;

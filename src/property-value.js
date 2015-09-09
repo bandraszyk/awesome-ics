@@ -38,7 +38,7 @@ PropertyMultipleValue.__format = {
 export class Binary extends PropertyValue {
     constructor(content) {
         super(content);
-        // TODO: Implement behaviour
+        // TODO: Implement behaviour, remember to write tests
     }
 }
 
@@ -63,7 +63,7 @@ export class Boolean extends PropertyValue {
 export class CalendarUserAddress extends PropertyValue {
     constructor(content) {
         super(content);
-        // TODO: Implement behaviour
+        // TODO: Implement behaviour, remember to write tests
     }
 }
 
@@ -87,6 +87,10 @@ Date.__format = {
 export class DateTime extends PropertyValue {
     constructor(content) {
         super(content);
+        this.value = { date: null, time: null };
+
+        if (!content) { return; }
+
         let parts = content.split(DateTime.__format.separator);
 
         this.value = {
@@ -112,7 +116,7 @@ DateTime.__format = {
 export class Duration extends PropertyValue {
     constructor(content) {
         super(content);
-        // TODO: Implement behaviour
+        // TODO: Implement behaviour, remember to write tests
     }
 }
 
@@ -129,6 +133,7 @@ export class Float extends PropertyValue {
 export class Geo extends PropertyValue {
     constructor(content) {
         super(content);
+        this.value = { latitude: null, longitude: null };
 
         if (!content) { return; }
 
@@ -140,12 +145,14 @@ export class Geo extends PropertyValue {
         };
     }
     toString() {
-        return this.value.latitude.toString() + Geo.__format.separator + this.value.longitude.toString();
+        if (!this.value || !this.value.latitude || !this.value.latitude) { return ""; }
+
+        return `${this.value.latitude}${Geo.__format.separator}${this.value.longitude}`;
     }
     toJSON() {
-        return {
-            latitude    : this.value.latitude.toJSON(),
-            longitude   : this.value.longitude.toJSON()
+        return this.value && {
+            latitude    : this.value.latitude && this.value.latitude.toJSON(),
+            longitude   : this.value.longitude && this.value.longitude.toJSON()
         }
     }
 }
@@ -167,14 +174,14 @@ export class Integer extends PropertyValue {
 export class PeriodOfTime extends PropertyValue {
     constructor(content) {
         super(content);
-        // TODO: Implement behaviour
+        // TODO: Implement behaviour, remember to write tests
     }
 }
 
 export class RecurrenceRule extends PropertyValue {
     constructor(content) {
         super(content);
-        // TODO: Implement behaviour
+        // TODO: Implement behaviour, remember to write tests
     }
 }
 
@@ -187,6 +194,8 @@ export class Text extends PropertyValue {
 export class Time extends PropertyValue {
     constructor(content) {
         super(content);
+
+        this.value = { time: null, isFixed: null };
 
         if (!content) { return; }
 
@@ -208,12 +217,16 @@ Time.__format = {
 export class URI extends PropertyValue {
     constructor(content) {
         super(content);
+        // TODO: Implement behaviour, remember to write tests
     }
 }
 
 export class UTCOffset extends PropertyValue {
     constructor(content) {
         super(content);
+
+        if (!content) { return; }
+
         this.value = moment().utcOffset(content);
     }
     toString() {

@@ -18,8 +18,6 @@ var _propertyParameter = require("./property-parameter");
 
 var _propertyValue = require("./property-value");
 
-//-- Definition of calendar
-
 var Calendar = (function (_Block) {
     _inherits(Calendar, _Block);
 

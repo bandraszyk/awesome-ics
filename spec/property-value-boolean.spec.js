@@ -9,11 +9,11 @@ describe("Property Value Boolean", function() {
         var content = undefined;
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Boolean(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean(content);
 
         //-- Assert
-        expect(property.original).toBeUndefined();
-        expect(property.value).toBeNull();
+        expect(propertyValue.original).toBeUndefined();
+        expect(propertyValue.value).toBeNull();
     });
 
     it("should contain original value", function() {
@@ -21,10 +21,10 @@ describe("Property Value Boolean", function() {
         var content = "TRUE";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Boolean(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean(content);
 
         //-- Assert
-        expect(property.original).toEqual(content);
+        expect(propertyValue.original).toEqual(content);
     });
 
     it("should return same string value", function() {
@@ -32,10 +32,10 @@ describe("Property Value Boolean", function() {
         var content = "TRUE";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Boolean(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean(content);
 
         //-- Assert
-        expect(property.toString()).toEqual(content);
+        expect(propertyValue.toString()).toEqual(content);
     });
 
     it("should contain null value when wrongly formatted", function() {
@@ -43,10 +43,10 @@ describe("Property Value Boolean", function() {
         var content = "AWESOME";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Boolean(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean(content);
 
         //-- Assert
-        expect(property.value).toBeNull();
+        expect(propertyValue.value).toBeNull();
     });
 
     it("should equal `true`", function() {
@@ -54,10 +54,10 @@ describe("Property Value Boolean", function() {
         var content = "TRUE";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Boolean(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean(content);
 
         //-- Assert
-        expect(property.value).toEqual(true);
+        expect(propertyValue.value).toEqual(true);
     });
 
     it("should equal `false`", function() {
@@ -65,9 +65,9 @@ describe("Property Value Boolean", function() {
         var content = "FALSE";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Boolean(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean(content);
 
         //-- Assert
-        expect(property.value).toEqual(false);
+        expect(propertyValue.value).toEqual(false);
     });
 });

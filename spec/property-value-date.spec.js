@@ -1,5 +1,6 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 var _util		= require("./_util");
+var moment      = require("moment");
 
 describe("Property Value Date", function() {
     beforeEach(function() { _util.applyCustomMatcher(jasmine); });
@@ -21,10 +22,10 @@ describe("Property Value Date", function() {
         var content = "20150901";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Date(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date(content);
 
         //-- Assert
-        expect(property.original).toEqual(content);
+        expect(propertyValue.original).toEqual(content);
     });
 
     it("should return same string value", function() {
@@ -32,10 +33,10 @@ describe("Property Value Date", function() {
         var content = "20150901";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Date(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date(content);
 
         //-- Assert
-        expect(property.toString()).toEqual(content);
+        expect(propertyValue.toString()).toEqual(content);
     });
 
     it("should be invalid when wrongly formatted", function() {
@@ -43,10 +44,10 @@ describe("Property Value Date", function() {
         var content = "AWESOME";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Date(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date(content);
 
         //-- Assert
-        expect(property.value.isValid()).toEqual(false);
+        expect(propertyValue.value.isValid()).toEqual(false);
     });
 
     it("should equal valid date when properly formatted", function() {
@@ -54,10 +55,21 @@ describe("Property Value Date", function() {
         var content = "20150901";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Date(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date(content);
 
         //-- Assert
-        expect(property.value.isValid()).toEqual(true);
+        expect(propertyValue.value.isValid()).toEqual(true);
+    });
+
+    it("should contains momentjs value", function() {
+        //-- Arrange
+        var content = "20150901";
+
+        //-- Act
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date(content);
+
+        //-- Assert
+        expect(propertyValue.value.isValid()).toBeTruthy();
     });
 
     it("should equal same date as passed", function() {
@@ -65,9 +77,9 @@ describe("Property Value Date", function() {
         var content = "20150901";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Date(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date(content);
 
         //-- Assert
-        expect(property.value.format("YYYY-MM-DD")).toEqual("2015-09-01");
+        expect(propertyValue.value.format("YYYY-MM-DD")).toEqual("2015-09-01");
     });
 });

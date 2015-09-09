@@ -9,11 +9,11 @@ describe("Property Value Text", function() {
         var content = undefined;
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Text(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text(content);
 
         //-- Assert
-        expect(property.original).toBeUndefined();
-        expect(property.value).toBeNull();
+        expect(propertyValue.original).toBeUndefined();
+        expect(propertyValue.value).toBeNull();
     });
 
     it("should contain original value", function() {
@@ -21,10 +21,10 @@ describe("Property Value Text", function() {
         var content = "Property_Value";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Text(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text(content);
 
         //-- Assert
-        expect(property.original).toEqual(content);
+        expect(propertyValue.original).toEqual(content);
     });
 
     it("should contain value", function() {
@@ -32,10 +32,10 @@ describe("Property Value Text", function() {
         var content = "Property_Value";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Text(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text(content);
 
         //-- Assert
-        expect(property.value).toEqual("Property_Value");
+        expect(propertyValue.value).toEqual("Property_Value");
     });
 
     it("should return same string value", function() {
@@ -43,9 +43,9 @@ describe("Property Value Text", function() {
         var content = "Property_Value";
 
         //-- property
-        var property = new AwesomeICS.Elements.PropertyValue.Text(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text(content);
 
         //-- Assert
-        expect(property.toString()).toEqual(content);
+        expect(propertyValue.toString()).toEqual(content);
     });
 });
