@@ -19,7 +19,7 @@ export class PropertyValue {
         this.value = value || null;
         return this;
     }
-    setValueFromString(string) {
+    convertFromString(string) {
         if (isEmptyString(string)) { return this.clear(); }
 
         return this.setValue(string);
@@ -45,11 +45,11 @@ export class PropertyMultipleValue {
         this.value = value || [];
         return this;
     }
-    setValueFromString(string) {
+    convertFromString(string) {
         if (isEmptyString(string)) { return this.clear(); }
 
         this.value = splitSafe(string, PropertyMultipleValue.__format.separator)
-            .map(function(singleContent) { return new this.mapping().setValueFromString(singleContent); }, this);
+            .map(function(singleContent) { return new this.mapping().convertFromString(singleContent); }, this);
 
         return this;
     }
@@ -67,7 +67,7 @@ export class Boolean extends PropertyValue {
     toString() {
         return this.value && this.value.toString().toUpperCase();
     }
-    setValueFromString(string) {
+    convertFromString(string) {
         if (isEmptyString(string)) { return super.clear(); }
 
         try {
@@ -89,7 +89,7 @@ export class Date extends PropertyValue {
     toString() {
         return this.value && this.value.format(Date.__format.date);
     }
-    setValueFromString(string) {
+    convertFromString(string) {
         if (isEmptyString(string)) { return super.clear(); }
 
         this.value = moment.utc(string, Date.__format.date);
@@ -121,14 +121,14 @@ export class DateTime extends PropertyValue {
             time: this.value && this.value.time && this.value.time.toJSON() || null
         }
     }
-    setValueFromString(string) {
+    convertFromString(string) {
         if (isEmptyString(string)) { return this.clear(); }
 
         let parts = string.split(DateTime.__format.separator);
 
         this.value = {
-            date: new Date().setValueFromString(parts[0]),
-            time: new Time().setValueFromString(parts[1])
+            date: new Date().convertFromString(parts[0]),
+            time: new Time().convertFromString(parts[1])
         };
 
         return this;
@@ -152,7 +152,7 @@ export class Duration extends PropertyValue {
 }
 
 export class Float extends PropertyValue {
-    setValueFromString(string) {
+    convertFromString(string) {
         if (isEmptyString(string)) { return super.clear(); }
 
         this.value = parseFloat(string);
@@ -176,14 +176,14 @@ export class Geo extends PropertyValue {
             longitude   : this.value && this.value.longitude && this.value.longitude.toJSON() || null
         }
     }
-    setValueFromString(string) {
+    convertFromString(string) {
         if (isEmptyString(string)) { return this.clear(); }
 
         let coordinates = string.split(Geo.__format.separator);
 
         this.value = {
-            latitude    : new Float().setValueFromString(coordinates[0]),
-            longitude   : new Float().setValueFromString(coordinates[1])
+            latitude    : new Float().convertFromString(coordinates[0]),
+            longitude   : new Float().convertFromString(coordinates[1])
         };
 
         return this;
@@ -206,7 +206,7 @@ Geo.__format = {
 };
 
 export class Integer extends PropertyValue {
-    setValueFromString(string) {
+    convertFromString(string) {
         if (isEmptyString(string)) { return super.clear(); }
 
         this.value = parseInt(string);
@@ -234,7 +234,7 @@ export class Time extends PropertyValue {
 
         return this.value.time.format(Time.__format.time) + (!this.value.isFixed && Time.__format.timeUTC || "");
     }
-    setValueFromString(string) {
+    convertFromString(string) {
         if (isEmptyString(string)) { return this.clear(); }
 
         this.value = {
@@ -267,7 +267,7 @@ export class UTCOffset extends PropertyValue {
     toString() {
         return this.value && this.value.format(UTCOffset.__format.offset);
     }
-    setValueFromString(string) {
+    convertFromString(string) {
         if (isEmptyString(string)) { return super.clear(); }
 
         this.value = moment().utcOffset(string);
@@ -386,8 +386,8 @@ export function getValue(propertyName, propertyValue, propertyParameters) {
     mapping = Array.isArray(mapping) ? mapping[0] : mapping;
 
     if (mapping.isMultiple === true && containsMultipleSeparator) {
-        return new PropertyMultipleValue(mapping).setValueFromString(propertyValue);
+        return new PropertyMultipleValue(mapping).convertFromString(propertyValue);
     }
 
-    return new mapping().setValueFromString(propertyValue);
+    return new mapping().convertFromString(propertyValue);
 }

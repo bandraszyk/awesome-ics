@@ -6,7 +6,12 @@ import { PropertyValue, PropertyMultipleValue, Binary, Boolean, CalendarUserAddr
          Float, Geo, Integer, PeriodOfTime, RecurrenceRule, Text, Time, URI, UTCOffset } from "./property-value";
 
 //-- Definition of calendar
-export class Calendar extends Block { }
+export class Calendar extends Block {
+    constructor() {
+        super();
+        this.type = "CALENDAR";
+    }
+}
 
 export const Elements = {
     Block               : Block,

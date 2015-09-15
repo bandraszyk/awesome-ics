@@ -14,8 +14,6 @@ var _propertyParameter = require("./property-parameter");
 
 var _propertyValue = require("./property-value");
 
-function clear(property) {}
-
 var Property = (function () {
     function Property() {
         _classCallCheck(this, Property);
@@ -63,8 +61,8 @@ var Property = (function () {
             };
         }
     }, {
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
                 return this.clear();
             }
@@ -77,7 +75,7 @@ var Property = (function () {
             if (this.name.indexOf(Property.__format.separatorParameter) !== -1) {
                 this.name = parameters[0];
                 this.parameters = parameters.slice(1).map(function (paramContent) {
-                    return new _propertyParameter.PropertyParameter().setValueFromString(paramContent);
+                    return new _propertyParameter.PropertyParameter().convertFromString(paramContent);
                 });
             }
 

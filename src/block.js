@@ -31,7 +31,7 @@ export class Block {
             blocks      : this.blocks.map(mapToJSON)
         }
     }
-    setValueFromString(string) {
+    convertFromString(string) {
         //-- Get rid of invalid characters
         string = Block.__format.prepareString(string);
 
@@ -70,7 +70,7 @@ export class Block {
             //-- Process as new child block
             if (blockCounter === 0 && block.length > 0) {
                 block.push(line);
-                this.blocks.push(new Block().setValueFromString(block.join(Block.__format.newLine)));
+                this.blocks.push(new Block().convertFromString(block.join(Block.__format.newLine)));
                 block = [];
                 return;
             }
@@ -79,7 +79,7 @@ export class Block {
             if (blockCounter > 0) { return block.push(line); }
 
             //-- Add as property
-            this.properties.push(new Property().setValueFromString(line));
+            this.properties.push(new Property().convertFromString(line));
         });
 
         return this;

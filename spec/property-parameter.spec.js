@@ -7,7 +7,7 @@ describe("Parameter", function() {
         var parameter = new AwesomeICS.Elements.PropertyParameter();
 
         //-- Act
-        var parameterSetResult = parameter.setValueFromString(content);
+        var parameterSetResult = parameter.convertFromString(content);
 
         //-- Assert
         expect(parameterSetResult).toBe(parameter);
@@ -20,7 +20,7 @@ describe("Parameter", function() {
         var content = undefined;
 
         //-- Act
-        var parameter = new AwesomeICS.Elements.PropertyParameter().setValueFromString(content);
+        var parameter = new AwesomeICS.Elements.PropertyParameter().convertFromString(content);
 
         //-- Assert
         expect(parameter.name).toBeNull("");
@@ -32,7 +32,7 @@ describe("Parameter", function() {
         var content = "PARAMETER_NAME=PARAMETER_VALUE";
 
         //-- Act
-        var parameter = new AwesomeICS.Elements.PropertyParameter().setValueFromString(content);
+        var parameter = new AwesomeICS.Elements.PropertyParameter().convertFromString(content);
 
         //-- Assert
         expect(parameter.toString()).toEqual(content);
@@ -43,7 +43,7 @@ describe("Parameter", function() {
         var content = "PARAMETER_NAME=PARAMETER_VALUE";
 
         //-- Act
-        var parameter = new AwesomeICS.Elements.PropertyParameter().setValueFromString(content);
+        var parameter = new AwesomeICS.Elements.PropertyParameter().convertFromString(content);
 
         //-- Assert
         expect(parameter.name).toEqual("PARAMETER_NAME");
@@ -54,7 +54,7 @@ describe("Parameter", function() {
         var content = "PARAMETER_NAME=PARAMETER_VALUE";
 
         //-- Act
-        var parameter = new AwesomeICS.Elements.PropertyParameter().setValueFromString(content);
+        var parameter = new AwesomeICS.Elements.PropertyParameter().convertFromString(content);
 
         //-- Assert
         expect(parameter.value).toEqual("PARAMETER_VALUE");

@@ -60,8 +60,8 @@ var Block = (function () {
             };
         }
     }, {
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             var _this = this;
             string = Block.__format.prepareString(string);
 
@@ -93,14 +93,14 @@ var Block = (function () {
                 }
                 if (blockCounter === 0 && block.length > 0) {
                     block.push(line);
-                    _this.blocks.push(new Block().setValueFromString(block.join(Block.__format.newLine)));
+                    _this.blocks.push(new Block().convertFromString(block.join(Block.__format.newLine)));
                     block = [];
                     return;
                 }
                 if (blockCounter > 0) {
                     return block.push(line);
                 }
-                _this.properties.push(new _property.Property().setValueFromString(line));
+                _this.properties.push(new _property.Property().convertFromString(line));
             });
 
             return this;

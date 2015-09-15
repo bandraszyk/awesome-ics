@@ -7,7 +7,7 @@ describe("Calendar", function() {
         var icsFile = fs.readFileSync("./spec/ics/basic.ics", "utf8").trim();
 
         //-- Act
-        var calendar = new AwesomeICS.Calendar().setValueFromString(icsFile);
+        var calendar = new AwesomeICS.Calendar().convertFromString(icsFile);
 
         //-- Assert
         expect(calendar.toString()).toBeTruthy(AwesomeICS.Elements.Block.__format.prepareString(icsFile));
@@ -18,7 +18,7 @@ describe("Calendar", function() {
         var icsFile = fs.readFileSync("./spec/ics/basic-real.ics", 'utf8').trim();
 
         //-- Act
-        var calendar = new AwesomeICS.Calendar().setValueFromString(icsFile);
+        var calendar = new AwesomeICS.Calendar().convertFromString(icsFile);
 
 
         //-- Assert
@@ -30,7 +30,7 @@ describe("Calendar", function() {
         var icsFile = fs.readFileSync("./spec/ics/basic-long-description.ics", 'utf8');
 
         //-- Act
-        var calendar = new AwesomeICS.Calendar().setValueFromString(icsFile);
+        var calendar = new AwesomeICS.Calendar().convertFromString(icsFile);
 
         //-- Assert
         expect(calendar.toString()).toEqual(AwesomeICS.Elements.Block.__format.prepareString(icsFile));
@@ -41,7 +41,7 @@ describe("Calendar", function() {
         var icsFile = fs.readFileSync("./spec/ics/basic-multiple-property.ics", 'utf8');
 
         //-- Act
-        var calendar = new AwesomeICS.Calendar().setValueFromString(icsFile);
+        var calendar = new AwesomeICS.Calendar().convertFromString(icsFile);
 
         //-- Assert
         expect(calendar.toString()).toEqual(AwesomeICS.Elements.Block.__format.prepareString(icsFile));
@@ -52,7 +52,7 @@ describe("Calendar", function() {
         var icsFile = fs.readFileSync("./spec/ics/basic-geocoordinates.ics", "utf8");
 
         //-- Act
-        var calendar = new AwesomeICS.Calendar().setValueFromString(icsFile);
+        var calendar = new AwesomeICS.Calendar().convertFromString(icsFile);
 
         //-- Assert
         expect(calendar.toString()).toEqual(AwesomeICS.Elements.Block.__format.prepareString(icsFile));

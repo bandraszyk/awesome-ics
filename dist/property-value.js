@@ -52,8 +52,8 @@ var PropertyValue = (function () {
             return this;
         }
     }, {
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
                 return this.clear();
             }
@@ -98,14 +98,14 @@ var PropertyMultipleValue = (function () {
             return this;
         }
     }, {
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
                 return this.clear();
             }
 
             this.value = (0, _util.splitSafe)(string, PropertyMultipleValue.__format.separator).map(function (singleContent) {
-                return new this.mapping().setValueFromString(singleContent);
+                return new this.mapping().convertFromString(singleContent);
             }, this);
 
             return this;
@@ -150,8 +150,8 @@ var Boolean = (function (_PropertyValue2) {
             return this.value && this.value.toString().toUpperCase();
         }
     }, {
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
                 return _get(Object.getPrototypeOf(Boolean.prototype), "clear", this).call(this);
             }
@@ -200,8 +200,8 @@ var Date = (function (_PropertyValue4) {
             return this.value && this.value.format(Date.__format.date);
         }
     }, {
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
                 return _get(Object.getPrototypeOf(Date.prototype), "clear", this).call(this);
             }
@@ -254,8 +254,8 @@ var DateTime = (function (_PropertyValue5) {
             };
         }
     }, {
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
                 return this.clear();
             }
@@ -263,8 +263,8 @@ var DateTime = (function (_PropertyValue5) {
             var parts = string.split(DateTime.__format.separator);
 
             this.value = {
-                date: new Date().setValueFromString(parts[0]),
-                time: new Time().setValueFromString(parts[1])
+                date: new Date().convertFromString(parts[0]),
+                time: new Time().convertFromString(parts[1])
             };
 
             return this;
@@ -316,8 +316,8 @@ var Float = (function (_PropertyValue7) {
     }
 
     _createClass(Float, [{
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
                 return _get(Object.getPrototypeOf(Float.prototype), "clear", this).call(this);
             }
@@ -365,8 +365,8 @@ var Geo = (function (_PropertyValue8) {
             };
         }
     }, {
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
                 return this.clear();
             }
@@ -374,8 +374,8 @@ var Geo = (function (_PropertyValue8) {
             var coordinates = string.split(Geo.__format.separator);
 
             this.value = {
-                latitude: new Float().setValueFromString(coordinates[0]),
-                longitude: new Float().setValueFromString(coordinates[1])
+                latitude: new Float().convertFromString(coordinates[0]),
+                longitude: new Float().convertFromString(coordinates[1])
             };
 
             return this;
@@ -418,8 +418,8 @@ var Integer = (function (_PropertyValue9) {
     }
 
     _createClass(Integer, [{
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
                 return _get(Object.getPrototypeOf(Integer.prototype), "clear", this).call(this);
             }
@@ -501,8 +501,8 @@ var Time = (function (_PropertyValue13) {
             return this.value.time.format(Time.__format.time) + (!this.value.isFixed && Time.__format.timeUTC || "");
         }
     }, {
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
                 return this.clear();
             }
@@ -567,8 +567,8 @@ var UTCOffset = (function (_PropertyValue15) {
             return this.value && this.value.format(UTCOffset.__format.offset);
         }
     }, {
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
                 return _get(Object.getPrototypeOf(UTCOffset.prototype), "clear", this).call(this);
             }
@@ -692,8 +692,8 @@ function getValue(propertyName, propertyValue, propertyParameters) {
     mapping = Array.isArray(mapping) ? mapping[0] : mapping;
 
     if (mapping.isMultiple === true && containsMultipleSeparator) {
-        return new PropertyMultipleValue(mapping).setValueFromString(propertyValue);
+        return new PropertyMultipleValue(mapping).convertFromString(propertyValue);
     }
 
-    return new mapping().setValueFromString(propertyValue);
+    return new mapping().convertFromString(propertyValue);
 }

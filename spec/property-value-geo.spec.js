@@ -7,7 +7,7 @@ describe("Property Value Geo", function() {
         var propertyValue = new AwesomeICS.Elements.PropertyValue.Geo();
 
         //-- Act
-        var propertyValueSetResult = propertyValue.setValueFromString(content);
+        var propertyValueSetResult = propertyValue.convertFromString(content);
 
         //-- Assert
         expect(propertyValueSetResult).toBe(propertyValue);
@@ -19,7 +19,7 @@ describe("Property Value Geo", function() {
         var content = undefined;
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Geo().setValueFromString(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Geo().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.longitude).toBeNull();
@@ -31,7 +31,7 @@ describe("Property Value Geo", function() {
         var content = "45.67;11.23";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Geo().setValueFromString(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Geo().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.longitude instanceof AwesomeICS.Elements.PropertyValue.Float).toBeTruthy();
@@ -43,7 +43,7 @@ describe("Property Value Geo", function() {
         var content = "45.67;11.23";
 
         //-- property
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Geo().setValueFromString(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Geo().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.toString()).toEqual(content);

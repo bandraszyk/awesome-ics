@@ -2,10 +2,6 @@ import { splitSafe, mapToJSON, mapToString, isEmptyString } from "./util";
 import { PropertyParameter } from "./property-parameter";
 import { getValue, PropertyValue, PropertyMultipleValue } from "./property-value";
 
-function clear(property) {
-
-}
-
 export class Property {
     constructor() {
         this.clear();
@@ -43,7 +39,7 @@ export class Property {
             value       : mapToJSON(this.value)
         };
     }
-    setValueFromString(string) {
+    convertFromString(string) {
         if (isEmptyString(string)) { return this.clear(); }
 
         this.name       = splitSafe(string, Property.__format.separatorProperty)[0];
@@ -53,7 +49,7 @@ export class Property {
 
         if (this.name.indexOf(Property.__format.separatorParameter) !== -1) {
             this.name       = parameters[0];
-            this.parameters = parameters.slice(1).map(function(paramContent) { return new PropertyParameter().setValueFromString(paramContent); });
+            this.parameters = parameters.slice(1).map(function(paramContent) { return new PropertyParameter().convertFromString(paramContent); });
         }
 
         this.value = getValue(this.name, this.value, this.parameters);

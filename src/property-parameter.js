@@ -23,14 +23,15 @@ const propertyTypes = [
     "VALUE"
 ];
 
-function clear(parameter) {
-    parameter.name   = null;
-    parameter.value  = null;
-}
-
 export class PropertyParameter {
     constructor() {
-        clear(this);
+        this.clear();
+    }
+    clear() {
+        this.name   = null;
+        this.value  = null;
+
+        return this;
     }
     toString() {
         return [ this.name, this.value ].join(PropertyParameter.__format.separator);
@@ -41,11 +42,12 @@ export class PropertyParameter {
             value   : this.value
         };
     }
-    setValueFromString(string) {
-        if (isEmptyString(string)) { clear(this); return this; }
+    convertFromString(string) {
+        if (isEmptyString(string)) { return this.clear(); }
 
         this.name       = splitSafe(string, PropertyParameter.__format.separator)[0];
         this.value      = string.slice(this.name.length + 1);
+
         return this;
     }
     setName(name) {

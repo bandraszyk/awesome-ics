@@ -12,19 +12,22 @@ var _util = require("./util");
 
 var propertyTypes = ["ALTREP", "CN", "CUTYPE", "DELEGATED-FROM", "DELEGATED-TO", "DIR", "ENCODING", "FMTTYPE", "FBTYPE", "LANGUAGE", "MEMBER", "PARTSTAT", "RANGE", "RELATED", "RELTYPE", "ROLE", "RSVP", "SENT-BY", "TZID", "VALUE"];
 
-function clear(parameter) {
-    parameter.name = null;
-    parameter.value = null;
-}
-
 var PropertyParameter = (function () {
     function PropertyParameter() {
         _classCallCheck(this, PropertyParameter);
 
-        clear(this);
+        this.clear();
     }
 
     _createClass(PropertyParameter, [{
+        key: "clear",
+        value: function clear() {
+            this.name = null;
+            this.value = null;
+
+            return this;
+        }
+    }, {
         key: "toString",
         value: function toString() {
             return [this.name, this.value].join(PropertyParameter.__format.separator);
@@ -38,14 +41,15 @@ var PropertyParameter = (function () {
             };
         }
     }, {
-        key: "setValueFromString",
-        value: function setValueFromString(string) {
+        key: "convertFromString",
+        value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
-                clear(this);return this;
+                return this.clear();
             }
 
             this.name = (0, _util.splitSafe)(string, PropertyParameter.__format.separator)[0];
             this.value = string.slice(this.name.length + 1);
+
             return this;
         }
     }, {

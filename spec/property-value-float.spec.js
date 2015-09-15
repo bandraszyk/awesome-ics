@@ -8,7 +8,7 @@ describe("Property Value Float", function() {
         var propertyValue = new AwesomeICS.Elements.PropertyValue.Float();
 
         //-- Act
-        var propertyValueSetResult = propertyValue.setValueFromString(content);
+        var propertyValueSetResult = propertyValue.convertFromString(content);
 
         //-- Assert
         expect(propertyValueSetResult).toBe(propertyValue);
@@ -20,7 +20,7 @@ describe("Property Value Float", function() {
         var content = undefined;
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float().setValueFromString(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value).toBeNull();
@@ -31,7 +31,7 @@ describe("Property Value Float", function() {
         var content = "7.68";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Float().setValueFromString(content);
+        var property = new AwesomeICS.Elements.PropertyValue.Float().convertFromString(content);
 
         //-- Assert
         expect(property.value).toEqual(7.68);
@@ -42,7 +42,7 @@ describe("Property Value Float", function() {
         var content = "AWESOME";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float().setValueFromString(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value).toEqual(NaN);
@@ -53,7 +53,7 @@ describe("Property Value Float", function() {
         var content = "7.68";
 
         //-- property
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float().setValueFromString(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.toString()).toEqual(content);

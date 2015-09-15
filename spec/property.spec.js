@@ -7,7 +7,7 @@ describe("Property", function() {
 		var property = new AwesomeICS.Elements.Property();
 
 		//-- Act
-		var propertySetResult = property.setValueFromString(content);
+		var propertySetResult = property.convertFromString(content);
 
 		//-- Assert
 		expect(propertySetResult).toBe(property);
@@ -20,7 +20,7 @@ describe("Property", function() {
 		var content = undefined;
 
 		//-- Act
-		var property = new AwesomeICS.Elements.Property().setValueFromString(content);
+		var property = new AwesomeICS.Elements.Property().convertFromString(content);
 
 		//-- Assert
 		expect(property.parameters.length).toEqual(0);
@@ -33,7 +33,7 @@ describe("Property", function() {
 		var content = "PROPERTY_NAME:PROPERTY_VALUE";
 
 		//-- Act
-		var property = new AwesomeICS.Elements.Property().setValueFromString(content);
+		var property = new AwesomeICS.Elements.Property().convertFromString(content);
 
 		//-- Assert
 		expect(property.toString()).toEqual(content);
@@ -44,7 +44,7 @@ describe("Property", function() {
 		var content = "PROPERTY_NAME:PROPERTY_VALUE";
 
 		//-- Act
-		var property = new AwesomeICS.Elements.Property().setValueFromString(content);;
+		var property = new AwesomeICS.Elements.Property().convertFromString(content);;
 
 		//-- Assert
 		expect(property.name).toEqual("PROPERTY_NAME");
@@ -55,7 +55,7 @@ describe("Property", function() {
 		var content = "PROPERTY_NAME:PROPERTY_VALUE";
 
 		//-- Act
-		var property = new AwesomeICS.Elements.Property().setValueFromString(content);;
+		var property = new AwesomeICS.Elements.Property().convertFromString(content);;
 
 		//-- Assert
 		expect(property.value instanceof AwesomeICS.Elements.PropertyValue.Value).toBeTruthy();
@@ -66,7 +66,7 @@ describe("Property", function() {
 		var content = "PROPERTY_NAME;VALUE=DATE:PROPERTY_VALUE";
 
 		//-- Act
-		var property = new AwesomeICS.Elements.Property().setValueFromString(content);;
+		var property = new AwesomeICS.Elements.Property().convertFromString(content);;
 
 		//-- Assert
 		expect(property.parameters.length).toEqual(1);

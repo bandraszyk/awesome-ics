@@ -7,7 +7,7 @@ describe("Block", function() {
         var block = new AwesomeICS.Elements.Block();
 
         //-- Act
-        var blockSetResult = block.setValueFromString(content);
+        var blockSetResult = block.convertFromString(content);
 
         //-- Assert
         expect(blockSetResult).toBe(block);
@@ -19,7 +19,7 @@ describe("Block", function() {
         var content = undefined;
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block().setValueFromString(content);
+        var block = new AwesomeICS.Elements.Block().convertFromString(content);
 
         //-- Assert
         expect(block.properties.length).toEqual(0);
@@ -32,7 +32,7 @@ describe("Block", function() {
         var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block().setValueFromString(content);
+        var block = new AwesomeICS.Elements.Block().convertFromString(content);
 
         //-- Assert
         expect(block.toString()).toEqual(content);
@@ -43,7 +43,7 @@ describe("Block", function() {
         var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";
 
         //-- Act
-        var calendar = new AwesomeICS.Elements.Block().setValueFromString(content);
+        var calendar = new AwesomeICS.Elements.Block().convertFromString(content);
 
         //-- Assert
         expect(calendar.type).toEqual("BLOCK_NAME");
@@ -54,7 +54,7 @@ describe("Block", function() {
         var content = "BEGIN:BLOCK_NAME\nPROPERTY_NAME:PROPERTY_VALUE\nEND:BLOCK_NAME";
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block().setValueFromString(content);
+        var block = new AwesomeICS.Elements.Block().convertFromString(content);
 
         //-- Assert
         expect(block.properties.length).toEqual(1);
@@ -65,7 +65,7 @@ describe("Block", function() {
         var content = "BEGIN:BLOCK_NAME\nBEGIN:BLOCK_CHILD\nEND:BLOCK_CHILD\nEND:BLOCK_NAME";
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block().setValueFromString(content);
+        var block = new AwesomeICS.Elements.Block().convertFromString(content);
 
         //-- Assert
         expect(block.blocks.length).toEqual(1);
@@ -76,7 +76,7 @@ describe("Block", function() {
         var content = "BEGIN:BLOCK_NAME\nPROPERTY_NAME:PROPERTY_VALUE\nBEGIN:BLOCK_CHILD\nEND:BLOCK_CHILD\nEND:BLOCK_NAME";
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block().setValueFromString(content);
+        var block = new AwesomeICS.Elements.Block().convertFromString(content);
 
         //-- Assert
         expect(block.properties.length).toEqual(1);

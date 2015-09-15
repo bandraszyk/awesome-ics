@@ -7,7 +7,7 @@ describe("Property Value Text", function() {
         var propertyValue = new AwesomeICS.Elements.PropertyValue.Text();
 
         //-- Act
-        var propertyValueSetResult = propertyValue.setValueFromString(content);
+        var propertyValueSetResult = propertyValue.convertFromString(content);
 
         //-- Assert
         expect(propertyValueSetResult).toBe(propertyValue);
@@ -19,7 +19,7 @@ describe("Property Value Text", function() {
         var content = undefined;
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text().setValueFromString(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value).toBeNull();
@@ -30,7 +30,7 @@ describe("Property Value Text", function() {
         var content = "Property_Value";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text().setValueFromString(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value).toEqual("Property_Value");
@@ -41,7 +41,7 @@ describe("Property Value Text", function() {
         var content = "Property_Value";
 
         //-- property
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text().setValueFromString(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.toString()).toEqual(content);
