@@ -16,6 +16,19 @@ describe("Property MultipleValue", function() {
         expect(propertyValue.value.length).toEqual(0);
     });
 
+    it("should allow to set value from string", function() {
+        //-- Arrange
+        var content = "Parameter_Value";
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.MultipleValue();
+
+        //-- Act
+        var propertyValueSetResult = propertyValue.setValueFromString(content, AwesomeICS.Elements.PropertyValue.Value);
+
+        //-- Assert
+        expect(propertyValueSetResult).toBe(propertyValue);
+        expect(propertyValueSetResult.value.length).toEqual(1);
+    });
+
     it("should contain original value", function() {
         //-- Arrange
         var content = "Parameter_Value";

@@ -16,6 +16,19 @@ describe("Property Value Boolean", function() {
         expect(propertyValue.value).toBeNull();
     });
 
+    it("should allow to set value from string", function() {
+        //-- Arrange
+        var content = "TRUE";
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean();
+
+        //-- Act
+        var propertyValueSetResult = propertyValue.setValueFromString(content);
+
+        //-- Assert
+        expect(propertyValueSetResult).toBe(propertyValue);
+        expect(propertyValueSetResult.value).toBeTruthy();
+    });
+
     it("should contain original value", function() {
         //-- Arrange
         var content = "TRUE";

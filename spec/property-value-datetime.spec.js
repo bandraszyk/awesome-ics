@@ -17,6 +17,19 @@ describe("Property Value DateTime", function() {
         expect(propertyValue.value.time).toBeNull();
     });
 
+    it("should allow to set value from string", function() {
+        //-- Arrange
+        var content = "20150901T061545";
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.DateTime();
+
+        //-- Act
+        var propertyValueSetResult = propertyValue.setValueFromString(content);
+
+        //-- Assert
+        expect(propertyValueSetResult).toBe(propertyValue);
+        expect(propertyValueSetResult.toString()).toEqual(content);
+    });
+
     it("should contain original value", function() {
         //-- Arrange
         var content = "20150901T061545";

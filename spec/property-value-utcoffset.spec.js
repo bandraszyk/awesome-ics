@@ -16,6 +16,19 @@ describe("Property Value UTCOffset", function() {
         expect(property.value).toBeNull();
     });
 
+    it("should allow to set value from string", function() {
+        //-- Arrange
+        var content = "+0200";
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.UTCOffset();
+
+        //-- Act
+        var propertyValueSetResult = propertyValue.setValueFromString(content);
+
+        //-- Assert
+        expect(propertyValueSetResult).toBe(propertyValue);
+        expect(propertyValueSetResult.toString()).toEqual(content);
+    });
+
     it("should contain original value", function() {
         //-- Arrange
         var content = "+0200";

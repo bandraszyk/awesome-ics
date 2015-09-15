@@ -16,6 +16,19 @@ describe("Property Value Float", function() {
         expect(propertyValue.value).toBeNull();
     });
 
+    it("should allow to set value from string", function() {
+        //-- Arrange
+        var content = "7.68";
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float();
+
+        //-- Act
+        var propertyValueSetResult = propertyValue.setValueFromString(content);
+
+        //-- Assert
+        expect(propertyValueSetResult).toBe(propertyValue);
+        expect(propertyValueSetResult.toString()).toEqual(content);
+    });
+
     it("should contain original value", function() {
         //-- Arrange
         var content = "7.68";
