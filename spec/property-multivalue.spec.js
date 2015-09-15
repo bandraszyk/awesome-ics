@@ -13,7 +13,7 @@ describe("Property MultipleValue", function() {
 
         //-- Assert
         expect(propertyValue.original).toBeUndefined();
-        expect(propertyValue.values.length).toEqual(0);
+        expect(propertyValue.value.length).toEqual(0);
     });
 
     it("should contain original value", function() {
@@ -35,7 +35,7 @@ describe("Property MultipleValue", function() {
         var propertyValue = new AwesomeICS.Elements.PropertyValue.MultipleValue(content, AwesomeICS.Elements.PropertyValue.Value);
 
         //-- Assert
-        expect(propertyValue.values.length).toEqual(1);
+        expect(propertyValue.value.length).toEqual(1);
     });
 
     it("should contain one value of given type", function() {
@@ -46,8 +46,8 @@ describe("Property MultipleValue", function() {
         var propertyValue = new AwesomeICS.Elements.PropertyValue.MultipleValue(content, AwesomeICS.Elements.PropertyValue.Value);
 
         //-- Assert
-        expect(propertyValue.values.length).toEqual(1);
-        expect(propertyValue.values[0] instanceof AwesomeICS.Elements.PropertyValue.Value).toBeTruthy();
+        expect(propertyValue.value.length).toEqual(1);
+        expect(propertyValue.value[0] instanceof AwesomeICS.Elements.PropertyValue.Value).toBeTruthy();
     });
 
     it("should contain two value", function() {
@@ -58,7 +58,7 @@ describe("Property MultipleValue", function() {
         var propertyValue = new AwesomeICS.Elements.PropertyValue.MultipleValue(content, AwesomeICS.Elements.PropertyValue.Value);
 
         //-- Assert
-        expect(propertyValue.values.length).toEqual(2);
+        expect(propertyValue.value.length).toEqual(2);
     });
 
     it("should return same string value", function() {

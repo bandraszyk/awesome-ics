@@ -3,8 +3,13 @@ import moment from "moment";
 
 export class PropertyValue {
     constructor(content) {
-        this.original   = content;
-        this.value      = content || null;
+        this.original = content;
+        this.value = this.emptyValue();
+
+        if (content) { this.setValueFromString(content); }
+    }
+    emptyValue() {
+        return null;
     }
     toString() {
         return this.value && this.value.toString();
@@ -12,22 +17,38 @@ export class PropertyValue {
     toJSON() {
         return this.value;
     }
+    setValue(value) {
+        this.value = value || null;
+        return this;
+    }
+    setValueFromString(string) {
+        return this.setValue(string);
+    }
 }
 
 export class PropertyMultipleValue {
     constructor(content, mapping) {
         this.original = content;
-        this.values = [];
+        this.value = this.emptyValue();
 
-        if (!content) { return; }
-
-        this.values = splitSafe(content, PropertyMultipleValue.__format.separator).map(function(singleContent) { return new mapping(singleContent); });
+        if (content) { this.setValueFromString(content, mapping); }
+    }
+    emptyValue() {
+        return [];
     }
     toString() {
-        return this.values.map(mapToString).join(PropertyMultipleValue.__format.separator);
+        return this.value.map(mapToString).join(PropertyMultipleValue.__format.separator);
     }
     toJSON() {
-        return this.values.map(mapToJSON);
+        return this.value.map(mapToJSON);
+    }
+    setValue(value) {
+        this.value = values || [];
+        return this;
+    }
+    setValueFromString(string, mapping) {
+        this.value = splitSafe(string, PropertyMultipleValue.__format.separator).map(function(singleContent) { return new mapping(singleContent); });
+        return this;
     }
 }
 
@@ -36,47 +57,36 @@ PropertyMultipleValue.__format = {
 };
 
 export class Binary extends PropertyValue {
-    constructor(content) {
-        super(content);
-        // TODO: Implement behaviour, remember to write tests
-    }
+    // TODO: Implement behaviour, remember to write tests
 }
 
 export class Boolean extends PropertyValue {
-    constructor(content) {
-        super(content);
-
-        if (!content) { return; }
-
-        try {
-            this.value = JSON.parse(content.toLowerCase());
-        }
-        catch(error) {
-            this.value = null;
-        }
-    }
     toString() {
         return this.value && this.value.toString().toUpperCase();
+    }
+    setValueFromString(string) {
+        try {
+            this.value = JSON.parse(string.toLowerCase());
+        }
+        catch(error) {
+            this.value = this.emptyValue();
+        }
+
+        return this;
     }
 }
 
 export class CalendarUserAddress extends PropertyValue {
-    constructor(content) {
-        super(content);
-        // TODO: Implement behaviour, remember to write tests
-    }
+    // TODO: Implement behaviour, remember to write tests
 }
 
 export class Date extends PropertyValue {
-    constructor(content) {
-        super(content);
-
-        if (!content) { return; }
-
-        this.value = moment.utc(content, Date.__format.date);
-    }
     toString() {
         return this.value && this.value.format(Date.__format.date);
+    }
+    setValueFromString(string) {
+        this.value = moment.utc(string, Date.__format.date);
+        return this;
     }
 }
 
@@ -87,25 +97,30 @@ Date.__format = {
 export class DateTime extends PropertyValue {
     constructor(content) {
         super(content);
-        this.value = { date: null, time: null };
+    }
+    emptyValue() {
+        return { date: null, time: null };
+    }
+    toString() {
+        if (!this.value || !this.value.date || !this.value.time) { return ""; }
 
-        if (!content) { return; }
-
-        let parts = content.split(DateTime.__format.separator);
+        return `${this.value.date.toString()}${DateTime.__format.separator}${this.value.time.toString()}`;
+    }
+    toJSON() {
+        return {
+            date: this.value && this.value.date && this.value.date.toJSON() || null,
+            time: this.value && this.value.time && this.value.time.toJSON() || null
+        }
+    }
+    setValueFromString(string) {
+        let parts = string.split(DateTime.__format.separator);
 
         this.value = {
             date: new Date(parts[0]),
             time: new Time(parts[1])
         };
-    }
-    toString() {
-        return this.value.date.toString() + DateTime.__format.separator + this.value.time.toString();
-    }
-    toJSON() {
-        return {
-            date: this.value.date.toJSON(),
-            time: this.value.time.toJSON()
-        }
+
+        return this;
     }
 }
 
@@ -114,35 +129,19 @@ DateTime.__format = {
 };
 
 export class Duration extends PropertyValue {
-    constructor(content) {
-        super(content);
-        // TODO: Implement behaviour, remember to write tests
-    }
+    // TODO: Implement behaviour, remember to write tests
 }
 
 export class Float extends PropertyValue {
-    constructor(content) {
-        super(content);
-
-        if (!content) { return; }
-
-        this.value = parseFloat(content);
+    setValueFromString(string) {
+        this.value = parseFloat(string);
+        return this;
     }
 }
 
 export class Geo extends PropertyValue {
-    constructor(content) {
-        super(content);
-        this.value = { latitude: null, longitude: null };
-
-        if (!content) { return; }
-
-        let coordinates = content.split(Geo.__format.separator);
-
-        this.value = {
-            latitude    : new Float(coordinates[0]),
-            longitude   : new Float(coordinates[1])
-        };
+    emptyValue() {
+        return { latitude: null, longitude: null };
     }
     toString() {
         if (!this.value || !this.value.latitude || !this.value.latitude) { return ""; }
@@ -151,9 +150,19 @@ export class Geo extends PropertyValue {
     }
     toJSON() {
         return this.value && {
-            latitude    : this.value.latitude && this.value.latitude.toJSON(),
-            longitude   : this.value.longitude && this.value.longitude.toJSON()
+            latitude    : this.value && this.value.latitude && this.value.latitude.toJSON() || null,
+            longitude   : this.value && this.value.longitude && this.value.longitude.toJSON() || null
         }
+    }
+    setValueFromString(string) {
+        let coordinates = string.split(Geo.__format.separator);
+
+        this.value = {
+            latitude    : new Float(coordinates[0]),
+            longitude   : new Float(coordinates[1])
+        };
+
+        return this;
     }
 }
 
@@ -162,50 +171,38 @@ Geo.__format = {
 };
 
 export class Integer extends PropertyValue {
-    constructor(content) {
-        super(content);
-
-        if (!content) { return; }
-
-        this.value = parseInt(content);
+    setValueFromString(string) {
+        this.value = parseInt(string);
+        return this;
     }
 }
 
 export class PeriodOfTime extends PropertyValue {
-    constructor(content) {
-        super(content);
-        // TODO: Implement behaviour, remember to write tests
-    }
+    // TODO: Implement behaviour, remember to write tests
 }
 
 export class RecurrenceRule extends PropertyValue {
-    constructor(content) {
-        super(content);
-        // TODO: Implement behaviour, remember to write tests
-    }
+    // TODO: Implement behaviour, remember to write tests
 }
 
-export class Text extends PropertyValue {
-    constructor(content) {
-        super(content);
-    }
-}
+export class Text extends PropertyValue {}
 
 export class Time extends PropertyValue {
-    constructor(content) {
-        super(content);
-
-        this.value = { time: null, isFixed: null };
-
-        if (!content) { return; }
-
-        this.value = {
-            time    : moment(content.slice(0, 6), Time.__format.time),
-            isFixed : content.slice(-1) !== Time.__format.timeUTC
-        };
+    emptyValue() {
+        return { time: null, isFixed: null };
     }
     toString() {
+        if (!this.value || !this.value.time) { return ""; }
+
         return this.value.time.format(Time.__format.time) + (!this.value.isFixed && Time.__format.timeUTC || "");
+    }
+    setValueFromString(string) {
+        this.value = {
+            time    : moment(string.slice(0, 6), Time.__format.time),
+            isFixed : string.slice(-1) !== Time.__format.timeUTC
+        };
+
+        return this;
     }
 }
 
@@ -215,22 +212,16 @@ Time.__format = {
 };
 
 export class URI extends PropertyValue {
-    constructor(content) {
-        super(content);
-        // TODO: Implement behaviour, remember to write tests
-    }
+    // TODO: Implement behaviour, remember to write tests
 }
 
 export class UTCOffset extends PropertyValue {
-    constructor(content) {
-        super(content);
-
-        if (!content) { return; }
-
-        this.value = moment().utcOffset(content);
-    }
     toString() {
         return this.value && this.value.format(UTCOffset.__format.offset);
+    }
+    setValueFromString(string) {
+        this.value = moment().utcOffset(string);
+        return this;
     }
 }
 

@@ -27,10 +27,19 @@ var PropertyValue = (function () {
         _classCallCheck(this, PropertyValue);
 
         this.original = content;
-        this.value = content || null;
+        this.value = this.emptyValue();
+
+        if (content) {
+            this.setValueFromString(content);
+        }
     }
 
     _createClass(PropertyValue, [{
+        key: "emptyValue",
+        value: function emptyValue() {
+            return null;
+        }
+    }, {
         key: "toString",
         value: function toString() {
             return this.value && this.value.toString();
@@ -39,6 +48,17 @@ var PropertyValue = (function () {
         key: "toJSON",
         value: function toJSON() {
             return this.value;
+        }
+    }, {
+        key: "setValue",
+        value: function setValue(value) {
+            this.value = value || null;
+            return this;
+        }
+    }, {
+        key: "setValueFromString",
+        value: function setValueFromString(string) {
+            return this.setValue(string);
         }
     }]);
 
@@ -52,26 +72,41 @@ var PropertyMultipleValue = (function () {
         _classCallCheck(this, PropertyMultipleValue);
 
         this.original = content;
-        this.values = [];
+        this.value = this.emptyValue();
 
-        if (!content) {
-            return;
+        if (content) {
+            this.setValueFromString(content, mapping);
         }
-
-        this.values = (0, _util.splitSafe)(content, PropertyMultipleValue.__format.separator).map(function (singleContent) {
-            return new mapping(singleContent);
-        });
     }
 
     _createClass(PropertyMultipleValue, [{
+        key: "emptyValue",
+        value: function emptyValue() {
+            return [];
+        }
+    }, {
         key: "toString",
         value: function toString() {
-            return this.values.map(_util.mapToString).join(PropertyMultipleValue.__format.separator);
+            return this.value.map(_util.mapToString).join(PropertyMultipleValue.__format.separator);
         }
     }, {
         key: "toJSON",
         value: function toJSON() {
-            return this.values.map(_util.mapToJSON);
+            return this.value.map(_util.mapToJSON);
+        }
+    }, {
+        key: "setValue",
+        value: function setValue(value) {
+            this.value = values || [];
+            return this;
+        }
+    }, {
+        key: "setValueFromString",
+        value: function setValueFromString(string, mapping) {
+            this.value = (0, _util.splitSafe)(string, PropertyMultipleValue.__format.separator).map(function (singleContent) {
+                return new mapping(singleContent);
+            });
+            return this;
         }
     }]);
 
@@ -87,10 +122,10 @@ PropertyMultipleValue.__format = {
 var Binary = (function (_PropertyValue) {
     _inherits(Binary, _PropertyValue);
 
-    function Binary(content) {
+    function Binary() {
         _classCallCheck(this, Binary);
 
-        _get(Object.getPrototypeOf(Binary.prototype), "constructor", this).call(this, content);
+        _get(Object.getPrototypeOf(Binary.prototype), "constructor", this).apply(this, arguments);
     }
 
     return Binary;
@@ -101,26 +136,27 @@ exports.Binary = Binary;
 var Boolean = (function (_PropertyValue2) {
     _inherits(Boolean, _PropertyValue2);
 
-    function Boolean(content) {
+    function Boolean() {
         _classCallCheck(this, Boolean);
 
-        _get(Object.getPrototypeOf(Boolean.prototype), "constructor", this).call(this, content);
-
-        if (!content) {
-            return;
-        }
-
-        try {
-            this.value = JSON.parse(content.toLowerCase());
-        } catch (error) {
-            this.value = null;
-        }
+        _get(Object.getPrototypeOf(Boolean.prototype), "constructor", this).apply(this, arguments);
     }
 
     _createClass(Boolean, [{
         key: "toString",
         value: function toString() {
             return this.value && this.value.toString().toUpperCase();
+        }
+    }, {
+        key: "setValueFromString",
+        value: function setValueFromString(string) {
+            try {
+                this.value = JSON.parse(string.toLowerCase());
+            } catch (error) {
+                this.value = this.emptyValue();
+            }
+
+            return this;
         }
     }]);
 
@@ -132,10 +168,10 @@ exports.Boolean = Boolean;
 var CalendarUserAddress = (function (_PropertyValue3) {
     _inherits(CalendarUserAddress, _PropertyValue3);
 
-    function CalendarUserAddress(content) {
+    function CalendarUserAddress() {
         _classCallCheck(this, CalendarUserAddress);
 
-        _get(Object.getPrototypeOf(CalendarUserAddress.prototype), "constructor", this).call(this, content);
+        _get(Object.getPrototypeOf(CalendarUserAddress.prototype), "constructor", this).apply(this, arguments);
     }
 
     return CalendarUserAddress;
@@ -146,22 +182,22 @@ exports.CalendarUserAddress = CalendarUserAddress;
 var Date = (function (_PropertyValue4) {
     _inherits(Date, _PropertyValue4);
 
-    function Date(content) {
+    function Date() {
         _classCallCheck(this, Date);
 
-        _get(Object.getPrototypeOf(Date.prototype), "constructor", this).call(this, content);
-
-        if (!content) {
-            return;
-        }
-
-        this.value = _moment2["default"].utc(content, Date.__format.date);
+        _get(Object.getPrototypeOf(Date.prototype), "constructor", this).apply(this, arguments);
     }
 
     _createClass(Date, [{
         key: "toString",
         value: function toString() {
             return this.value && this.value.format(Date.__format.date);
+        }
+    }, {
+        key: "setValueFromString",
+        value: function setValueFromString(string) {
+            this.value = _moment2["default"].utc(string, Date.__format.date);
+            return this;
         }
     }]);
 
@@ -181,32 +217,41 @@ var DateTime = (function (_PropertyValue5) {
         _classCallCheck(this, DateTime);
 
         _get(Object.getPrototypeOf(DateTime.prototype), "constructor", this).call(this, content);
-        this.value = { date: null, time: null };
-
-        if (!content) {
-            return;
-        }
-
-        var parts = content.split(DateTime.__format.separator);
-
-        this.value = {
-            date: new Date(parts[0]),
-            time: new Time(parts[1])
-        };
     }
 
     _createClass(DateTime, [{
+        key: "emptyValue",
+        value: function emptyValue() {
+            return { date: null, time: null };
+        }
+    }, {
         key: "toString",
         value: function toString() {
-            return this.value.date.toString() + DateTime.__format.separator + this.value.time.toString();
+            if (!this.value || !this.value.date || !this.value.time) {
+                return "";
+            }
+
+            return "" + this.value.date.toString() + DateTime.__format.separator + this.value.time.toString();
         }
     }, {
         key: "toJSON",
         value: function toJSON() {
             return {
-                date: this.value.date.toJSON(),
-                time: this.value.time.toJSON()
+                date: this.value && this.value.date && this.value.date.toJSON() || null,
+                time: this.value && this.value.time && this.value.time.toJSON() || null
             };
+        }
+    }, {
+        key: "setValueFromString",
+        value: function setValueFromString(string) {
+            var parts = string.split(DateTime.__format.separator);
+
+            this.value = {
+                date: new Date(parts[0]),
+                time: new Time(parts[1])
+            };
+
+            return this;
         }
     }]);
 
@@ -222,10 +267,10 @@ DateTime.__format = {
 var Duration = (function (_PropertyValue6) {
     _inherits(Duration, _PropertyValue6);
 
-    function Duration(content) {
+    function Duration() {
         _classCallCheck(this, Duration);
 
-        _get(Object.getPrototypeOf(Duration.prototype), "constructor", this).call(this, content);
+        _get(Object.getPrototypeOf(Duration.prototype), "constructor", this).apply(this, arguments);
     }
 
     return Duration;
@@ -236,17 +281,19 @@ exports.Duration = Duration;
 var Float = (function (_PropertyValue7) {
     _inherits(Float, _PropertyValue7);
 
-    function Float(content) {
+    function Float() {
         _classCallCheck(this, Float);
 
-        _get(Object.getPrototypeOf(Float.prototype), "constructor", this).call(this, content);
-
-        if (!content) {
-            return;
-        }
-
-        this.value = parseFloat(content);
+        _get(Object.getPrototypeOf(Float.prototype), "constructor", this).apply(this, arguments);
     }
+
+    _createClass(Float, [{
+        key: "setValueFromString",
+        value: function setValueFromString(string) {
+            this.value = parseFloat(string);
+            return this;
+        }
+    }]);
 
     return Float;
 })(PropertyValue);
@@ -256,25 +303,18 @@ exports.Float = Float;
 var Geo = (function (_PropertyValue8) {
     _inherits(Geo, _PropertyValue8);
 
-    function Geo(content) {
+    function Geo() {
         _classCallCheck(this, Geo);
 
-        _get(Object.getPrototypeOf(Geo.prototype), "constructor", this).call(this, content);
-        this.value = { latitude: null, longitude: null };
-
-        if (!content) {
-            return;
-        }
-
-        var coordinates = content.split(Geo.__format.separator);
-
-        this.value = {
-            latitude: new Float(coordinates[0]),
-            longitude: new Float(coordinates[1])
-        };
+        _get(Object.getPrototypeOf(Geo.prototype), "constructor", this).apply(this, arguments);
     }
 
     _createClass(Geo, [{
+        key: "emptyValue",
+        value: function emptyValue() {
+            return { latitude: null, longitude: null };
+        }
+    }, {
         key: "toString",
         value: function toString() {
             if (!this.value || !this.value.latitude || !this.value.latitude) {
@@ -287,9 +327,21 @@ var Geo = (function (_PropertyValue8) {
         key: "toJSON",
         value: function toJSON() {
             return this.value && {
-                latitude: this.value.latitude && this.value.latitude.toJSON(),
-                longitude: this.value.longitude && this.value.longitude.toJSON()
+                latitude: this.value && this.value.latitude && this.value.latitude.toJSON() || null,
+                longitude: this.value && this.value.longitude && this.value.longitude.toJSON() || null
             };
+        }
+    }, {
+        key: "setValueFromString",
+        value: function setValueFromString(string) {
+            var coordinates = string.split(Geo.__format.separator);
+
+            this.value = {
+                latitude: new Float(coordinates[0]),
+                longitude: new Float(coordinates[1])
+            };
+
+            return this;
         }
     }]);
 
@@ -305,17 +357,19 @@ Geo.__format = {
 var Integer = (function (_PropertyValue9) {
     _inherits(Integer, _PropertyValue9);
 
-    function Integer(content) {
+    function Integer() {
         _classCallCheck(this, Integer);
 
-        _get(Object.getPrototypeOf(Integer.prototype), "constructor", this).call(this, content);
-
-        if (!content) {
-            return;
-        }
-
-        this.value = parseInt(content);
+        _get(Object.getPrototypeOf(Integer.prototype), "constructor", this).apply(this, arguments);
     }
+
+    _createClass(Integer, [{
+        key: "setValueFromString",
+        value: function setValueFromString(string) {
+            this.value = parseInt(string);
+            return this;
+        }
+    }]);
 
     return Integer;
 })(PropertyValue);
@@ -325,10 +379,10 @@ exports.Integer = Integer;
 var PeriodOfTime = (function (_PropertyValue10) {
     _inherits(PeriodOfTime, _PropertyValue10);
 
-    function PeriodOfTime(content) {
+    function PeriodOfTime() {
         _classCallCheck(this, PeriodOfTime);
 
-        _get(Object.getPrototypeOf(PeriodOfTime.prototype), "constructor", this).call(this, content);
+        _get(Object.getPrototypeOf(PeriodOfTime.prototype), "constructor", this).apply(this, arguments);
     }
 
     return PeriodOfTime;
@@ -339,10 +393,10 @@ exports.PeriodOfTime = PeriodOfTime;
 var RecurrenceRule = (function (_PropertyValue11) {
     _inherits(RecurrenceRule, _PropertyValue11);
 
-    function RecurrenceRule(content) {
+    function RecurrenceRule() {
         _classCallCheck(this, RecurrenceRule);
 
-        _get(Object.getPrototypeOf(RecurrenceRule.prototype), "constructor", this).call(this, content);
+        _get(Object.getPrototypeOf(RecurrenceRule.prototype), "constructor", this).apply(this, arguments);
     }
 
     return RecurrenceRule;
@@ -353,10 +407,10 @@ exports.RecurrenceRule = RecurrenceRule;
 var Text = (function (_PropertyValue12) {
     _inherits(Text, _PropertyValue12);
 
-    function Text(content) {
+    function Text() {
         _classCallCheck(this, Text);
 
-        _get(Object.getPrototypeOf(Text.prototype), "constructor", this).call(this, content);
+        _get(Object.getPrototypeOf(Text.prototype), "constructor", this).apply(this, arguments);
     }
 
     return Text;
@@ -367,27 +421,35 @@ exports.Text = Text;
 var Time = (function (_PropertyValue13) {
     _inherits(Time, _PropertyValue13);
 
-    function Time(content) {
+    function Time() {
         _classCallCheck(this, Time);
 
-        _get(Object.getPrototypeOf(Time.prototype), "constructor", this).call(this, content);
-
-        this.value = { time: null, isFixed: null };
-
-        if (!content) {
-            return;
-        }
-
-        this.value = {
-            time: (0, _moment2["default"])(content.slice(0, 6), Time.__format.time),
-            isFixed: content.slice(-1) !== Time.__format.timeUTC
-        };
+        _get(Object.getPrototypeOf(Time.prototype), "constructor", this).apply(this, arguments);
     }
 
     _createClass(Time, [{
+        key: "emptyValue",
+        value: function emptyValue() {
+            return { time: null, isFixed: null };
+        }
+    }, {
         key: "toString",
         value: function toString() {
+            if (!this.value || !this.value.time) {
+                return "";
+            }
+
             return this.value.time.format(Time.__format.time) + (!this.value.isFixed && Time.__format.timeUTC || "");
+        }
+    }, {
+        key: "setValueFromString",
+        value: function setValueFromString(string) {
+            this.value = {
+                time: (0, _moment2["default"])(string.slice(0, 6), Time.__format.time),
+                isFixed: string.slice(-1) !== Time.__format.timeUTC
+            };
+
+            return this;
         }
     }]);
 
@@ -404,10 +466,10 @@ Time.__format = {
 var URI = (function (_PropertyValue14) {
     _inherits(URI, _PropertyValue14);
 
-    function URI(content) {
+    function URI() {
         _classCallCheck(this, URI);
 
-        _get(Object.getPrototypeOf(URI.prototype), "constructor", this).call(this, content);
+        _get(Object.getPrototypeOf(URI.prototype), "constructor", this).apply(this, arguments);
     }
 
     return URI;
@@ -418,22 +480,22 @@ exports.URI = URI;
 var UTCOffset = (function (_PropertyValue15) {
     _inherits(UTCOffset, _PropertyValue15);
 
-    function UTCOffset(content) {
+    function UTCOffset() {
         _classCallCheck(this, UTCOffset);
 
-        _get(Object.getPrototypeOf(UTCOffset.prototype), "constructor", this).call(this, content);
-
-        if (!content) {
-            return;
-        }
-
-        this.value = (0, _moment2["default"])().utcOffset(content);
+        _get(Object.getPrototypeOf(UTCOffset.prototype), "constructor", this).apply(this, arguments);
     }
 
     _createClass(UTCOffset, [{
         key: "toString",
         value: function toString() {
             return this.value && this.value.format(UTCOffset.__format.offset);
+        }
+    }, {
+        key: "setValueFromString",
+        value: function setValueFromString(string) {
+            this.value = (0, _moment2["default"])().utcOffset(string);
+            return this;
         }
     }]);
 
