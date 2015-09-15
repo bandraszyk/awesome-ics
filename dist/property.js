@@ -14,18 +14,17 @@ var _propertyParameter = require("./property-parameter");
 
 var _propertyValue = require("./property-value");
 
+function clear(property) {
+    property.parameters = [];
+    property.name = null;
+    property.value = null;
+}
+
 var Property = (function () {
-    function Property(content) {
+    function Property() {
         _classCallCheck(this, Property);
 
-        this.original = content;
-        this.parameters = [];
-        this.name = null;
-        this.value = null;
-
-        if (content) {
-            this.setValueFromString(content);
-        }
+        clear(this);
     }
 
     _createClass(Property, [{
@@ -62,6 +61,10 @@ var Property = (function () {
     }, {
         key: "setValueFromString",
         value: function setValueFromString(string) {
+            if ((0, _util.isEmptyString)(string)) {
+                clear(this);return this;
+            }
+
             this.name = (0, _util.splitSafe)(string, Property.__format.separatorProperty)[0];
             this.value = string.slice(this.name.length + 1);
 
@@ -70,7 +73,7 @@ var Property = (function () {
             if (this.name.indexOf(Property.__format.separatorParameter) !== -1) {
                 this.name = parameters[0];
                 this.parameters = parameters.slice(1).map(function (paramContent) {
-                    return new _propertyParameter.PropertyParameter(paramContent);
+                    return new _propertyParameter.PropertyParameter().setValueFromString(paramContent);
                 });
             }
 

@@ -1,22 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
-var _util		= require("./_util");
 var moment      = require("moment");
 
 describe("Property Value Date", function() {
-    beforeEach(function() { _util.applyCustomMatcher(jasmine); });
-
-    it("should be empty", function() {
-        //-- Arrange
-        var content = undefined;
-
-        //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Date(content);
-
-        //-- Assert
-        expect(property.original).toBeUndefined();
-        expect(property.value).toBeNull();
-    });
-
     it("should allow to set value from string", function() {
         //-- Arrange
         var content = "20150901";
@@ -30,15 +15,15 @@ describe("Property Value Date", function() {
         expect(propertyValueSetResult.toString()).toEqual(content);
     });
 
-    it("should contain original value", function() {
+    it("should be empty", function() {
         //-- Arrange
-        var content = "20150901";
+        var content = undefined;
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date(content);
+        var property = new AwesomeICS.Elements.PropertyValue.Date().setValueFromString(content);
 
         //-- Assert
-        expect(propertyValue.original).toEqual(content);
+        expect(property.value).toBeNull();
     });
 
     it("should return same string value", function() {
@@ -46,7 +31,7 @@ describe("Property Value Date", function() {
         var content = "20150901";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date().setValueFromString(content);
 
         //-- Assert
         expect(propertyValue.toString()).toEqual(content);
@@ -57,7 +42,7 @@ describe("Property Value Date", function() {
         var content = "AWESOME";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date().setValueFromString(content);
 
         //-- Assert
         expect(propertyValue.value.isValid()).toEqual(false);
@@ -68,7 +53,7 @@ describe("Property Value Date", function() {
         var content = "20150901";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date().setValueFromString(content);
 
         //-- Assert
         expect(propertyValue.value.isValid()).toEqual(true);
@@ -79,7 +64,7 @@ describe("Property Value Date", function() {
         var content = "20150901";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date().setValueFromString(content);
 
         //-- Assert
         expect(propertyValue.value.isValid()).toBeTruthy();
@@ -90,7 +75,7 @@ describe("Property Value Date", function() {
         var content = "20150901";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date().setValueFromString(content);
 
         //-- Assert
         expect(propertyValue.value.format("YYYY-MM-DD")).toEqual("2015-09-01");

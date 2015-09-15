@@ -58,3 +58,7 @@ export function splitSafeLines(text, format) {
 
     return lines.filter(function(line) { return line; });
 }
+
+export function isEmptyString(string) {
+    return string === undefined || string === null || string.trim() === "";
+}

@@ -21,10 +21,10 @@ var _propertyValue = require("./property-value");
 var Calendar = (function (_Block) {
     _inherits(Calendar, _Block);
 
-    function Calendar(content) {
+    function Calendar() {
         _classCallCheck(this, Calendar);
 
-        _get(Object.getPrototypeOf(Calendar.prototype), "constructor", this).call(this, content);
+        _get(Object.getPrototypeOf(Calendar.prototype), "constructor", this).apply(this, arguments);
     }
 
     return Calendar;

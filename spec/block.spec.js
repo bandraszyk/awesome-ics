@@ -1,23 +1,6 @@
 var AwesomeICS	= require("../dist/awesome-ics");
-var _util		= require("./_util");
 
 describe("Block", function() {
-    beforeEach(function() { _util.applyCustomMatcher(jasmine); });
-
-    it("should be empty", function() {
-        //-- Arrange
-        var content = undefined;
-
-        //-- Act
-        var block = new AwesomeICS.Elements.Block(content);
-
-        //-- Assert
-        expect(block.original).toBeUndefined();
-        expect(block.properties.length).toEqual(0);
-        expect(block.blocks.length).toEqual(0);
-        expect(block.type).toBeNull();
-    });
-
     it("should allow to set value from string", function() {
         //-- Arrange
         var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";
@@ -31,15 +14,17 @@ describe("Block", function() {
         expect(block.toString()).toEqual(content);
     });
 
-    it("should contain original content", function() {
+    it("should be empty", function() {
         //-- Arrange
-        var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";
+        var content = undefined;
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block(content);
+        var block = new AwesomeICS.Elements.Block().setValueFromString(content);
 
         //-- Assert
-        expect(block.original).toEqual(content);
+        expect(block.properties.length).toEqual(0);
+        expect(block.blocks.length).toEqual(0);
+        expect(block.type).toBeNull();
     });
 
     it("should return same string value", function() {
@@ -47,7 +32,7 @@ describe("Block", function() {
         var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block(content);
+        var block = new AwesomeICS.Elements.Block().setValueFromString(content);
 
         //-- Assert
         expect(block.toString()).toEqual(content);
@@ -58,7 +43,7 @@ describe("Block", function() {
         var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";
 
         //-- Act
-        var calendar = new AwesomeICS.Elements.Block(content);
+        var calendar = new AwesomeICS.Elements.Block().setValueFromString(content);
 
         //-- Assert
         expect(calendar.type).toEqual("BLOCK_NAME");
@@ -69,7 +54,7 @@ describe("Block", function() {
         var content = "BEGIN:BLOCK_NAME\nPROPERTY_NAME:PROPERTY_VALUE\nEND:BLOCK_NAME";
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block(content);
+        var block = new AwesomeICS.Elements.Block().setValueFromString(content);
 
         //-- Assert
         expect(block.properties.length).toEqual(1);
@@ -80,7 +65,7 @@ describe("Block", function() {
         var content = "BEGIN:BLOCK_NAME\nBEGIN:BLOCK_CHILD\nEND:BLOCK_CHILD\nEND:BLOCK_NAME";
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block(content);
+        var block = new AwesomeICS.Elements.Block().setValueFromString(content);
 
         //-- Assert
         expect(block.blocks.length).toEqual(1);
@@ -91,7 +76,7 @@ describe("Block", function() {
         var content = "BEGIN:BLOCK_NAME\nPROPERTY_NAME:PROPERTY_VALUE\nBEGIN:BLOCK_CHILD\nEND:BLOCK_CHILD\nEND:BLOCK_NAME";
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block(content);
+        var block = new AwesomeICS.Elements.Block().setValueFromString(content);
 
         //-- Assert
         expect(block.properties.length).toEqual(1);

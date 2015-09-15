@@ -10,6 +10,7 @@ exports.mapToJSON = mapToJSON;
 exports.setError = setError;
 exports.splitSafe = splitSafe;
 exports.splitSafeLines = splitSafeLines;
+exports.isEmptyString = isEmptyString;
 
 function trim(text) {
     var trimmedBeginning = removePattern(text, /^\s+/g);
@@ -73,4 +74,8 @@ function splitSafeLines(text, format) {
     return lines.filter(function (line) {
         return line;
     });
+}
+
+function isEmptyString(string) {
+    return string === undefined || string === null || string.trim() === "";
 }

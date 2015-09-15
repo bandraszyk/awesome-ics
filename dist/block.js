@@ -12,19 +12,17 @@ var _property = require("./property");
 
 var _util = require("./util");
 
+function clear(block) {
+    block.properties = [];
+    block.blocks = [];
+    block.type = null;
+}
+
 var Block = (function () {
-    function Block(content) {
+    function Block() {
         _classCallCheck(this, Block);
-        content = content && content.replace(/\r/g, "").trim();
 
-        this.original = content;
-        this.properties = [];
-        this.blocks = [];
-        this.type = null;
-
-        if (content) {
-            return this.setValueFromString(content);
-        }
+        clear(this);
     }
 
     _createClass(Block, [{
@@ -63,6 +61,11 @@ var Block = (function () {
         key: "setValueFromString",
         value: function setValueFromString(string) {
             var _this = this;
+            string = Block.__format.prepareString(string);
+
+            if ((0, _util.isEmptyString)(string)) {
+                clear(this);return this;
+            }
             var lines = (0, _util.splitSafeLines)(string, Block.__format);
             var blockBegin = (0, _util.trim)(lines.shift() || "");
             var blockEnd = (0, _util.trim)(lines.pop() || "");
@@ -88,14 +91,14 @@ var Block = (function () {
                 }
                 if (blockCounter === 0 && block.length > 0) {
                     block.push(line);
-                    _this.blocks.push(new Block(block.join(Block.__format.newLine)));
+                    _this.blocks.push(new Block().setValueFromString(block.join(Block.__format.newLine)));
                     block = [];
                     return;
                 }
                 if (blockCounter > 0) {
                     return block.push(line);
                 }
-                _this.properties.push(new _property.Property(line));
+                _this.properties.push(new _property.Property().setValueFromString(line));
             });
 
             return this;
@@ -113,5 +116,8 @@ Block.__format = {
     blockBegin: "BEGIN:",
     blockEnd: "END:",
     newLine: "\n",
-    multiLineBegin: " "
+    multiLineBegin: " ",
+    prepareString: function prepareString(string) {
+        return string && string.replace(/\r/g, "").trim();
+    }
 };

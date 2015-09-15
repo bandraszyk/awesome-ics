@@ -23,23 +23,13 @@ var _moment = require("moment");
 var _moment2 = _interopRequireDefault(_moment);
 
 var PropertyValue = (function () {
-    function PropertyValue(content) {
+    function PropertyValue() {
         _classCallCheck(this, PropertyValue);
 
-        this.original = content;
-        this.value = this.emptyValue();
-
-        if (content) {
-            this.setValueFromString(content);
-        }
+        this.value = this.getEmptyValue();
     }
 
     _createClass(PropertyValue, [{
-        key: "emptyValue",
-        value: function emptyValue() {
-            return null;
-        }
-    }, {
         key: "toString",
         value: function toString() {
             return this.value && this.value.toString();
@@ -50,6 +40,17 @@ var PropertyValue = (function () {
             return this.value;
         }
     }, {
+        key: "getEmptyValue",
+        value: function getEmptyValue() {
+            return null;
+        }
+    }, {
+        key: "handleEmptyString",
+        value: function handleEmptyString() {
+            this.value = this.getEmptyValue();
+            return this;
+        }
+    }, {
         key: "setValue",
         value: function setValue(value) {
             this.value = value || null;
@@ -58,6 +59,10 @@ var PropertyValue = (function () {
     }, {
         key: "setValueFromString",
         value: function setValueFromString(string) {
+            if ((0, _util.isEmptyString)(string)) {
+                return this.handleEmptyString();
+            }
+
             return this.setValue(string);
         }
     }]);
@@ -68,20 +73,15 @@ var PropertyValue = (function () {
 exports.PropertyValue = PropertyValue;
 
 var PropertyMultipleValue = (function () {
-    function PropertyMultipleValue(content, mapping) {
+    function PropertyMultipleValue() {
         _classCallCheck(this, PropertyMultipleValue);
 
-        this.original = content;
-        this.value = this.emptyValue();
-
-        if (content) {
-            this.setValueFromString(content, mapping);
-        }
+        this.value = this.getEmptyValue();
     }
 
     _createClass(PropertyMultipleValue, [{
-        key: "emptyValue",
-        value: function emptyValue() {
+        key: "getEmptyValue",
+        value: function getEmptyValue() {
             return [];
         }
     }, {
@@ -103,9 +103,15 @@ var PropertyMultipleValue = (function () {
     }, {
         key: "setValueFromString",
         value: function setValueFromString(string, mapping) {
+            if ((0, _util.isEmptyString)(string)) {
+                this.value = this.getEmptyValue();
+                return this;
+            }
+
             this.value = (0, _util.splitSafe)(string, PropertyMultipleValue.__format.separator).map(function (singleContent) {
-                return new mapping(singleContent);
+                return new mapping().setValueFromString(singleContent);
             });
+
             return this;
         }
     }]);
@@ -150,10 +156,14 @@ var Boolean = (function (_PropertyValue2) {
     }, {
         key: "setValueFromString",
         value: function setValueFromString(string) {
+            if ((0, _util.isEmptyString)(string)) {
+                return _get(Object.getPrototypeOf(Boolean.prototype), "handleEmptyString", this).call(this);
+            }
+
             try {
                 this.value = JSON.parse(string.toLowerCase());
             } catch (error) {
-                this.value = this.emptyValue();
+                this.value = this.getEmptyValue();
             }
 
             return this;
@@ -196,7 +206,12 @@ var Date = (function (_PropertyValue4) {
     }, {
         key: "setValueFromString",
         value: function setValueFromString(string) {
+            if ((0, _util.isEmptyString)(string)) {
+                return _get(Object.getPrototypeOf(Date.prototype), "handleEmptyString", this).call(this);
+            }
+
             this.value = _moment2["default"].utc(string, Date.__format.date);
+
             return this;
         }
     }]);
@@ -220,8 +235,8 @@ var DateTime = (function (_PropertyValue5) {
     }
 
     _createClass(DateTime, [{
-        key: "emptyValue",
-        value: function emptyValue() {
+        key: "getEmptyValue",
+        value: function getEmptyValue() {
             return { date: null, time: null };
         }
     }, {
@@ -244,11 +259,15 @@ var DateTime = (function (_PropertyValue5) {
     }, {
         key: "setValueFromString",
         value: function setValueFromString(string) {
+            if ((0, _util.isEmptyString)(string)) {
+                return _get(Object.getPrototypeOf(DateTime.prototype), "handleEmptyString", this).call(this);
+            }
+
             var parts = string.split(DateTime.__format.separator);
 
             this.value = {
-                date: new Date(parts[0]),
-                time: new Time(parts[1])
+                date: new Date().setValueFromString(parts[0]),
+                time: new Time().setValueFromString(parts[1])
             };
 
             return this;
@@ -290,6 +309,10 @@ var Float = (function (_PropertyValue7) {
     _createClass(Float, [{
         key: "setValueFromString",
         value: function setValueFromString(string) {
+            if ((0, _util.isEmptyString)(string)) {
+                return _get(Object.getPrototypeOf(Float.prototype), "handleEmptyString", this).call(this);
+            }
+
             this.value = parseFloat(string);
             return this;
         }
@@ -310,8 +333,8 @@ var Geo = (function (_PropertyValue8) {
     }
 
     _createClass(Geo, [{
-        key: "emptyValue",
-        value: function emptyValue() {
+        key: "getEmptyValue",
+        value: function getEmptyValue() {
             return { latitude: null, longitude: null };
         }
     }, {
@@ -321,7 +344,7 @@ var Geo = (function (_PropertyValue8) {
                 return "";
             }
 
-            return "" + this.value.latitude + Geo.__format.separator + this.value.longitude;
+            return "" + this.value.latitude.toString() + Geo.__format.separator + this.value.longitude.toString();
         }
     }, {
         key: "toJSON",
@@ -334,11 +357,15 @@ var Geo = (function (_PropertyValue8) {
     }, {
         key: "setValueFromString",
         value: function setValueFromString(string) {
+            if ((0, _util.isEmptyString)(string)) {
+                return _get(Object.getPrototypeOf(Geo.prototype), "handleEmptyString", this).call(this);
+            }
+
             var coordinates = string.split(Geo.__format.separator);
 
             this.value = {
-                latitude: new Float(coordinates[0]),
-                longitude: new Float(coordinates[1])
+                latitude: new Float().setValueFromString(coordinates[0]),
+                longitude: new Float().setValueFromString(coordinates[1])
             };
 
             return this;
@@ -366,6 +393,10 @@ var Integer = (function (_PropertyValue9) {
     _createClass(Integer, [{
         key: "setValueFromString",
         value: function setValueFromString(string) {
+            if ((0, _util.isEmptyString)(string)) {
+                return _get(Object.getPrototypeOf(Integer.prototype), "handleEmptyString", this).call(this);
+            }
+
             this.value = parseInt(string);
             return this;
         }
@@ -428,8 +459,8 @@ var Time = (function (_PropertyValue13) {
     }
 
     _createClass(Time, [{
-        key: "emptyValue",
-        value: function emptyValue() {
+        key: "getEmptyValue",
+        value: function getEmptyValue() {
             return { time: null, isFixed: null };
         }
     }, {
@@ -444,6 +475,10 @@ var Time = (function (_PropertyValue13) {
     }, {
         key: "setValueFromString",
         value: function setValueFromString(string) {
+            if ((0, _util.isEmptyString)(string)) {
+                return _get(Object.getPrototypeOf(Time.prototype), "handleEmptyString", this).call(this);
+            }
+
             this.value = {
                 time: (0, _moment2["default"])(string.slice(0, 6), Time.__format.time),
                 isFixed: string.slice(-1) !== Time.__format.timeUTC
@@ -494,6 +529,10 @@ var UTCOffset = (function (_PropertyValue15) {
     }, {
         key: "setValueFromString",
         value: function setValueFromString(string) {
+            if ((0, _util.isEmptyString)(string)) {
+                return _get(Object.getPrototypeOf(UTCOffset.prototype), "handleEmptyString", this).call(this);
+            }
+
             this.value = (0, _moment2["default"])().utcOffset(string);
             return this;
         }
@@ -613,8 +652,8 @@ function getValue(propertyName, propertyValue, propertyParameters) {
     mapping = Array.isArray(mapping) ? mapping[0] : mapping;
 
     if (mapping.isMultiple === true && containsMultipleSeparator) {
-        return new PropertyMultipleValue(propertyValue, mapping);
+        return new PropertyMultipleValue().setValueFromString(propertyValue, mapping);
     }
 
-    return new mapping(propertyValue);
+    return new mapping().setValueFromString(propertyValue);
 }

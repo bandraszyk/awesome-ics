@@ -1,17 +1,15 @@
 import { Property } from "./property";
-import { mapToJSON, mapToString, splitSafeLines, setError, trim, removePattern } from "./util";
+import { mapToJSON, mapToString, splitSafeLines, setError, trim, removePattern, isEmptyString } from "./util";
+
+function clear(block) {
+    block.properties = [];
+    block.blocks     = [];
+    block.type       = null;
+}
 
 export class Block {
-    constructor(content) {
-        //-- Get rid of invalid characters
-        content = content && content.replace(/\r/g, "").trim();
-
-        this.original   = content;
-        this.properties = [];
-        this.blocks     = [];
-        this.type       = null;
-
-        if (content) { return this.setValueFromString(content) }
+    constructor() {
+        clear(this);
     }
     toString() {
         if (this.error) { return this.error; }
@@ -34,6 +32,11 @@ export class Block {
         }
     }
     setValueFromString(string) {
+        //-- Get rid of invalid characters
+        string = Block.__format.prepareString(string);
+
+        if (isEmptyString(string)) { clear(this); return this; }
+
         //-- Read the content
         let lines = splitSafeLines(string, Block.__format);
         let blockBegin = trim(lines.shift() || "");
@@ -67,7 +70,7 @@ export class Block {
             //-- Process as new child block
             if (blockCounter === 0 && block.length > 0) {
                 block.push(line);
-                this.blocks.push(new Block(block.join(Block.__format.newLine)));
+                this.blocks.push(new Block().setValueFromString(block.join(Block.__format.newLine)));
                 block = [];
                 return;
             }
@@ -76,7 +79,7 @@ export class Block {
             if (blockCounter > 0) { return block.push(line); }
 
             //-- Add as property
-            this.properties.push(new Property(line));
+            this.properties.push(new Property().setValueFromString(line));
         });
 
         return this;
@@ -89,5 +92,8 @@ Block.__format = {
     blockBegin      : "BEGIN:",
     blockEnd        : "END:",
     newLine         : "\n",
-    multiLineBegin  : " "
+    multiLineBegin  : " ",
+    prepareString   : function(string) {
+        return string && string.replace(/\r/g, "").trim();
+    }
 };

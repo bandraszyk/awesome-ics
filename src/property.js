@@ -1,15 +1,16 @@
-import { splitSafe, mapToJSON, mapToString } from "./util";
+import { splitSafe, mapToJSON, mapToString, isEmptyString } from "./util";
 import { PropertyParameter } from "./property-parameter";
 import { getValue } from "./property-value";
 
-export class Property {
-    constructor(content) {
-        this.original   = content;
-        this.parameters = [];
-        this.name       = null;
-        this.value      = null;
+function clear(property) {
+    property.parameters = [];
+    property.name       = null;
+    property.value      = null;
+}
 
-        if (content) { this.setValueFromString(content); }
+export class Property {
+    constructor() {
+        clear(this);
     }
     toString() {
         let name = this.name;
@@ -39,6 +40,8 @@ export class Property {
         };
     }
     setValueFromString(string) {
+        if (isEmptyString(string)) { clear(this); return this; }
+
         this.name       = splitSafe(string, Property.__format.separatorProperty)[0];
         this.value      = string.slice(this.name.length + 1);
 
@@ -46,7 +49,7 @@ export class Property {
 
         if (this.name.indexOf(Property.__format.separatorParameter) !== -1) {
             this.name       = parameters[0];
-            this.parameters = parameters.slice(1).map(function(paramContent) { return new PropertyParameter(paramContent); });
+            this.parameters = parameters.slice(1).map(function(paramContent) { return new PropertyParameter().setValueFromString(paramContent); });
         }
 
         this.value = getValue(this.name, this.value, this.parameters);

@@ -1,15 +1,9 @@
-import { mapToJSON, mapToString, splitSafe } from "./util";
+import { mapToJSON, mapToString, splitSafe, isEmptyString } from "./util";
 import moment from "moment";
 
 export class PropertyValue {
-    constructor(content) {
-        this.original = content;
-        this.value = this.emptyValue();
-
-        if (content) { this.setValueFromString(content); }
-    }
-    emptyValue() {
-        return null;
+    constructor() {
+        this.value = this.getEmptyValue();
     }
     toString() {
         return this.value && this.value.toString();
@@ -17,23 +11,29 @@ export class PropertyValue {
     toJSON() {
         return this.value;
     }
+    getEmptyValue() {
+        return null;
+    }
+    handleEmptyString() {
+        this.value = this.getEmptyValue();
+        return this;
+    }
     setValue(value) {
         this.value = value || null;
         return this;
     }
     setValueFromString(string) {
+        if (isEmptyString(string)) { return this.handleEmptyString(); }
+
         return this.setValue(string);
     }
 }
 
 export class PropertyMultipleValue {
-    constructor(content, mapping) {
-        this.original = content;
-        this.value = this.emptyValue();
-
-        if (content) { this.setValueFromString(content, mapping); }
+    constructor() {
+        this.value = this.getEmptyValue();
     }
-    emptyValue() {
+    getEmptyValue() {
         return [];
     }
     toString() {
@@ -47,7 +47,13 @@ export class PropertyMultipleValue {
         return this;
     }
     setValueFromString(string, mapping) {
-        this.value = splitSafe(string, PropertyMultipleValue.__format.separator).map(function(singleContent) { return new mapping(singleContent); });
+        if (isEmptyString(string)) {
+            this.value = this.getEmptyValue();
+            return this;
+        }
+
+        this.value = splitSafe(string, PropertyMultipleValue.__format.separator).map(function(singleContent) { return new mapping().setValueFromString(singleContent); });
+
         return this;
     }
 }
@@ -65,11 +71,13 @@ export class Boolean extends PropertyValue {
         return this.value && this.value.toString().toUpperCase();
     }
     setValueFromString(string) {
+        if (isEmptyString(string)) { return super.handleEmptyString(); }
+
         try {
             this.value = JSON.parse(string.toLowerCase());
         }
         catch(error) {
-            this.value = this.emptyValue();
+            this.value = this.getEmptyValue();
         }
 
         return this;
@@ -85,7 +93,10 @@ export class Date extends PropertyValue {
         return this.value && this.value.format(Date.__format.date);
     }
     setValueFromString(string) {
+        if (isEmptyString(string)) { return super.handleEmptyString(); }
+
         this.value = moment.utc(string, Date.__format.date);
+
         return this;
     }
 }
@@ -98,7 +109,7 @@ export class DateTime extends PropertyValue {
     constructor(content) {
         super(content);
     }
-    emptyValue() {
+    getEmptyValue() {
         return { date: null, time: null };
     }
     toString() {
@@ -113,11 +124,13 @@ export class DateTime extends PropertyValue {
         }
     }
     setValueFromString(string) {
+        if (isEmptyString(string)) { return super.handleEmptyString(); }
+
         let parts = string.split(DateTime.__format.separator);
 
         this.value = {
-            date: new Date(parts[0]),
-            time: new Time(parts[1])
+            date: new Date().setValueFromString(parts[0]),
+            time: new Time().setValueFromString(parts[1])
         };
 
         return this;
@@ -134,19 +147,21 @@ export class Duration extends PropertyValue {
 
 export class Float extends PropertyValue {
     setValueFromString(string) {
+        if (isEmptyString(string)) { return super.handleEmptyString(); }
+
         this.value = parseFloat(string);
         return this;
     }
 }
 
 export class Geo extends PropertyValue {
-    emptyValue() {
+    getEmptyValue() {
         return { latitude: null, longitude: null };
     }
     toString() {
         if (!this.value || !this.value.latitude || !this.value.latitude) { return ""; }
 
-        return `${this.value.latitude}${Geo.__format.separator}${this.value.longitude}`;
+        return `${this.value.latitude.toString()}${Geo.__format.separator}${this.value.longitude.toString()}`;
     }
     toJSON() {
         return this.value && {
@@ -155,11 +170,13 @@ export class Geo extends PropertyValue {
         }
     }
     setValueFromString(string) {
+        if (isEmptyString(string)) { return super.handleEmptyString(); }
+
         let coordinates = string.split(Geo.__format.separator);
 
         this.value = {
-            latitude    : new Float(coordinates[0]),
-            longitude   : new Float(coordinates[1])
+            latitude    : new Float().setValueFromString(coordinates[0]),
+            longitude   : new Float().setValueFromString(coordinates[1])
         };
 
         return this;
@@ -172,6 +189,8 @@ Geo.__format = {
 
 export class Integer extends PropertyValue {
     setValueFromString(string) {
+        if (isEmptyString(string)) { return super.handleEmptyString(); }
+
         this.value = parseInt(string);
         return this;
     }
@@ -188,7 +207,7 @@ export class RecurrenceRule extends PropertyValue {
 export class Text extends PropertyValue {}
 
 export class Time extends PropertyValue {
-    emptyValue() {
+    getEmptyValue() {
         return { time: null, isFixed: null };
     }
     toString() {
@@ -197,6 +216,8 @@ export class Time extends PropertyValue {
         return this.value.time.format(Time.__format.time) + (!this.value.isFixed && Time.__format.timeUTC || "");
     }
     setValueFromString(string) {
+        if (isEmptyString(string)) { return super.handleEmptyString(); }
+
         this.value = {
             time    : moment(string.slice(0, 6), Time.__format.time),
             isFixed : string.slice(-1) !== Time.__format.timeUTC
@@ -220,6 +241,8 @@ export class UTCOffset extends PropertyValue {
         return this.value && this.value.format(UTCOffset.__format.offset);
     }
     setValueFromString(string) {
+        if (isEmptyString(string)) { return super.handleEmptyString(); }
+
         this.value = moment().utcOffset(string);
         return this;
     }
@@ -336,8 +359,8 @@ export function getValue(propertyName, propertyValue, propertyParameters) {
     mapping = Array.isArray(mapping) ? mapping[0] : mapping;
 
     if (mapping.isMultiple === true && containsMultipleSeparator) {
-        return new PropertyMultipleValue(propertyValue, mapping);
+        return new PropertyMultipleValue().setValueFromString(propertyValue, mapping);
     }
 
-    return new mapping(propertyValue);
+    return new mapping().setValueFromString(propertyValue);
 }

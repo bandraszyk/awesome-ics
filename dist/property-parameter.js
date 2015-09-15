@@ -12,17 +12,16 @@ var _util = require("./util");
 
 var propertyTypes = ["ALTREP", "CN", "CUTYPE", "DELEGATED-FROM", "DELEGATED-TO", "DIR", "ENCODING", "FMTTYPE", "FBTYPE", "LANGUAGE", "MEMBER", "PARTSTAT", "RANGE", "RELATED", "RELTYPE", "ROLE", "RSVP", "SENT-BY", "TZID", "VALUE"];
 
+function clear(parameter) {
+    parameter.name = null;
+    parameter.value = null;
+}
+
 var PropertyParameter = (function () {
-    function PropertyParameter(content) {
+    function PropertyParameter() {
         _classCallCheck(this, PropertyParameter);
 
-        this.original = content;
-        this.name = null;
-        this.value = null;
-
-        if (content) {
-            this.setValueFromString(content);
-        }
+        clear(this);
     }
 
     _createClass(PropertyParameter, [{
@@ -41,6 +40,10 @@ var PropertyParameter = (function () {
     }, {
         key: "setValueFromString",
         value: function setValueFromString(string) {
+            if ((0, _util.isEmptyString)(string)) {
+                clear(this);return this;
+            }
+
             this.name = (0, _util.splitSafe)(string, PropertyParameter.__format.separator)[0];
             this.value = string.slice(this.name.length + 1);
             return this;

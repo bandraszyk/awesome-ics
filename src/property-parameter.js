@@ -1,4 +1,4 @@
-import { splitSafe } from "./util";
+import { splitSafe, isEmptyString } from "./util";
 
 const propertyTypes = [
     "ALTREP",
@@ -23,13 +23,14 @@ const propertyTypes = [
     "VALUE"
 ];
 
-export class PropertyParameter {
-    constructor(content) {
-        this.original   = content;
-        this.name       = null;
-        this.value      = null;
+function clear(parameter) {
+    parameter.name   = null;
+    parameter.value  = null;
+}
 
-        if (content) { this.setValueFromString(content); }
+export class PropertyParameter {
+    constructor() {
+        clear(this);
     }
     toString() {
         return [ this.name, this.value ].join(PropertyParameter.__format.separator);
@@ -41,6 +42,8 @@ export class PropertyParameter {
         };
     }
     setValueFromString(string) {
+        if (isEmptyString(string)) { clear(this); return this; }
+
         this.name       = splitSafe(string, PropertyParameter.__format.separator)[0];
         this.value      = string.slice(this.name.length + 1);
         return this;

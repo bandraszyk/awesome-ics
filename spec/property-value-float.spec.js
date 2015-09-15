@@ -1,20 +1,6 @@
 var AwesomeICS	= require("../dist/awesome-ics");
-var _util		= require("./_util");
 
 describe("Property Value Float", function() {
-    beforeEach(function() { _util.applyCustomMatcher(jasmine); });
-
-    it("should be empty", function() {
-        //-- Arrange
-        var content = undefined;
-
-        //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float(content);
-
-        //-- Assert
-        expect(propertyValue.original).toBeUndefined();
-        expect(propertyValue.value).toBeNull();
-    });
 
     it("should allow to set value from string", function() {
         //-- Arrange
@@ -29,15 +15,15 @@ describe("Property Value Float", function() {
         expect(propertyValueSetResult.toString()).toEqual(content);
     });
 
-    it("should contain original value", function() {
+    it("should be empty", function() {
         //-- Arrange
-        var content = "7.68";
+        var content = undefined;
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float().setValueFromString(content);
 
         //-- Assert
-        expect(propertyValue.original).toEqual(content);
+        expect(propertyValue.value).toBeNull();
     });
 
     it("should contain value", function() {
@@ -45,7 +31,7 @@ describe("Property Value Float", function() {
         var content = "7.68";
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.Float(content);
+        var property = new AwesomeICS.Elements.PropertyValue.Float().setValueFromString(content);
 
         //-- Assert
         expect(property.value).toEqual(7.68);
@@ -56,7 +42,7 @@ describe("Property Value Float", function() {
         var content = "AWESOME";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float().setValueFromString(content);
 
         //-- Assert
         expect(propertyValue.value).toEqual(NaN);
@@ -67,7 +53,7 @@ describe("Property Value Float", function() {
         var content = "7.68";
 
         //-- property
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float(content);
+        var propertyValue = new AwesomeICS.Elements.PropertyValue.Float().setValueFromString(content);
 
         //-- Assert
         expect(propertyValue.toString()).toEqual(content);
