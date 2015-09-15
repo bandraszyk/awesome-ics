@@ -12,20 +12,22 @@ var _property = require("./property");
 
 var _util = require("./util");
 
-function clear(block) {
-    block.properties = [];
-    block.blocks = [];
-    block.type = null;
-}
-
 var Block = (function () {
     function Block() {
         _classCallCheck(this, Block);
 
-        clear(this);
+        this.clear();
     }
 
     _createClass(Block, [{
+        key: "clear",
+        value: function clear() {
+            this.properties = [];
+            this.blocks = [];
+            this.type = null;
+            return this;
+        }
+    }, {
         key: "toString",
         value: function toString() {
             if (this.error) {
@@ -64,7 +66,7 @@ var Block = (function () {
             string = Block.__format.prepareString(string);
 
             if ((0, _util.isEmptyString)(string)) {
-                clear(this);return this;
+                return this.clear();
             }
             var lines = (0, _util.splitSafeLines)(string, Block.__format);
             var blockBegin = (0, _util.trim)(lines.shift() || "");
@@ -101,6 +103,28 @@ var Block = (function () {
                 _this.properties.push(new _property.Property().setValueFromString(line));
             });
 
+            return this;
+        }
+    }, {
+        key: "setType",
+        value: function setType(type) {
+            this.type = type;
+            return this;
+        }
+    }, {
+        key: "addBlock",
+        value: function addBlock(block) {
+            if (block instanceof Block) {
+                this.blocks.push(block);
+            }
+            return this;
+        }
+    }, {
+        key: "addProperty",
+        value: function addProperty(property) {
+            if (property instanceof _property.Property) {
+                this.properties.push(property);
+            }
             return this;
         }
     }]);

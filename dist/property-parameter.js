@@ -48,6 +48,18 @@ var PropertyParameter = (function () {
             this.value = string.slice(this.name.length + 1);
             return this;
         }
+    }, {
+        key: "setName",
+        value: function setName(name) {
+            this.name = name;
+            return this;
+        }
+    }, {
+        key: "setValue",
+        value: function setValue(value) {
+            this.value = value;
+            return this;
+        }
     }]);
 
     return PropertyParameter;

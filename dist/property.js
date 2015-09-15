@@ -14,20 +14,24 @@ var _propertyParameter = require("./property-parameter");
 
 var _propertyValue = require("./property-value");
 
-function clear(property) {
-    property.parameters = [];
-    property.name = null;
-    property.value = null;
-}
+function clear(property) {}
 
 var Property = (function () {
     function Property() {
         _classCallCheck(this, Property);
 
-        clear(this);
+        this.clear();
     }
 
     _createClass(Property, [{
+        key: "clear",
+        value: function clear() {
+            this.parameters = [];
+            this.name = null;
+            this.value = null;
+            return this;
+        }
+    }, {
         key: "toString",
         value: function toString() {
             var name = this.name;
@@ -62,7 +66,7 @@ var Property = (function () {
         key: "setValueFromString",
         value: function setValueFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
-                clear(this);return this;
+                return this.clear();
             }
 
             this.name = (0, _util.splitSafe)(string, Property.__format.separatorProperty)[0];
@@ -78,6 +82,28 @@ var Property = (function () {
             }
 
             this.value = (0, _propertyValue.getValue)(this.name, this.value, this.parameters);
+            return this;
+        }
+    }, {
+        key: "setName",
+        value: function setName(name) {
+            this.name = name;
+            return this;
+        }
+    }, {
+        key: "setValue",
+        value: function setValue(value) {
+            if (value instanceof _propertyValue.PropertyValue || value instanceof _propertyValue.PropertyMultipleValue) {
+                this.value = value;
+            }
+            return this;
+        }
+    }, {
+        key: "addParameter",
+        value: function addParameter(parameter) {
+            if (parameter instanceof _propertyParameter.PropertyParameter) {
+                this.parameters.push(parameter);
+            }
             return this;
         }
     }]);

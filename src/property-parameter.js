@@ -48,6 +48,14 @@ export class PropertyParameter {
         this.value      = string.slice(this.name.length + 1);
         return this;
     }
+    setName(name) {
+        this.name = name;
+        return this;
+    }
+    setValue(value) {
+        this.value = value;
+        return this;
+    }
 }
 
 PropertyParameter.__format = {

@@ -1,15 +1,15 @@
 import { Property } from "./property";
 import { mapToJSON, mapToString, splitSafeLines, setError, trim, removePattern, isEmptyString } from "./util";
 
-function clear(block) {
-    block.properties = [];
-    block.blocks     = [];
-    block.type       = null;
-}
-
 export class Block {
     constructor() {
-        clear(this);
+        this.clear();
+    }
+    clear() {
+        this.properties = [];
+        this.blocks     = [];
+        this.type       = null;
+        return this;
     }
     toString() {
         if (this.error) { return this.error; }
@@ -35,7 +35,7 @@ export class Block {
         //-- Get rid of invalid characters
         string = Block.__format.prepareString(string);
 
-        if (isEmptyString(string)) { clear(this); return this; }
+        if (isEmptyString(string)) { return this.clear(); }
 
         //-- Read the content
         let lines = splitSafeLines(string, Block.__format);
@@ -82,6 +82,18 @@ export class Block {
             this.properties.push(new Property().setValueFromString(line));
         });
 
+        return this;
+    }
+    setType(type) {
+        this.type = type;
+        return this;
+    }
+    addBlock(block) {
+        if (block instanceof Block) { this.blocks.push(block); }
+        return this;
+    }
+    addProperty(property) {
+        if (property instanceof Property) { this.properties.push(property); }
         return this;
     }
 }
