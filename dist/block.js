@@ -14,8 +14,6 @@ var _util = require("./util");
 
 var Block = (function () {
     function Block(content) {
-        var _this = this;
-
         _classCallCheck(this, Block);
         content = content && content.replace(/\r/g, "").trim();
 
@@ -24,43 +22,9 @@ var Block = (function () {
         this.blocks = [];
         this.type = null;
 
-        if (!content) {
-            return;
+        if (content) {
+            return this.setValueFromString(content);
         }
-        var lines = (0, _util.splitSafeLines)(content, Block.__format);
-        var blockBegin = (0, _util.trim)(lines.shift() || "");
-        var blockEnd = (0, _util.trim)(lines.pop() || "");
-        if (!Block.__format.regexBlockBegin.test(blockBegin)) {
-            return (0, _util.setError)(this, "Cannot load Block element, first line should match /^BEGIN:/i.");
-        }
-        if (!Block.__format.regexBlockEnd.test(blockEnd)) {
-            return (0, _util.setError)(this, "Cannot load Block elements, last line should match /^END:/i.");
-        }
-        if ((0, _util.removePattern)(blockBegin, Block.__format.regexBlockBegin) !== (0, _util.removePattern)(blockEnd, Block.__format.regexBlockEnd)) {
-            return (0, _util.setError)(this, "Cannot load Block elements, block doesn't have and end.");
-        }
-        this.type = (0, _util.removePattern)(blockBegin, Block.__format.regexBlockBegin);
-
-        var block = [];
-        var blockCounter = 0;
-        lines.forEach(function (line) {
-            if (Block.__format.regexBlockBegin.test(line)) {
-                blockCounter++;
-            }
-            if (Block.__format.regexBlockEnd.test(line)) {
-                blockCounter--;
-            }
-            if (blockCounter === 0 && block.length > 0) {
-                block.push(line);
-                _this.blocks.push(new Block(block.join(Block.__format.newLine)));
-                block = [];
-                return;
-            }
-            if (blockCounter > 0) {
-                return block.push(line);
-            }
-            _this.properties.push(new _property.Property(line));
-        });
     }
 
     _createClass(Block, [{
@@ -94,6 +58,47 @@ var Block = (function () {
                 properties: this.properties.map(_util.mapToJSON),
                 blocks: this.blocks.map(_util.mapToJSON)
             };
+        }
+    }, {
+        key: "setValueFromString",
+        value: function setValueFromString(string) {
+            var _this = this;
+            var lines = (0, _util.splitSafeLines)(string, Block.__format);
+            var blockBegin = (0, _util.trim)(lines.shift() || "");
+            var blockEnd = (0, _util.trim)(lines.pop() || "");
+            if (!Block.__format.regexBlockBegin.test(blockBegin)) {
+                return (0, _util.setError)(this, "Cannot load Block element, first line should match /^BEGIN:/i.");
+            }
+            if (!Block.__format.regexBlockEnd.test(blockEnd)) {
+                return (0, _util.setError)(this, "Cannot load Block elements, last line should match /^END:/i.");
+            }
+            if ((0, _util.removePattern)(blockBegin, Block.__format.regexBlockBegin) !== (0, _util.removePattern)(blockEnd, Block.__format.regexBlockEnd)) {
+                return (0, _util.setError)(this, "Cannot load Block elements, block doesn't have and end.");
+            }
+            this.type = (0, _util.removePattern)(blockBegin, Block.__format.regexBlockBegin);
+
+            var block = [];
+            var blockCounter = 0;
+            lines.forEach(function (line) {
+                if (Block.__format.regexBlockBegin.test(line)) {
+                    blockCounter++;
+                }
+                if (Block.__format.regexBlockEnd.test(line)) {
+                    blockCounter--;
+                }
+                if (blockCounter === 0 && block.length > 0) {
+                    block.push(line);
+                    _this.blocks.push(new Block(block.join(Block.__format.newLine)));
+                    block = [];
+                    return;
+                }
+                if (blockCounter > 0) {
+                    return block.push(line);
+                }
+                _this.properties.push(new _property.Property(line));
+            });
+
+            return this;
         }
     }]);
 

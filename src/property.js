@@ -9,19 +9,7 @@ export class Property {
         this.name       = null;
         this.value      = null;
 
-        if (!content) { return; }
-
-        this.name       = splitSafe(content, Property.__format.separatorProperty)[0];
-        this.value      = content.slice(this.name.length + 1);
-
-        let parameters = splitSafe(this.name, Property.__format.separatorParameter);
-
-        if (this.name.indexOf(Property.__format.separatorParameter) !== -1) {
-            this.name       = parameters[0];
-            this.parameters = parameters.slice(1).map(function(paramContent) { return new PropertyParameter(paramContent); });
-        }
-
-        this.value = getValue(this.name, this.value, this.parameters);
+        if (content) { this.setValueFromString(content); }
     }
     toString() {
         let name = this.name;
@@ -49,6 +37,20 @@ export class Property {
             parameters  : this.parameters.map(mapToJSON),
             value       : mapToJSON(this.value)
         };
+    }
+    setValueFromString(string) {
+        this.name       = splitSafe(string, Property.__format.separatorProperty)[0];
+        this.value      = string.slice(this.name.length + 1);
+
+        let parameters = splitSafe(this.name, Property.__format.separatorParameter);
+
+        if (this.name.indexOf(Property.__format.separatorParameter) !== -1) {
+            this.name       = parameters[0];
+            this.parameters = parameters.slice(1).map(function(paramContent) { return new PropertyParameter(paramContent); });
+        }
+
+        this.value = getValue(this.name, this.value, this.parameters);
+        return this;
     }
 }
 

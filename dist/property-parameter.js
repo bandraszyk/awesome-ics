@@ -20,12 +20,9 @@ var PropertyParameter = (function () {
         this.name = null;
         this.value = null;
 
-        if (!content) {
-            return;
+        if (content) {
+            this.setValueFromString(content);
         }
-
-        this.name = (0, _util.splitSafe)(content, PropertyParameter.__format.separator)[0];
-        this.value = content.slice(this.name.length + 1);
     }
 
     _createClass(PropertyParameter, [{
@@ -40,6 +37,13 @@ var PropertyParameter = (function () {
                 name: this.name,
                 value: this.value
             };
+        }
+    }, {
+        key: "setValueFromString",
+        value: function setValueFromString(string) {
+            this.name = (0, _util.splitSafe)(string, PropertyParameter.__format.separator)[0];
+            this.value = string.slice(this.name.length + 1);
+            return this;
         }
     }]);
 

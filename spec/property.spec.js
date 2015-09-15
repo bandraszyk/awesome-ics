@@ -18,6 +18,21 @@ describe("Property", function() {
 		expect(property.value).toBeNull();
 	});
 
+	it("should allow to set value from string", function() {
+		//-- Arrange
+		var content = "PROPERTY_NAME:PROPERTY_VALUE";
+		var property = new AwesomeICS.Elements.Property();
+
+		//-- Act
+		var propertySetResult = property.setValueFromString(content);
+
+		//-- Assert
+		expect(propertySetResult).toBe(property);
+		expect(propertySetResult.name).toEqual("PROPERTY_NAME");
+		expect(propertySetResult.value instanceof AwesomeICS.Elements.PropertyValue.Value).toBeTruthy();
+	});
+
+
 	it("should contain original content", function() {
 		//-- Arrange
 		var content = "PROPERTY_NAME:PROPERTY_VALUE";

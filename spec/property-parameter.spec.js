@@ -17,6 +17,20 @@ describe("Parameter", function() {
         expect(parameter.value).toBeNull();
     });
 
+    it("should allow to set value from string", function() {
+        //-- Arrange
+        var content = "PARAMETER_NAME=PARAMETER_VALUE";
+        var parameter = new AwesomeICS.Elements.PropertyParameter();
+
+        //-- Act
+        var parameterSetResult = parameter.setValueFromString(content);
+
+        //-- Assert
+        expect(parameterSetResult).toBe(parameter);
+        expect(parameterSetResult.name).toEqual("PARAMETER_NAME");
+        expect(parameterSetResult.value).toEqual("PARAMETER_VALUE");
+    });
+
     it("should contain original content", function() {
         //-- Arrange
         var content = "PARAMETER_NAME=PARAMETER_VALUE";

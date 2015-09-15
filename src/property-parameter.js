@@ -29,10 +29,7 @@ export class PropertyParameter {
         this.name       = null;
         this.value      = null;
 
-        if (!content) { return; }
-
-        this.name       = splitSafe(content, PropertyParameter.__format.separator)[0];
-        this.value      = content.slice(this.name.length + 1);
+        if (content) { this.setValueFromString(content); }
     }
     toString() {
         return [ this.name, this.value ].join(PropertyParameter.__format.separator);
@@ -42,6 +39,11 @@ export class PropertyParameter {
             name    : this.name,
             value   : this.value
         };
+    }
+    setValueFromString(string) {
+        this.name       = splitSafe(string, PropertyParameter.__format.separator)[0];
+        this.value      = string.slice(this.name.length + 1);
+        return this;
     }
 }
 

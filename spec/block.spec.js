@@ -18,6 +18,19 @@ describe("Block", function() {
         expect(block.type).toBeNull();
     });
 
+    it("should allow to set value from string", function() {
+        //-- Arrange
+        var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";
+        var block = new AwesomeICS.Elements.Block();
+
+        //-- Act
+        var blockSetResult = block.setValueFromString(content);
+
+        //-- Assert
+        expect(blockSetResult).toBe(block);
+        expect(block.toString()).toEqual(content);
+    });
+
     it("should contain original content", function() {
         //-- Arrange
         var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";

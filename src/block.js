@@ -11,10 +11,31 @@ export class Block {
         this.blocks     = [];
         this.type       = null;
 
-        if (!content) { return; }
+        if (content) { return this.setValueFromString(content) }
+    }
+    toString() {
+        if (this.error) { return this.error; }
 
+        let properties  = "";
+        let blocks    = "";
+
+        if (this.properties.length) { properties = this.properties.map(mapToString).join(Block.__format.newLine) + Block.__format.newLine; }
+        if (this.blocks.length) { blocks = this.blocks.map(mapToString).join(Block.__format.newLine) + Block.__format.newLine; }
+
+        return `${Block.__format.blockBegin}${this.type}${Block.__format.newLine}${properties}${blocks}${Block.__format.blockEnd}${this.type}`;
+    }
+    toJSON() {
+        if (this.error) { return { error: this.error }; }
+
+        return {
+            type        : this.type,
+            properties  : this.properties.map(mapToJSON),
+            blocks      : this.blocks.map(mapToJSON)
+        }
+    }
+    setValueFromString(string) {
         //-- Read the content
-        let lines = splitSafeLines(content, Block.__format);
+        let lines = splitSafeLines(string, Block.__format);
         let blockBegin = trim(lines.shift() || "");
         let blockEnd = trim(lines.pop() || "");
 
@@ -57,26 +78,8 @@ export class Block {
             //-- Add as property
             this.properties.push(new Property(line));
         });
-    }
-    toString() {
-        if (this.error) { return this.error; }
 
-        let properties  = "";
-        let blocks    = "";
-
-        if (this.properties.length) { properties = this.properties.map(mapToString).join(Block.__format.newLine) + Block.__format.newLine; }
-        if (this.blocks.length) { blocks = this.blocks.map(mapToString).join(Block.__format.newLine) + Block.__format.newLine; }
-
-        return `${Block.__format.blockBegin}${this.type}${Block.__format.newLine}${properties}${blocks}${Block.__format.blockEnd}${this.type}`;
-    }
-    toJSON() {
-        if (this.error) { return { error: this.error }; }
-
-        return {
-            type        : this.type,
-            properties  : this.properties.map(mapToJSON),
-            blocks      : this.blocks.map(mapToJSON)
-        }
+        return this;
     }
 }
 

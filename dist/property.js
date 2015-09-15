@@ -23,23 +23,9 @@ var Property = (function () {
         this.name = null;
         this.value = null;
 
-        if (!content) {
-            return;
+        if (content) {
+            this.setValueFromString(content);
         }
-
-        this.name = (0, _util.splitSafe)(content, Property.__format.separatorProperty)[0];
-        this.value = content.slice(this.name.length + 1);
-
-        var parameters = (0, _util.splitSafe)(this.name, Property.__format.separatorParameter);
-
-        if (this.name.indexOf(Property.__format.separatorParameter) !== -1) {
-            this.name = parameters[0];
-            this.parameters = parameters.slice(1).map(function (paramContent) {
-                return new _propertyParameter.PropertyParameter(paramContent);
-            });
-        }
-
-        this.value = (0, _propertyValue.getValue)(this.name, this.value, this.parameters);
     }
 
     _createClass(Property, [{
@@ -72,6 +58,24 @@ var Property = (function () {
                 parameters: this.parameters.map(_util.mapToJSON),
                 value: (0, _util.mapToJSON)(this.value)
             };
+        }
+    }, {
+        key: "setValueFromString",
+        value: function setValueFromString(string) {
+            this.name = (0, _util.splitSafe)(string, Property.__format.separatorProperty)[0];
+            this.value = string.slice(this.name.length + 1);
+
+            var parameters = (0, _util.splitSafe)(this.name, Property.__format.separatorParameter);
+
+            if (this.name.indexOf(Property.__format.separatorParameter) !== -1) {
+                this.name = parameters[0];
+                this.parameters = parameters.slice(1).map(function (paramContent) {
+                    return new _propertyParameter.PropertyParameter(paramContent);
+                });
+            }
+
+            this.value = (0, _propertyValue.getValue)(this.name, this.value, this.parameters);
+            return this;
         }
     }]);
 
