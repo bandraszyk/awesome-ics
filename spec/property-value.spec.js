@@ -1,17 +1,17 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 
 describe("Property Value", function() {
-    it("should allow to set value from string", function() {
+    it("should allow to convert value from string", function() {
         //-- Arrange
         var content = "Parameter_Value";
         var propertyValue = new AwesomeICS.PropertyValue.Value();
 
         //-- Act
-        var propertyValueSetResult = propertyValue.convertFromString().convertFromString(content);
+        var propertyValueConverted = propertyValue.convertFromString(content);
 
         //-- Assert
-        expect(propertyValueSetResult).toBe(propertyValue);
-        expect(propertyValueSetResult.value).toEqual(content);
+        expect(propertyValueConverted).toBe(propertyValue);
+        expect(propertyValueConverted.value).toEqual(content);
     });
 
     it("should be empty", function() {
@@ -19,7 +19,7 @@ describe("Property Value", function() {
         var content = undefined;
 
         //-- Act
-        var propertyValue = new AwesomeICS.PropertyValue.Value().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Value();
 
         //-- Assert
         expect(propertyValue.value).toBeNull();
@@ -28,22 +28,65 @@ describe("Property Value", function() {
     it("should contain value", function() {
         //-- Arrange
         var content = "Property_Value";
+        var propertyValue = new AwesomeICS.PropertyValue.Value();
 
         //-- Act
-        var propertyValue = new AwesomeICS.PropertyValue.Value().convertFromString(content);
+        var propertyValueConverted = propertyValue.convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value).toEqual("Property_Value");
+        expect(propertyValueConverted).toBe(propertyValue);
     });
 
     it("should return same string value", function() {
         //-- Arrange
         var content = "Property_Value";
+        var propertyValue = new AwesomeICS.PropertyValue.Value();
 
-        //-- property
-        var propertyValue = new AwesomeICS.PropertyValue.Value().convertFromString(content);
+        //-- Act
+        var propertyValueConverted = propertyValue.convertFromString(content);
 
         //-- Assert
         expect(propertyValue.toString()).toEqual(content);
+        expect(propertyValueConverted).toBe(propertyValue);
+    });
+
+    it("should allow to set value", function() {
+        //-- Arrange
+        var value = true;
+        var propertyValue = new AwesomeICS.PropertyValue.Value();
+
+        //-- Act
+        var propertyValueSet = propertyValue.setValue(value);
+
+        //-- Assert
+        expect(propertyValue.value).toEqual(value);
+        expect(propertyValueSet).toBe(propertyValue);
+    });
+
+    it("should allow to clear value", function() {
+        //-- Arrange
+        var value = true;
+        var propertyValue = new AwesomeICS.PropertyValue.Value().setValue(value);
+
+        //-- Act
+        var propertyValueCleared = propertyValue.clear();
+
+        //-- Assert
+        expect(propertyValue.value).toBeNull();
+        expect(propertyValueCleared).toBe(propertyValue);
+    });
+
+    it("should clear the value during empty string conversion", function() {
+        //-- Arrange
+        var value = true;
+        var propertyValue = new AwesomeICS.PropertyValue.Value().setValue(value);
+
+        //-- Act
+        var propertyValueCleared = propertyValue.convertFromString();
+
+        //-- Assert
+        expect(propertyValue.value).toBeNull();
+        expect(propertyValueCleared).toBe(propertyValue);
     });
 });

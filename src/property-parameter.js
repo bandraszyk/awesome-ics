@@ -51,10 +51,18 @@ export class PropertyParameter {
         return this;
     }
     setName(name) {
+        if (typeof name !== "string" && !(name instanceof String)) {
+            throw new Error("[PropertyParameter] [setName()] The name must be an instance of `String`");
+        }
+
         this.name = name;
         return this;
     }
     setValue(value) {
+        if (typeof value !== "string" && !(value instanceof String)) {
+            throw new Error("[PropertyParameter] [setName()] The value must be an instance of `String`");
+        }
+
         this.value = value;
         return this;
     }

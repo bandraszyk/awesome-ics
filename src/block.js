@@ -12,8 +12,6 @@ export class Block {
         return this;
     }
     toString() {
-        if (this.error) { return this.error; }
-
         let properties  = "";
         let blocks    = "";
 
@@ -23,8 +21,6 @@ export class Block {
         return `${Block.__format.blockBegin}${this.type}${Block.__format.newLine}${properties}${blocks}${Block.__format.blockEnd}${this.type}`;
     }
     toJSON() {
-        if (this.error) { return { error: this.error }; }
-
         return {
             type        : this.type,
             properties  : this.properties.map(mapToJSON),
@@ -89,12 +85,16 @@ export class Block {
         return this;
     }
     setType(type) {
+        if (typeof type !== "string" && !(type instanceof String)) {
+            throw new Error("[Block] [setType()] The type must be an instance of `String`");
+        }
+
         this.type = type;
         return this;
     }
     addBlock(block) {
         if (!(block instanceof Block)) {
-            throw new Error("[Block] [addBlock()] The block should be an instance of `Block`");
+            throw new Error("[Block] [addBlock()] The block must be an instance of `Block`");
         }
 
         this.blocks.push(block);
@@ -102,7 +102,7 @@ export class Block {
     }
     addProperty(property) {
         if (!(property instanceof Property)) {
-            throw new Error("[Block] [addProperty()] The property should be an instance of `Block`");
+            throw new Error("[Block] [addProperty()] The property must be an instance of `Property`");
         }
 
         this.properties.push(property);

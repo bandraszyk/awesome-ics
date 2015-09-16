@@ -1,7 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 
 describe("Property", function() {
-	it("should allow to set value from string", function() {
+	it("should allow to convert value from string", function() {
 		//-- Arrange
 		var content = "PROPERTY_NAME:PROPERTY_VALUE";
 		var property = new AwesomeICS.Property();
@@ -91,6 +91,15 @@ describe("Property", function() {
 		expect(propertySet).toBe(property);
 	});
 
+	it("should allow only `String` as name", function() {
+		//-- Arrange
+		var name = 123;
+		var property = new AwesomeICS.Property();
+
+		//-- Act & Assert
+		expect(function() { property.setName(name); }).toThrow();
+	});
+
 	it("should allow to set value", function() {
 		//-- Arrange
 		var value = new AwesomeICS.PropertyValue.Value();
@@ -104,16 +113,16 @@ describe("Property", function() {
 		expect(propertySet).toBe(property);
 	});
 
-	it("should allow only `PropertyValue` or `PropertyValueMultiple` or any child class as value", function() {
+	it("should allow only `PropertyValue` or `PropertyValueMultiple` as value", function() {
 		//-- Arrange
 		var invalidValue = "Invalid Property";
 		var property = new AwesomeICS.Property();
 
 		//-- Act & Assert
-		expect(function() { property.setValue(invalidValue) }).toThrow();
+		expect(function() { property.setValue(invalidValue); }).toThrow();
 	});
 
-	it("should allow only `PropertyValue` or `PropertyValueMultiple` or any child class as value", function() {
+	it("should allow only `PropertyValue` or `PropertyValueMultiple` as value", function() {
 		//-- Arrange
 		var value = new AwesomeICS.PropertyValue.Value();
 		var property = new AwesomeICS.Property();
@@ -126,7 +135,7 @@ describe("Property", function() {
 		expect(property).toBe(propertySet);
 	});
 
-	it("should allow only `PropertyValue` or `PropertyValueMultiple` or any child class as value", function() {
+	it("should allow only `PropertyValue` or `PropertyValueMultiple` as value", function() {
 		//-- Arrange
 		var value = new AwesomeICS.PropertyValue.Boolean();
 		var property = new AwesomeICS.Property();
@@ -139,9 +148,9 @@ describe("Property", function() {
 		expect(property).toBe(propertySet);
 	});
 
-	it("should allow only `PropertyValue` or `PropertyValueMultiple` or any child class as value", function() {
+	it("should allow only `PropertyValue` or `PropertyValueMultiple` as value", function() {
 		//-- Arrange
-		var value = new AwesomeICS.PropertyValue.MultipleValue();
+		var value = new AwesomeICS.PropertyValue.MultipleValue(AwesomeICS.PropertyValue.Boolean);
 		var property = new AwesomeICS.Property();
 
 		//-- Act
@@ -172,6 +181,34 @@ describe("Property", function() {
 		var parameter = "Invalid Parameter";
 
 		//-- Act & Assert
-		expect(function() { property.addParameter(parameter) }).toThrow();
+		expect(function() { property.addParameter(parameter); }).toThrow();
+	});
+
+	it("should allow to clear the value", function() {
+		//-- Arrange
+		var content = "PROPERTY_NAME:PROPERTY_VALUE";
+		var property = new AwesomeICS.Property().convertFromString(content);
+
+		//-- Act
+		var propertyCleared = property.clear();
+
+		//-- Assert
+		expect(property.name).toBeNull();
+		expect(property.value).toBeNull();
+		expect(propertyCleared).toBe(property);
+	});
+
+	it("should clear the value during empty string conversion", function() {
+		//-- Arrange
+		var content = "PROPERTY_NAME:PROPERTY_VALUE";
+		var property = new AwesomeICS.Property().convertFromString(content);
+
+		//-- Act
+		var propertyCleared = property.convertFromString();
+
+		//-- Assert
+		expect(property.name).toBeNull();
+		expect(property.value).toBeNull();
+		expect(propertyCleared).toBe(property);
 	});
 });

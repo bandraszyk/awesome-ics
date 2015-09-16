@@ -61,12 +61,16 @@ export class Property {
         return this;
     }
     setName(name) {
+        if (typeof name !== "string" && !(name instanceof String)) {
+            throw new Error("[Property] [setName()] The name must be an instance of `String`");
+        }
+
         this.name = name;
         return this;
     }
     setValue(value) {
         if (!(value instanceof PropertyValue) && !(value instanceof PropertyMultipleValue)) {
-            throw new Error("[Property] [setValue()] The value should be an instance of `PropertyValue` or `PropertyMultipleValue` or any of their child classes");
+            throw new Error("[Property] [setValue()] The value must be an instance of `PropertyValue` or `PropertyMultipleValue`");
         }
 
         this.value = value;
@@ -74,7 +78,7 @@ export class Property {
     }
     addParameter(parameter) {
         if (!(parameter instanceof PropertyParameter)) {
-            throw new Error("[Property] [addParameter()] The parameter should be an instance of `PropertyParameter`");
+            throw new Error("[Property] [addParameter()] The parameter must be an instance of `PropertyParameter`");
         }
         this.parameters.push(parameter);
         return this;

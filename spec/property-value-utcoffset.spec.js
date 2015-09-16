@@ -1,7 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 
 describe("Property Value UTCOffset", function() {
-    it("should allow to set value from string", function() {
+    it("should allow to convert value from string", function() {
         //-- Arrange
         var content = "+0200";
         var propertyValue = new AwesomeICS.PropertyValue.UTCOffset();

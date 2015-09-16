@@ -1,7 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 
 describe("Parameter", function() {
-    it("should allow to set value from string", function() {
+    it("should allow to convert value from string", function() {
         //-- Arrange
         var content = "PARAMETER_NAME=PARAMETER_VALUE";
         var parameter = new AwesomeICS.PropertyParameter();
@@ -81,6 +81,15 @@ describe("Parameter", function() {
         expect(parameterSet).toBe(parameter);
     });
 
+    it("should allow only `String` as name", function() {
+        //-- Arrange
+        var name = 123;
+        var parameter = new AwesomeICS.PropertyParameter();
+
+        //-- Act & Assert
+        expect(function() { parameter.setName(name); }).toThrow();
+    });
+
     it("should allow to set value", function() {
         //-- Arrange
         var value = "PARAMETER_VALUE";
@@ -92,5 +101,42 @@ describe("Parameter", function() {
         //-- Assert
         expect(parameter.value).toEqual(value);
         expect(parameterSet).toBe(parameter);
+    });
+
+    it("should allow only `String` as value", function() {
+        //-- Arrange
+        var value = 123;
+        var parameter = new AwesomeICS.PropertyParameter();
+
+        //-- Act & Assert
+        expect(function() { parameter.setValue(value); }).toThrow();
+    });
+
+    it("should allow to clear the value", function() {
+        //-- Arrange
+        var content = "PROPERTY_NAME:PROPERTY_VALUE";
+        var parameter = new AwesomeICS.PropertyParameter().convertFromString(content);
+
+        //-- Act
+        var parameterCleared = parameter.clear();
+
+        //-- Assert
+        expect(parameter.name).toBeNull();
+        expect(parameter.value).toBeNull();
+        expect(parameterCleared).toBe(parameter);
+    });
+
+    it("should clear the value during empty string conversion", function() {
+        //-- Arrange
+        var content = "PROPERTY_NAME:PROPERTY_VALUE";
+        var parameter = new AwesomeICS.PropertyParameter().convertFromString(content);
+
+        //-- Act
+        var parameterCleared = parameter.convertFromString();
+
+        //-- Assert
+        expect(parameter.name).toBeNull();
+        expect(parameter.value).toBeNull();
+        expect(parameterCleared).toBe(parameter);
     });
 });

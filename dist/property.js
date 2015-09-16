@@ -94,6 +94,10 @@ var Property = (function () {
     }, {
         key: "setName",
         value: function setName(name) {
+            if (typeof name !== "string" && !(name instanceof String)) {
+                throw new Error("[Property] [setName()] The name must be an instance of `String`");
+            }
+
             this.name = name;
             return this;
         }
@@ -101,7 +105,7 @@ var Property = (function () {
         key: "setValue",
         value: function setValue(value) {
             if (!(value instanceof _propertyValue.PropertyValue) && !(value instanceof _propertyValue.PropertyMultipleValue)) {
-                throw new Error("[Property] [setValue()] The value should be an instance of `PropertyValue` or `PropertyMultipleValue` or any of their child classes");
+                throw new Error("[Property] [setValue()] The value must be an instance of `PropertyValue` or `PropertyMultipleValue`");
             }
 
             this.value = value;
@@ -111,7 +115,7 @@ var Property = (function () {
         key: "addParameter",
         value: function addParameter(parameter) {
             if (!(parameter instanceof _propertyParameter.PropertyParameter)) {
-                throw new Error("[Property] [addParameter()] The parameter should be an instance of `PropertyParameter`");
+                throw new Error("[Property] [addParameter()] The parameter must be an instance of `PropertyParameter`");
             }
             this.parameters.push(parameter);
             return this;

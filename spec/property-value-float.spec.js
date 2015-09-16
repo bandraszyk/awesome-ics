@@ -1,8 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 
 describe("Property Value Float", function() {
-
-    it("should allow to set value from string", function() {
+    it("should allow to convert value from string", function() {
         //-- Arrange
         var content = "7.68";
         var propertyValue = new AwesomeICS.PropertyValue.Float();

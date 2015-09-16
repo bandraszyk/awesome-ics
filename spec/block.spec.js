@@ -1,7 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 
 describe("Block", function() {
-    it("should allow to set value from string", function() {
+    it("should allow to convert value from string", function() {
         //-- Arrange
         var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";
         var block = new AwesomeICS.Block();
@@ -84,7 +84,7 @@ describe("Block", function() {
     it("should have one child block and one property", function() {
         //-- Arrange
         var content = "BEGIN:BLOCK_NAME\nPROPERTY_NAME:PROPERTY_VALUE\nBEGIN:BLOCK_CHILD\nEND:BLOCK_CHILD\nEND:BLOCK_NAME";
-        var block = new AwesomeICS.Block()
+        var block = new AwesomeICS.Block();
 
         //-- Act
         var blockConverted = block.convertFromString(content);
@@ -106,6 +106,15 @@ describe("Block", function() {
         //-- Assert
         expect(block.type).toEqual(type);
         expect(blockSet).toBe(block);
+    });
+
+    it("should allow only `String` as type", function() {
+        //-- Arrange
+        var type = 123;
+        var block = new AwesomeICS.Block();
+
+        //-- Act & Assert
+        expect(function() { block.setType(type); }).toThrow();
     });
 
     it("should allow to add child block", function() {
@@ -152,5 +161,35 @@ describe("Block", function() {
 
         //-- Act & Assert
         expect(function() { block.addProperty(child); }).toThrow();
+    });
+
+    it("should allow to clear the value", function() {
+        //-- Arrange
+        var content = "BEGIN:BLOCK_NAME\nPROPERTY_NAME:PROPERTY_VALUE\nBEGIN:BLOCK_CHILD\nEND:BLOCK_CHILD\nEND:BLOCK_NAME";
+        var block = new AwesomeICS.Block().convertFromString(content);
+
+        //-- Act
+        var blockCleared = block.clear();
+
+        //-- Assert
+        expect(block.type).toBeNull();
+        expect(block.properties.length).toEqual(0);
+        expect(block.blocks.length).toEqual(0);
+        expect(blockCleared).toBe(block);
+    });
+
+    it("should clear the value during empty string conversion", function() {
+        //-- Arrange
+        var content = "BEGIN:BLOCK_NAME\nPROPERTY_NAME:PROPERTY_VALUE\nBEGIN:BLOCK_CHILD\nEND:BLOCK_CHILD\nEND:BLOCK_NAME";
+        var block = new AwesomeICS.Block().convertFromString(content);
+
+        //-- Act
+        var blockCleared = block.convertFromString();
+
+        //-- Assert
+        expect(block.type).toBeNull();
+        expect(block.properties.length).toEqual(0);
+        expect(block.blocks.length).toEqual(0);
+        expect(blockCleared).toBe(block);
     });
 });

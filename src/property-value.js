@@ -12,11 +12,11 @@ export class PropertyValue {
         return this.value;
     }
     clear() {
-        this.value = null
+        this.value = null;
         return this;
     }
     setValue(value) {
-        this.value = value || null;
+        this.value = value;
         return this;
     }
     convertFromString(string) {
@@ -28,6 +28,10 @@ export class PropertyValue {
 
 export class PropertyMultipleValue {
     constructor(mapping) {
+        if (!mapping || typeof mapping !== "function" || !(new mapping() instanceof PropertyValue)) {
+            throw new Error("[PropertyMultipleValue] [constructor()] The mapping must be an instance of `PropertyValue`");
+        }
+
         this.mapping = mapping;
         this.clear();
     }
@@ -42,7 +46,11 @@ export class PropertyMultipleValue {
         return this.value.map(mapToJSON);
     }
     setValue(value) {
-        this.value = value || [];
+        if (!Array.isArray(value)) {
+            throw new Error("[PropertyMultipleValue] [setValue()] The value must be an array");
+        }
+
+        this.value = value;
         return this;
     }
     convertFromString(string) {
@@ -368,7 +376,7 @@ const valueParameterMapping = {
 };
 
 function getValueParameter(propertyParameters) {
-    if (!propertyParameters) { return; }
+    if (!propertyParameters || !propertyParameters.length) { return; }
 
     for (let i = 0; i < propertyParameters.length; i++) {
         if (propertyParameters[i].name === "VALUE") {

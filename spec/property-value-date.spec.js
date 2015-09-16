@@ -2,7 +2,7 @@ var AwesomeICS	= require("../dist/awesome-ics");
 var moment      = require("moment");
 
 describe("Property Value Date", function() {
-    it("should allow to set value from string", function() {
+    it("should allow to convert value from string", function() {
         //-- Arrange
         var content = "20150901";
         var propertyValue = new AwesomeICS.PropertyValue.Date();

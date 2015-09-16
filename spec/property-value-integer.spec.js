@@ -12,7 +12,7 @@ describe("Property Value Integer", function() {
         expect(propertyValue.value).toBeNull();
     });
 
-    it("should allow to set value from string", function() {
+    it("should allow to convert value from string", function() {
         //-- Arrange
         var content = "7";
         var propertyValue = new AwesomeICS.PropertyValue.Integer().convertFromString(content);

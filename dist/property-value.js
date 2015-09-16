@@ -48,7 +48,7 @@ var PropertyValue = (function () {
     }, {
         key: "setValue",
         value: function setValue(value) {
-            this.value = value || null;
+            this.value = value;
             return this;
         }
     }, {
@@ -70,6 +70,10 @@ exports.PropertyValue = PropertyValue;
 var PropertyMultipleValue = (function () {
     function PropertyMultipleValue(mapping) {
         _classCallCheck(this, PropertyMultipleValue);
+
+        if (!mapping || typeof mapping !== "function" || !(new mapping() instanceof PropertyValue)) {
+            throw new Error("[PropertyMultipleValue] [constructor()] The mapping must be an instance of `PropertyValue`");
+        }
 
         this.mapping = mapping;
         this.clear();
@@ -94,7 +98,11 @@ var PropertyMultipleValue = (function () {
     }, {
         key: "setValue",
         value: function setValue(value) {
-            this.value = value || [];
+            if (!Array.isArray(value)) {
+                throw new Error("[PropertyMultipleValue] [setValue()] The value must be an array");
+            }
+
+            this.value = value;
             return this;
         }
     }, {
@@ -674,7 +682,7 @@ var valueParameterMapping = {
 };
 
 function getValueParameter(propertyParameters) {
-    if (!propertyParameters) {
+    if (!propertyParameters || !propertyParameters.length) {
         return;
     }
 

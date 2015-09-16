@@ -30,10 +30,6 @@ var Block = (function () {
     }, {
         key: "toString",
         value: function toString() {
-            if (this.error) {
-                return this.error;
-            }
-
             var properties = "";
             var blocks = "";
 
@@ -49,10 +45,6 @@ var Block = (function () {
     }, {
         key: "toJSON",
         value: function toJSON() {
-            if (this.error) {
-                return { error: this.error };
-            }
-
             return {
                 type: this.type,
                 properties: this.properties.map(_util.mapToJSON),
@@ -108,6 +100,10 @@ var Block = (function () {
     }, {
         key: "setType",
         value: function setType(type) {
+            if (typeof type !== "string" && !(type instanceof String)) {
+                throw new Error("[Block] [setType()] The type must be an instance of `String`");
+            }
+
             this.type = type;
             return this;
         }
@@ -115,7 +111,7 @@ var Block = (function () {
         key: "addBlock",
         value: function addBlock(block) {
             if (!(block instanceof Block)) {
-                throw new Error("[Block] [addBlock()] The block should be an instance of `Block`");
+                throw new Error("[Block] [addBlock()] The block must be an instance of `Block`");
             }
 
             this.blocks.push(block);
@@ -125,7 +121,7 @@ var Block = (function () {
         key: "addProperty",
         value: function addProperty(property) {
             if (!(property instanceof _property.Property)) {
-                throw new Error("[Block] [addProperty()] The property should be an instance of `Block`");
+                throw new Error("[Block] [addProperty()] The property must be an instance of `Property`");
             }
 
             this.properties.push(property);
