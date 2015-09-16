@@ -157,12 +157,46 @@ export class DateTime extends PropertyValue {
 
         return this;
     }
+    setValue(value) {
+        if (typeof value !== "object") {
+            throw new Error("[DateTime] [setValue()] The value must be an instance of `Object`");
+        }
+
+        super.setValue(value);
+
+        if (value.date) { this.setDate(value.date); }
+        if (value.time) { this.setTime(value.time); }
+
+        return this;
+    }
     setDate(date) {
+        if (!(date instanceof Date)) {
+            throw new Error("[DateTime] [setDate()] The date must be an instance of `Date`");
+        }
+
         this.value.date = date;
         return this;
     }
     setTime(time) {
+        if (!(time instanceof Time)) {
+            throw new Error("[DateTime] [setTime()] The time must be an instance of `Time`");
+        }
+
         this.value.time = time;
+        return this;
+    }
+    setDateValue(date) {
+        this.value.date = new Date().setValue(date);
+        return this;
+    }
+    setTimeValue(time) {
+        if (!this.value.time) { this.value.time = new Time(); }
+        this.value.time.setTime(time);
+        return this;
+    }
+    setIsFixedValue(isFixed) {
+        if (!this.value.time) { this.value.time = new Time(); }
+        this.value.time = new Time().setIsFixed(isFixed);
         return this;
     }
 }
@@ -219,16 +253,41 @@ export class Geo extends PropertyValue {
 
         return this;
     }
+    setValue(value) {
+        if (typeof value !== "object") {
+            throw new Error("[Geo] [setValue()] The value must be an instance of `Object`");
+        }
+
+        super.setValue(value);
+
+        if (value.latitude) { this.setLatitude(value.latitude); }
+        if (value.longitude) { this.setLatitude(value.longitude); }
+
+        return this;
+    }
     setLatitude(latitude) {
-        this.value.latitude.setValue(latitude);
+        if (!(latitude instanceof Float)) {
+            throw new Error("[Geo] [setLatitude()] The latitude must be an instance of `Float`");
+        }
+
+        this.value.latitude = latitude;
         return this;
     }
     setLongitude(longitude) {
-        this.value.longitude.setValue(longitude);
+        if (!(longitude instanceof Float)) {
+            throw new Error("[Geo] [setLongitude()] The longitude must be an instance of `Float`");
+        }
+
+        this.value.longitude = longitude;
         return this;
     }
-    setLocation(latitude, longitude) {
-        return this.setLatitude(latitude).setLongitude(longitude);
+    setLatitudeValue(latitude) {
+        this.value.latitude = new Float().setValue(latitude);
+        return this;
+    }
+    setLongitudeValue(longitude) {
+        this.value.longitude = new Float().setValue(longitude);
+        return this;
     }
 }
 
@@ -290,11 +349,32 @@ export class Time extends PropertyValue {
 
         return this;
     }
+    setValue(value) {
+        if (typeof value !== 'object') {
+            throw new Error("[Time] [setValue()] The value must be an instance of `Object`");
+        }
+
+        // TODO: object should be cloned
+        super.setValue(value);
+
+        if (value.time) { this.setTime(value.time); }
+        if (value.isFixed) { this.setIsFixed(value.isFixed); }
+
+        return this;
+    }
     setTime(time) {
+        if (!moment.isMoment(time)) {
+            throw new Error("[Time] [setTime()] The time must be an instance of `Moment`");
+        }
+
         this.value.time = time;
         return this;
     }
     setIsFixed(isFixed) {
+        if (typeof isFixed !== "boolean" && !(isFixed instanceof Boolean)) {
+            throw new Error("[Time] [setIsFixed()] The isFixed must be an instance of `Boolean`");
+        }
+
         this.value.isFixed = isFixed;
         return this;
     }

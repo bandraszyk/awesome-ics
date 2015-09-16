@@ -300,15 +300,65 @@ var DateTime = (function (_PropertyValue5) {
             return this;
         }
     }, {
+        key: "setValue",
+        value: function setValue(value) {
+            if (typeof value !== "object") {
+                throw new Error("[DateTime] [setValue()] The value must be an instance of `Object`");
+            }
+
+            _get(Object.getPrototypeOf(DateTime.prototype), "setValue", this).call(this, value);
+
+            if (value.date) {
+                this.setDate(value.date);
+            }
+            if (value.time) {
+                this.setTime(value.time);
+            }
+
+            return this;
+        }
+    }, {
         key: "setDate",
         value: function setDate(date) {
+            if (!(date instanceof Date)) {
+                throw new Error("[DateTime] [setDate()] The date must be an instance of `Date`");
+            }
+
             this.value.date = date;
             return this;
         }
     }, {
         key: "setTime",
         value: function setTime(time) {
+            if (!(time instanceof Time)) {
+                throw new Error("[DateTime] [setTime()] The time must be an instance of `Time`");
+            }
+
             this.value.time = time;
+            return this;
+        }
+    }, {
+        key: "setDateValue",
+        value: function setDateValue(date) {
+            this.value.date = new Date().setValue(date);
+            return this;
+        }
+    }, {
+        key: "setTimeValue",
+        value: function setTimeValue(time) {
+            if (!this.value.time) {
+                this.value.time = new Time();
+            }
+            this.value.time.setTime(time);
+            return this;
+        }
+    }, {
+        key: "setIsFixedValue",
+        value: function setIsFixedValue(isFixed) {
+            if (!this.value.time) {
+                this.value.time = new Time();
+            }
+            this.value.time = new Time().setIsFixed(isFixed);
             return this;
         }
     }]);
@@ -420,21 +470,54 @@ var Geo = (function (_PropertyValue8) {
             return this;
         }
     }, {
+        key: "setValue",
+        value: function setValue(value) {
+            if (typeof value !== "object") {
+                throw new Error("[Geo] [setValue()] The value must be an instance of `Object`");
+            }
+
+            _get(Object.getPrototypeOf(Geo.prototype), "setValue", this).call(this, value);
+
+            if (value.latitude) {
+                this.setLatitude(value.latitude);
+            }
+            if (value.longitude) {
+                this.setLatitude(value.longitude);
+            }
+
+            return this;
+        }
+    }, {
         key: "setLatitude",
         value: function setLatitude(latitude) {
-            this.value.latitude.setValue(latitude);
+            if (!(latitude instanceof Float)) {
+                throw new Error("[Geo] [setLatitude()] The latitude must be an instance of `Float`");
+            }
+
+            this.value.latitude = latitude;
             return this;
         }
     }, {
         key: "setLongitude",
         value: function setLongitude(longitude) {
-            this.value.longitude.setValue(longitude);
+            if (!(longitude instanceof Float)) {
+                throw new Error("[Geo] [setLongitude()] The longitude must be an instance of `Float`");
+            }
+
+            this.value.longitude = longitude;
             return this;
         }
     }, {
-        key: "setLocation",
-        value: function setLocation(latitude, longitude) {
-            return this.setLatitude(latitude).setLongitude(longitude);
+        key: "setLatitudeValue",
+        value: function setLatitudeValue(latitude) {
+            this.value.latitude = new Float().setValue(latitude);
+            return this;
+        }
+    }, {
+        key: "setLongitudeValue",
+        value: function setLongitudeValue(longitude) {
+            this.value.longitude = new Float().setValue(longitude);
+            return this;
         }
     }]);
 
@@ -574,14 +657,39 @@ var Time = (function (_PropertyValue13) {
             return this;
         }
     }, {
+        key: "setValue",
+        value: function setValue(value) {
+            if (typeof value !== 'object') {
+                throw new Error("[Time] [setValue()] The value must be an instance of `Object`");
+            }
+            _get(Object.getPrototypeOf(Time.prototype), "setValue", this).call(this, value);
+
+            if (value.time) {
+                this.setTime(value.time);
+            }
+            if (value.isFixed) {
+                this.setIsFixed(value.isFixed);
+            }
+
+            return this;
+        }
+    }, {
         key: "setTime",
         value: function setTime(time) {
+            if (!_moment2["default"].isMoment(time)) {
+                throw new Error("[Time] [setTime()] The time must be an instance of `Moment`");
+            }
+
             this.value.time = time;
             return this;
         }
     }, {
         key: "setIsFixed",
         value: function setIsFixed(isFixed) {
+            if (typeof isFixed !== "boolean" && !(isFixed instanceof Boolean)) {
+                throw new Error("[Time] [setIsFixed()] The isFixed must be an instance of `Boolean`");
+            }
+
             this.value.isFixed = isFixed;
             return this;
         }
