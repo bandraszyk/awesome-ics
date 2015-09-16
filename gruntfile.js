@@ -13,12 +13,12 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    "dist/awesome-ics.js"        : "src/awesome-ics.js",
-                    "dist/block.js"              : "src/block.js",
-                    "dist/property.js"           : "src/property.js",
-                    "dist/property-parameter.js" : "src/property-parameter.js",
+                    "dist/util.js"               : "src/util.js",
                     "dist/property-value.js"     : "src/property-value.js",
-                    "dist/util.js"               : "src/util.js"
+                    "dist/property-parameter.js" : "src/property-parameter.js",
+                    "dist/property.js"           : "src/property.js",
+                    "dist/block.js"              : "src/block.js",
+                    "dist/awesome-ics.js"        : "src/awesome-ics.js"
                 }
             }
         },

@@ -4,82 +4,153 @@ describe("Block", function() {
     it("should allow to set value from string", function() {
         //-- Arrange
         var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";
-        var block = new AwesomeICS.Elements.Block();
+        var block = new AwesomeICS.Block();
 
         //-- Act
-        var blockSetResult = block.convertFromString(content);
+        var blockConverted = block.convertFromString(content);
 
         //-- Assert
-        expect(blockSetResult).toBe(block);
         expect(block.toString()).toEqual(content);
+        expect(blockConverted).toBe(block);
     });
 
     it("should be empty", function() {
         //-- Arrange
         var content = undefined;
+        var block = new AwesomeICS.Block();
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block().convertFromString(content);
+        var blockConverted = block.convertFromString(content);
 
         //-- Assert
         expect(block.properties.length).toEqual(0);
         expect(block.blocks.length).toEqual(0);
         expect(block.type).toBeNull();
+        expect(blockConverted).toBe(block);
     });
 
     it("should return same string value", function() {
         //-- Arrange
         var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";
+        var block = new AwesomeICS.Block();
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block().convertFromString(content);
+        var blockConverted = block.convertFromString(content);
 
         //-- Assert
         expect(block.toString()).toEqual(content);
+        expect(blockConverted).toBe(block);
     });
 
     it("should have type", function() {
         //-- Arrange
         var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";
+        var block = new AwesomeICS.Block();
 
         //-- Act
-        var calendar = new AwesomeICS.Elements.Block().convertFromString(content);
+        var blockConverted = block.convertFromString(content);
 
         //-- Assert
-        expect(calendar.type).toEqual("BLOCK_NAME");
+        expect(block.type).toEqual("BLOCK_NAME");
+        expect(blockConverted).toBe(block);
     });
 
     it("should have one property", function() {
         //-- Arrange
         var content = "BEGIN:BLOCK_NAME\nPROPERTY_NAME:PROPERTY_VALUE\nEND:BLOCK_NAME";
+        var block = new AwesomeICS.Block();
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block().convertFromString(content);
+        var blockConverted = block.convertFromString(content);
 
         //-- Assert
         expect(block.properties.length).toEqual(1);
+        expect(blockConverted).toBe(block);
     });
 
     it("should have one child block", function() {
         //-- Arrange
         var content = "BEGIN:BLOCK_NAME\nBEGIN:BLOCK_CHILD\nEND:BLOCK_CHILD\nEND:BLOCK_NAME";
+        var block = new AwesomeICS.Block();
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block().convertFromString(content);
+        var blockConverted = block.convertFromString(content);
 
         //-- Assert
         expect(block.blocks.length).toEqual(1);
+        expect(blockConverted).toBe(block);
     });
 
     it("should have one child block and one property", function() {
         //-- Arrange
         var content = "BEGIN:BLOCK_NAME\nPROPERTY_NAME:PROPERTY_VALUE\nBEGIN:BLOCK_CHILD\nEND:BLOCK_CHILD\nEND:BLOCK_NAME";
+        var block = new AwesomeICS.Block()
 
         //-- Act
-        var block = new AwesomeICS.Elements.Block().convertFromString(content);
+        var blockConverted = block.convertFromString(content);
 
         //-- Assert
         expect(block.properties.length).toEqual(1);
         expect(block.blocks.length).toEqual(1);
+        expect(blockConverted).toBe(block);
+    });
+
+    it("should allow to set type", function() {
+        //-- Arrange
+        var type = "EVENT";
+        var block = new AwesomeICS.Block();
+
+        //-- Act
+        var blockSet = block.setType(type);
+
+        //-- Assert
+        expect(block.type).toEqual(type);
+        expect(blockSet).toBe(block);
+    });
+
+    it("should allow to add child block", function() {
+        //-- Arrange
+        var child = new AwesomeICS.Block();
+        var block = new AwesomeICS.Block();
+
+        //-- Act
+        var blockWithChild = block.addBlock(child);
+
+        //-- Assert
+        expect(block.blocks.length).toEqual(1);
+        expect(block.blocks[0]).toBe(child);
+        expect(blockWithChild).toBe(block);
+    });
+
+    it("should allow only `Block` to be added to blocks", function() {
+        //-- Arrange
+        var child = "Invalid Child Block";
+        var block = new AwesomeICS.Block();
+
+        //-- Act & Assert
+        expect(function() { block.addBlock(child); }).toThrow();
+    });
+
+    it("should allow to add property", function() {
+        //-- Arrange
+        var property = new AwesomeICS.Property();
+        var block = new AwesomeICS.Block();
+
+        //-- Act
+        var blockWithProperty = block.addProperty(property);
+
+        //-- Assert
+        expect(block.properties.length).toEqual(1);
+        expect(block.properties[0]).toBe(property);
+        expect(blockWithProperty).toBe(block);
+    });
+
+    it("should allow only `Property` to be added to properties", function() {
+        //-- Arrange
+        var child = "Invalid Child Parameter";
+        var block = new AwesomeICS.Block();
+
+        //-- Act & Assert
+        expect(function() { block.addProperty(child); }).toThrow();
     });
 });

@@ -4,7 +4,7 @@ describe("Property MultipleValue", function() {
     it("should allow to set value from string", function() {
         //-- Arrange
         var content = "Parameter_Value";
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.MultipleValue(AwesomeICS.Elements.PropertyValue.Value);
+        var propertyValue = new AwesomeICS.PropertyValue.MultipleValue(AwesomeICS.PropertyValue.Value);
 
         //-- Act
         var propertyValueSetResult = propertyValue.convertFromString(content);
@@ -19,7 +19,7 @@ describe("Property MultipleValue", function() {
         var content = undefined;
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.MultipleValue(AwesomeICS.Elements.PropertyValue.Value).convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.MultipleValue(AwesomeICS.PropertyValue.Value).convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.length).toEqual(0);
@@ -30,7 +30,7 @@ describe("Property MultipleValue", function() {
         var content = "Parameter_Value";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.MultipleValue(AwesomeICS.Elements.PropertyValue.Value).convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.MultipleValue(AwesomeICS.PropertyValue.Value).convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.length).toEqual(1);
@@ -41,11 +41,11 @@ describe("Property MultipleValue", function() {
         var content = "Parameter_Value";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.MultipleValue(AwesomeICS.Elements.PropertyValue.Value).convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.MultipleValue(AwesomeICS.PropertyValue.Value).convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.length).toEqual(1);
-        expect(propertyValue.value[0] instanceof AwesomeICS.Elements.PropertyValue.Value).toBeTruthy();
+        expect(propertyValue.value[0] instanceof AwesomeICS.PropertyValue.Value).toBeTruthy();
     });
 
     it("should contain two value", function() {
@@ -53,7 +53,7 @@ describe("Property MultipleValue", function() {
         var content = "Parameter_Value1,Parameter_Value2";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.MultipleValue(AwesomeICS.Elements.PropertyValue.Value).convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.MultipleValue(AwesomeICS.PropertyValue.Value).convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.length).toEqual(2);
@@ -64,7 +64,7 @@ describe("Property MultipleValue", function() {
         var content = "Parameter_Value";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.MultipleValue(AwesomeICS.Elements.PropertyValue.Value).convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.MultipleValue(AwesomeICS.PropertyValue.Value).convertFromString(content);
 
         //-- Assert
         expect(propertyValue.toString()).toEqual(content);

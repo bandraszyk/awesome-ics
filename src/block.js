@@ -1,5 +1,5 @@
 import { Property } from "./property";
-import { mapToJSON, mapToString, splitSafeLines, setError, trim, removePattern, isEmptyString } from "./util";
+import { mapToJSON, mapToString, splitSafeLines, trim, removePattern, isEmptyString } from "./util";
 
 export class Block {
     constructor() {
@@ -43,14 +43,18 @@ export class Block {
         let blockEnd = trim(lines.pop() || "");
 
         //-- Validate block start
-        if (!Block.__format.regexBlockBegin.test(blockBegin)) { return setError(this, "Cannot load Block element, first line should match /^BEGIN:/i."); }
+        if (!Block.__format.regexBlockBegin.test(blockBegin)) {
+            throw new Error("[Block] [convertFromString()] Cannot load Block element, first line should match /^BEGIN:/i.");
+        }
 
         //-- Validate block end
-        if (!Block.__format.regexBlockEnd.test(blockEnd)) { return setError(this, "Cannot load Block elements, last line should match /^END:/i."); }
+        if (!Block.__format.regexBlockEnd.test(blockEnd)) {
+            throw new Error("[Block] [convertFromString()] Cannot load Block elements, last line should match /^END:/i.");
+        }
 
         //-- Validate the name
         if (removePattern(blockBegin, Block.__format.regexBlockBegin) !== removePattern(blockEnd, Block.__format.regexBlockEnd)) {
-            return setError(this, "Cannot load Block elements, block doesn't have and end.");
+            throw new Error("[Block] [convertFromString()] Cannot load Block elements, block doesn't have the end.");
         }
 
         //-- Set the name
@@ -89,11 +93,19 @@ export class Block {
         return this;
     }
     addBlock(block) {
-        if (block instanceof Block) { this.blocks.push(block); }
+        if (!(block instanceof Block)) {
+            throw new Error("[Block] [addBlock()] The block should be an instance of `Block`");
+        }
+
+        this.blocks.push(block);
         return this;
     }
     addProperty(property) {
-        if (property instanceof Property) { this.properties.push(property); }
+        if (!(property instanceof Property)) {
+            throw new Error("[Block] [addProperty()] The property should be an instance of `Block`");
+        }
+
+        this.properties.push(property);
         return this;
     }
 }

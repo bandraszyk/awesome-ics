@@ -18,8 +18,8 @@ var _propertyParameter = require("./property-parameter");
 
 var _propertyValue = require("./property-value");
 
-var Calendar = (function (_Block) {
-    _inherits(Calendar, _Block);
+var Calendar = (function (_BlockType) {
+    _inherits(Calendar, _BlockType);
 
     function Calendar() {
         _classCallCheck(this, Calendar);
@@ -32,28 +32,29 @@ var Calendar = (function (_Block) {
 })(_block.Block);
 
 exports.Calendar = Calendar;
-var Elements = {
-    Block: _block.Block,
-    Property: _property.Property,
-    PropertyParameter: _propertyParameter.PropertyParameter,
-    PropertyValue: {
-        Value: _propertyValue.PropertyValue,
-        MultipleValue: _propertyValue.PropertyMultipleValue,
-        Binary: _propertyValue.Binary,
-        Boolean: _propertyValue.Boolean,
-        CalendarUserAddress: _propertyValue.CalendarUserAddress,
-        Date: _propertyValue.Date,
-        DateTime: _propertyValue.DateTime,
-        Duration: _propertyValue.Duration,
-        Float: _propertyValue.Float,
-        Geo: _propertyValue.Geo,
-        Integer: _propertyValue.Integer,
-        PeriodOfTime: _propertyValue.PeriodOfTime,
-        RecurrenceRule: _propertyValue.RecurrenceRule,
-        Text: _propertyValue.Text,
-        Time: _propertyValue.Time,
-        URI: _propertyValue.URI,
-        UTCOffset: _propertyValue.UTCOffset
-    }
+var Block = _block.Block;
+exports.Block = Block;
+var Property = _property.Property;
+exports.Property = Property;
+var PropertyParameter = _propertyParameter.PropertyParameter;
+exports.PropertyParameter = PropertyParameter;
+var PropertyValue = {
+    Value: _propertyValue.PropertyValue,
+    MultipleValue: _propertyValue.PropertyMultipleValue,
+    Binary: _propertyValue.Binary,
+    Boolean: _propertyValue.Boolean,
+    CalendarUserAddress: _propertyValue.CalendarUserAddress,
+    Date: _propertyValue.Date,
+    DateTime: _propertyValue.DateTime,
+    Duration: _propertyValue.Duration,
+    Float: _propertyValue.Float,
+    Geo: _propertyValue.Geo,
+    Integer: _propertyValue.Integer,
+    PeriodOfTime: _propertyValue.PeriodOfTime,
+    RecurrenceRule: _propertyValue.RecurrenceRule,
+    Text: _propertyValue.Text,
+    Time: _propertyValue.Time,
+    URI: _propertyValue.URI,
+    UTCOffset: _propertyValue.UTCOffset
 };
-exports.Elements = Elements;
+exports.PropertyValue = PropertyValue;

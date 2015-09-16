@@ -6,7 +6,7 @@ describe("Property Value Integer", function() {
         var content = undefined;
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Integer().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Integer().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value).toBeNull();
@@ -15,7 +15,7 @@ describe("Property Value Integer", function() {
     it("should allow to set value from string", function() {
         //-- Arrange
         var content = "7";
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Integer().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Integer().convertFromString(content);
 
         //-- Act
         var propertyValueSetResult = propertyValue.convertFromString(content);
@@ -30,7 +30,7 @@ describe("Property Value Integer", function() {
         var content = "7";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Integer().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Integer().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value).toEqual(7);
@@ -41,7 +41,7 @@ describe("Property Value Integer", function() {
         var content = "AWESOME";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Integer().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Integer().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value).toEqual(NaN);
@@ -52,7 +52,7 @@ describe("Property Value Integer", function() {
         var content = "7";
 
         //-- property
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Integer().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Integer().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.toString()).toEqual(content);

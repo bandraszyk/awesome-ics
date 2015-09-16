@@ -10,9 +10,12 @@ export class Property {
         this.parameters = [];
         this.name       = null;
         this.value      = null;
+        this.error      = undefined;
         return this;
     }
     toString() {
+        if (this.error) { return this.error; }
+
         let name = this.name;
 
         if (this.parameters.length) {
@@ -33,6 +36,8 @@ export class Property {
         return returnValue;
     }
     toJSON() {
+        if (this.error) { return { error: this.error }; }
+
         return {
             name        : this.name,
             parameters  : this.parameters.map(mapToJSON),
@@ -60,11 +65,18 @@ export class Property {
         return this;
     }
     setValue(value) {
-        if (value instanceof PropertyValue || value instanceof PropertyMultipleValue) { this.value = value; }
+        if (!(value instanceof PropertyValue) && !(value instanceof PropertyMultipleValue)) {
+            throw new Error("[Property] [setValue()] The value should be an instance of `PropertyValue` or `PropertyMultipleValue` or any of their child classes");
+        }
+
+        this.value = value;
         return this;
     }
     addParameter(parameter) {
-        if (parameter instanceof PropertyParameter) { this.parameters.push(parameter); }
+        if (!(parameter instanceof PropertyParameter)) {
+            throw new Error("[Property] [addParameter()] The parameter should be an instance of `PropertyParameter`");
+        }
+        this.parameters.push(parameter);
         return this;
     }
 }

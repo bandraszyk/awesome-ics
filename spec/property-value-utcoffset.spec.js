@@ -4,7 +4,7 @@ describe("Property Value UTCOffset", function() {
     it("should allow to set value from string", function() {
         //-- Arrange
         var content = "+0200";
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.UTCOffset();
+        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset();
 
         //-- Act
         var propertyValueSetResult = propertyValue.convertFromString(content);
@@ -19,7 +19,7 @@ describe("Property Value UTCOffset", function() {
         var content = undefined;
 
         //-- Act
-        var property = new AwesomeICS.Elements.PropertyValue.UTCOffset().convertFromString(content);
+        var property = new AwesomeICS.PropertyValue.UTCOffset().convertFromString(content);
 
         //-- Assert
         expect(property.value).toBeNull();
@@ -30,7 +30,7 @@ describe("Property Value UTCOffset", function() {
         var content = "AWESOME";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.UTCOffset().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.utcOffset()).toEqual(0);
@@ -41,7 +41,7 @@ describe("Property Value UTCOffset", function() {
         var content = "+0200";
 
         //-- property
-        var property = new AwesomeICS.Elements.PropertyValue.UTCOffset().convertFromString(content);
+        var property = new AwesomeICS.PropertyValue.UTCOffset().convertFromString(content);
 
         //-- Assert
         expect(property.toString()).toEqual(content);
@@ -52,7 +52,7 @@ describe("Property Value UTCOffset", function() {
         var content = "-0200";
 
         //-- property
-        var property = new AwesomeICS.Elements.PropertyValue.UTCOffset().convertFromString(content);
+        var property = new AwesomeICS.PropertyValue.UTCOffset().convertFromString(content);
 
         //-- Assert
         expect(property.toString()).toEqual(content);
@@ -63,7 +63,7 @@ describe("Property Value UTCOffset", function() {
         var content = "-0200";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.UTCOffset().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.isValid()).toBeTruthy();
@@ -74,7 +74,7 @@ describe("Property Value UTCOffset", function() {
         var content = "20150901";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Date().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Date().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.format("YYYY-MM-DD")).toEqual("2015-09-01");

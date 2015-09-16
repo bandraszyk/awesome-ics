@@ -27,11 +27,16 @@ var Property = (function () {
             this.parameters = [];
             this.name = null;
             this.value = null;
+            this.error = undefined;
             return this;
         }
     }, {
         key: "toString",
         value: function toString() {
+            if (this.error) {
+                return this.error;
+            }
+
             var name = this.name;
 
             if (this.parameters.length) {
@@ -54,6 +59,10 @@ var Property = (function () {
     }, {
         key: "toJSON",
         value: function toJSON() {
+            if (this.error) {
+                return { error: this.error };
+            }
+
             return {
                 name: this.name,
                 parameters: this.parameters.map(_util.mapToJSON),
@@ -91,17 +100,20 @@ var Property = (function () {
     }, {
         key: "setValue",
         value: function setValue(value) {
-            if (value instanceof _propertyValue.PropertyValue || value instanceof _propertyValue.PropertyMultipleValue) {
-                this.value = value;
+            if (!(value instanceof _propertyValue.PropertyValue) && !(value instanceof _propertyValue.PropertyMultipleValue)) {
+                throw new Error("[Property] [setValue()] The value should be an instance of `PropertyValue` or `PropertyMultipleValue` or any of their child classes");
             }
+
+            this.value = value;
             return this;
         }
     }, {
         key: "addParameter",
         value: function addParameter(parameter) {
-            if (parameter instanceof _propertyParameter.PropertyParameter) {
-                this.parameters.push(parameter);
+            if (!(parameter instanceof _propertyParameter.PropertyParameter)) {
+                throw new Error("[Property] [addParameter()] The parameter should be an instance of `PropertyParameter`");
             }
+            this.parameters.push(parameter);
             return this;
         }
     }]);

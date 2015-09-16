@@ -7,7 +7,6 @@ exports.trim = trim;
 exports.removePattern = removePattern;
 exports.mapToString = mapToString;
 exports.mapToJSON = mapToJSON;
-exports.setError = setError;
 exports.splitSafe = splitSafe;
 exports.splitSafeLines = splitSafeLines;
 exports.isEmptyString = isEmptyString;
@@ -27,10 +26,6 @@ function mapToString(entry) {
 
 function mapToJSON(entry) {
     return entry.toJSON();
-}
-
-function setError(object, message) {
-    object.error = message;
 }
 
 function splitSafe(text, separator) {

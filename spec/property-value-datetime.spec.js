@@ -4,7 +4,7 @@ describe("Property Value DateTime", function() {
     it("should allow to set value from string", function() {
         //-- Arrange
         var content = "20150901T061545";
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.DateTime().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.DateTime().convertFromString(content);
 
         //-- Act
         var propertyValueSetResult = propertyValue.convertFromString(content);
@@ -19,7 +19,7 @@ describe("Property Value DateTime", function() {
         var content = undefined;
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.DateTime().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.DateTime().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.date).toBeNull();
@@ -31,11 +31,11 @@ describe("Property Value DateTime", function() {
         var content = "20150901T061545";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.DateTime().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.DateTime().convertFromString(content);
 
         //-- Assert
-        expect(propertyValue.value.date instanceof AwesomeICS.Elements.PropertyValue.Date).toBeTruthy();
-        expect(propertyValue.value.time instanceof AwesomeICS.Elements.PropertyValue.Time).toBeTruthy();
+        expect(propertyValue.value.date instanceof AwesomeICS.PropertyValue.Date).toBeTruthy();
+        expect(propertyValue.value.time instanceof AwesomeICS.PropertyValue.Time).toBeTruthy();
     });
 
     it("should return same string value", function() {
@@ -43,7 +43,7 @@ describe("Property Value DateTime", function() {
         var content = "20150901T061545";
 
         //-- property
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.DateTime().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.DateTime().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.toString()).toEqual(content);

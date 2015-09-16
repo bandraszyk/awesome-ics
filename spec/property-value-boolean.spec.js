@@ -4,7 +4,7 @@ describe("Property Value Boolean", function() {
     it("should allow to set value from string", function() {
         //-- Arrange
         var content = "TRUE";
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean();
+        var propertyValue = new AwesomeICS.PropertyValue.Boolean();
 
         //-- Act
         var propertyValueSetResult = propertyValue.convertFromString(content);
@@ -19,7 +19,7 @@ describe("Property Value Boolean", function() {
         var content = undefined;
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Boolean().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value).toBeNull();
@@ -30,7 +30,7 @@ describe("Property Value Boolean", function() {
         var content = "TRUE";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean().convertFromString(content)
+        var propertyValue = new AwesomeICS.PropertyValue.Boolean().convertFromString(content)
 
         //-- Assert
         expect(propertyValue.toString()).toEqual(content);
@@ -41,7 +41,7 @@ describe("Property Value Boolean", function() {
         var content = "AWESOME";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean().convertFromString(content)
+        var propertyValue = new AwesomeICS.PropertyValue.Boolean().convertFromString(content)
 
         //-- Assert
         expect(propertyValue.value).toBeNull();
@@ -52,7 +52,7 @@ describe("Property Value Boolean", function() {
         var content = "TRUE";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean().convertFromString(content)
+        var propertyValue = new AwesomeICS.PropertyValue.Boolean().convertFromString(content)
 
         //-- Assert
         expect(propertyValue.value).toEqual(true);
@@ -63,7 +63,7 @@ describe("Property Value Boolean", function() {
         var content = "FALSE";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Boolean().convertFromString(content)
+        var propertyValue = new AwesomeICS.PropertyValue.Boolean().convertFromString(content)
 
         //-- Assert
         expect(propertyValue.value).toEqual(false);

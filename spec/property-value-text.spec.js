@@ -4,7 +4,7 @@ describe("Property Value Text", function() {
     it("should allow to set value from string", function() {
         //-- Arrange
         var content = "Property_Value";
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text();
+        var propertyValue = new AwesomeICS.PropertyValue.Text();
 
         //-- Act
         var propertyValueSetResult = propertyValue.convertFromString(content);
@@ -19,7 +19,7 @@ describe("Property Value Text", function() {
         var content = undefined;
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Text().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value).toBeNull();
@@ -30,7 +30,7 @@ describe("Property Value Text", function() {
         var content = "Property_Value";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Text().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value).toEqual("Property_Value");
@@ -41,7 +41,7 @@ describe("Property Value Text", function() {
         var content = "Property_Value";
 
         //-- property
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Text().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Text().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.toString()).toEqual(content);

@@ -72,13 +72,13 @@ var Block = (function () {
             var blockBegin = (0, _util.trim)(lines.shift() || "");
             var blockEnd = (0, _util.trim)(lines.pop() || "");
             if (!Block.__format.regexBlockBegin.test(blockBegin)) {
-                return (0, _util.setError)(this, "Cannot load Block element, first line should match /^BEGIN:/i.");
+                throw new Error("[Block] [convertFromString()] Cannot load Block element, first line should match /^BEGIN:/i.");
             }
             if (!Block.__format.regexBlockEnd.test(blockEnd)) {
-                return (0, _util.setError)(this, "Cannot load Block elements, last line should match /^END:/i.");
+                throw new Error("[Block] [convertFromString()] Cannot load Block elements, last line should match /^END:/i.");
             }
             if ((0, _util.removePattern)(blockBegin, Block.__format.regexBlockBegin) !== (0, _util.removePattern)(blockEnd, Block.__format.regexBlockEnd)) {
-                return (0, _util.setError)(this, "Cannot load Block elements, block doesn't have and end.");
+                throw new Error("[Block] [convertFromString()] Cannot load Block elements, block doesn't have the end.");
             }
             this.type = (0, _util.removePattern)(blockBegin, Block.__format.regexBlockBegin);
 
@@ -114,17 +114,21 @@ var Block = (function () {
     }, {
         key: "addBlock",
         value: function addBlock(block) {
-            if (block instanceof Block) {
-                this.blocks.push(block);
+            if (!(block instanceof Block)) {
+                throw new Error("[Block] [addBlock()] The block should be an instance of `Block`");
             }
+
+            this.blocks.push(block);
             return this;
         }
     }, {
         key: "addProperty",
         value: function addProperty(property) {
-            if (property instanceof _property.Property) {
-                this.properties.push(property);
+            if (!(property instanceof _property.Property)) {
+                throw new Error("[Block] [addProperty()] The property should be an instance of `Block`");
             }
+
+            this.properties.push(property);
             return this;
         }
     }]);

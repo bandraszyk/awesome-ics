@@ -4,7 +4,7 @@ describe("Property Value Time", function() {
     it("should allow to set value from string", function() {
         //-- Arrange
         var content = "061545";
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Time();
+        var propertyValue = new AwesomeICS.PropertyValue.Time();
 
         //-- Act
         var propertyValueSetResult = propertyValue.convertFromString(content);
@@ -19,7 +19,7 @@ describe("Property Value Time", function() {
         var content = undefined;
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Time(content).convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Time(content).convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.time).toBeNull();
@@ -31,7 +31,7 @@ describe("Property Value Time", function() {
         var content = "061545";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Time().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Time().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.toString()).toEqual(content);
@@ -42,7 +42,7 @@ describe("Property Value Time", function() {
         var content = "061545";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Time().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Time().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.time.isValid()).toBeTruthy();
@@ -53,7 +53,7 @@ describe("Property Value Time", function() {
         var content = "AWESOME";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Time().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Time().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.time.isValid()).toEqual(false);
@@ -64,7 +64,7 @@ describe("Property Value Time", function() {
         var content = "061545";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Time().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Time().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.time.isValid()).toEqual(true);
@@ -75,7 +75,7 @@ describe("Property Value Time", function() {
         var content = "061545";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Time().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Time().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.time.format("HH:mm:SS")).toEqual("06:15:45");
@@ -86,7 +86,7 @@ describe("Property Value Time", function() {
         var content = "061545";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Time().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Time().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.isFixed).toEqual(true);
@@ -97,7 +97,7 @@ describe("Property Value Time", function() {
         var content = "061545Z";
 
         //-- Act
-        var propertyValue = new AwesomeICS.Elements.PropertyValue.Time().convertFromString(content);
+        var propertyValue = new AwesomeICS.PropertyValue.Time().convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.isFixed).toEqual(false);

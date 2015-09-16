@@ -15,10 +15,6 @@ export function mapToJSON(entry) {
     return entry.toJSON();
 }
 
-export function setError(object, message) {
-    object.error = message;
-}
-
 export function splitSafe(text, separator) {
     let parts = text.split(separator);
 
