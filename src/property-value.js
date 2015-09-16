@@ -73,7 +73,16 @@ export class Binary extends PropertyValue {
 
 export class Boolean extends PropertyValue {
     toString() {
-        return this.value && this.value.toString().toUpperCase();
+        if (typeof this.value === "undefined" || this.value === null) { return ""; }
+
+        return this.value.toString().toUpperCase();
+    }
+    setValue(value) {
+        if (typeof value !== "boolean" && !(value instanceof Boolean)) {
+            throw new Error("[Boolean] [setValue()] The value must be an instance of `Boolean`");
+        }
+
+        return super.setValue(value);
     }
     convertFromString(string) {
         if (isEmptyString(string)) { return super.clear(); }
@@ -96,6 +105,13 @@ export class CalendarUserAddress extends PropertyValue {
 export class Date extends PropertyValue {
     toString() {
         return this.value && this.value.format(Date.__format.date);
+    }
+    setValue(value) {
+        if (!moment.isMoment(value)) {
+            throw new Error("[Date] [setValue()] The value must be an instance of `Moment`");
+        }
+
+        return super.setValue(value);
     }
     convertFromString(string) {
         if (isEmptyString(string)) { return super.clear(); }
@@ -160,6 +176,13 @@ export class Duration extends PropertyValue {
 }
 
 export class Float extends PropertyValue {
+    setValue(value) {
+        if (typeof value !== "number" && !(value instanceof Number)) {
+            throw new Error("[Float] [setValue()] The value must be an instance of `Number`");
+        }
+
+        return super.setValue(value);
+    }
     convertFromString(string) {
         if (isEmptyString(string)) { return super.clear(); }
 
@@ -214,6 +237,13 @@ Geo.__format = {
 };
 
 export class Integer extends PropertyValue {
+    setValue(value) {
+        if (typeof value !== "number" && !(value instanceof Number)) {
+            throw new Error("[Integer] [setValue()] The value must be an instance of `Number`");
+        }
+
+        return super.setValue(value);
+    }
     convertFromString(string) {
         if (isEmptyString(string)) { return super.clear(); }
 
@@ -230,7 +260,15 @@ export class RecurrenceRule extends PropertyValue {
     // TODO: Implement behaviour, remember to write tests
 }
 
-export class Text extends PropertyValue {}
+export class Text extends PropertyValue {
+    setValue(value) {
+        if (typeof value !== "string" && !(value instanceof String)) {
+            throw new Error("[Integer] [setValue()] The value must be an instance of `Number`");
+        }
+
+        return super.setValue(value);
+    }
+}
 
 export class Time extends PropertyValue {
     clear() {
@@ -274,6 +312,13 @@ export class URI extends PropertyValue {
 export class UTCOffset extends PropertyValue {
     toString() {
         return this.value && this.value.format(UTCOffset.__format.offset);
+    }
+    setValue(value) {
+        if (!moment.isMoment(value)) {
+            throw new Error("[Date] [setValue()] The value must be an instance of `Moment`");
+        }
+
+        return super.setValue(value);
     }
     convertFromString(string) {
         if (isEmptyString(string)) { return super.clear(); }

@@ -1,7 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 
 describe("Property", function() {
-	it("should allow to convert value from string", function() {
+	it("should allow to convert value from `String`", function() {
 		//-- Arrange
 		var content = "PROPERTY_NAME:PROPERTY_VALUE";
 		var property = new AwesomeICS.Property();
@@ -115,11 +115,11 @@ describe("Property", function() {
 
 	it("should allow only `PropertyValue` or `PropertyValueMultiple` as value", function() {
 		//-- Arrange
-		var invalidValue = "Invalid Property";
+		var value = "Invalid Property";
 		var property = new AwesomeICS.Property();
 
 		//-- Act & Assert
-		expect(function() { property.setValue(invalidValue); }).toThrow();
+		expect(function() { property.setValue(value); }).toThrow();
 	});
 
 	it("should allow only `PropertyValue` or `PropertyValueMultiple` as value", function() {

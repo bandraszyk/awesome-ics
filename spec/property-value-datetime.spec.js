@@ -1,7 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 
 describe("Property Value DateTime", function() {
-    it("should allow to convert value from string", function() {
+    it("should allow to convert value from `String`", function() {
         //-- Arrange
         var content = "20150901T061545";
         var propertyValue = new AwesomeICS.PropertyValue.DateTime().convertFromString(content);

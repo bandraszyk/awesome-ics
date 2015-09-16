@@ -1,7 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 
 describe("Block", function() {
-    it("should allow to convert value from string", function() {
+    it("should allow to convert value from `String`", function() {
         //-- Arrange
         var content = "BEGIN:BLOCK_NAME\nEND:BLOCK_NAME";
         var block = new AwesomeICS.Block();

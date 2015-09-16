@@ -1,7 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 
 describe("Property Value", function() {
-    it("should allow to convert value from string", function() {
+    it("should allow to convert value from `String`", function() {
         //-- Arrange
         var content = "Parameter_Value";
         var propertyValue = new AwesomeICS.PropertyValue.Value();

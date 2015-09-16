@@ -1,7 +1,7 @@
 var AwesomeICS	= require("../dist/awesome-ics");
 
 describe("Property Value Time", function() {
-    it("should allow to convert value from string", function() {
+    it("should allow to convert value from `String`", function() {
         //-- Arrange
         var content = "061545";
         var propertyValue = new AwesomeICS.PropertyValue.Time();
@@ -37,7 +37,7 @@ describe("Property Value Time", function() {
         expect(propertyValue.toString()).toEqual(content);
     });
 
-    it("should contains momentjs value", function() {
+    it("should contains `Moment` value", function() {
         //-- Arrange
         var content = "061545";
 

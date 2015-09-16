@@ -1,82 +1,112 @@
 var AwesomeICS	= require("../dist/awesome-ics");
+var moment      = require("moment");
 
 describe("Property Value UTCOffset", function() {
-    it("should allow to convert value from string", function() {
+    it("should allow to convert value from `String`", function() {
         //-- Arrange
         var content = "+0200";
         var propertyValue = new AwesomeICS.PropertyValue.UTCOffset();
 
         //-- Act
-        var propertyValueSetResult = propertyValue.convertFromString(content);
+        var propertyValueConverted = propertyValue.convertFromString(content);
 
         //-- Assert
-        expect(propertyValueSetResult).toBe(propertyValue);
-        expect(propertyValueSetResult.toString()).toEqual(content);
+        expect(propertyValue.toString()).toEqual(content);
+        expect(propertyValueConverted).toBe(propertyValue);
     });
 
     it("should be empty", function() {
-        //-- Arrange
-        var content = undefined;
-
-        //-- Act
-        var property = new AwesomeICS.PropertyValue.UTCOffset().convertFromString(content);
+        //-- Arrange & Act
+        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset();
 
         //-- Assert
-        expect(property.value).toBeNull();
+        expect(propertyValue.value).toBeNull();
     });
 
     it("should be zero when wrongly formatted", function() {
         //-- Arrange
         var content = "AWESOME";
+        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset();
 
         //-- Act
-        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset().convertFromString(content);
+        var propertyValueConverted = propertyValue.convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.utcOffset()).toEqual(0);
+        expect(propertyValueConverted).toBe(propertyValue);
     });
 
     it("should return same string value", function() {
         //-- Arrange
         var content = "+0200";
+        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset();
 
-        //-- property
-        var property = new AwesomeICS.PropertyValue.UTCOffset().convertFromString(content);
+        //-- Act
+        var propertyValueConverted = propertyValue.convertFromString(content);
 
         //-- Assert
-        expect(property.toString()).toEqual(content);
+        expect(propertyValue.toString()).toEqual(content);
+        expect(propertyValueConverted).toBe(propertyValue);
     });
 
     it("should allow negative zones", function() {
         //-- Arrange
         var content = "-0200";
-
-        //-- property
-        var property = new AwesomeICS.PropertyValue.UTCOffset().convertFromString(content);
-
-        //-- Assert
-        expect(property.toString()).toEqual(content);
-    });
-
-    it("should contains momentjs value", function() {
-        //-- Arrange
-        var content = "-0200";
+        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset();
 
         //-- Act
-        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset().convertFromString(content);
+        var propertyValueConverted = propertyValue.convertFromString(content);
+
+        //-- Assert
+        expect(propertyValue.toString()).toEqual(content);
+        expect(propertyValueConverted).toBe(propertyValue);
+    });
+
+    it("should contains `Moment` value", function() {
+        //-- Arrange
+        var content = "-0200";
+        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset();
+
+        //-- Act
+        var propertyValueConverted = propertyValue.convertFromString(content);
 
         //-- Assert
         expect(propertyValue.value.isValid()).toBeTruthy();
+        expect(propertyValueConverted).toBe(propertyValue);
     });
 
-    it("should equal same date as passed", function() {
+    it("should allow to set value", function() {
         //-- Arrange
-        var content = "20150901";
+        var value = moment();
+        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset();
 
         //-- Act
-        var propertyValue = new AwesomeICS.PropertyValue.Date().convertFromString(content);
+        var propertyValueSet = propertyValue.setValue(value);
 
         //-- Assert
-        expect(propertyValue.value.format("YYYY-MM-DD")).toEqual("2015-09-01");
+        expect(propertyValue.value).toEqual(value);
+        expect(propertyValueSet).toBe(propertyValue);
+    });
+
+    it("should allow only `Moment` as value", function() {
+        //-- Arrange
+        var value = "-2000";
+        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset();
+
+        //-- Act & Assert
+        expect(function() { propertyValue.setValue(value); }).toThrow();
+    });
+
+    it("should clear the value during empty string conversion", function() {
+        //-- Arrange
+        var value = moment();
+        var propertyValue = new AwesomeICS.PropertyValue.UTCOffset().setValue(value);
+
+        //-- Act
+        var propertyValueCleared = propertyValue.convertFromString();
+
+        //-- Assert
+        expect(propertyValue.value).toBeNull();
+        expect(propertyValueCleared).toBe(propertyValue);
     });
 });

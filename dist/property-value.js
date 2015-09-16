@@ -155,7 +155,20 @@ var Boolean = (function (_PropertyValue2) {
     _createClass(Boolean, [{
         key: "toString",
         value: function toString() {
-            return this.value && this.value.toString().toUpperCase();
+            if (typeof this.value === "undefined" || this.value === null) {
+                return "";
+            }
+
+            return this.value.toString().toUpperCase();
+        }
+    }, {
+        key: "setValue",
+        value: function setValue(value) {
+            if (typeof value !== "boolean" && !(value instanceof Boolean)) {
+                throw new Error("[Boolean] [setValue()] The value must be an instance of `Boolean`");
+            }
+
+            return _get(Object.getPrototypeOf(Boolean.prototype), "setValue", this).call(this, value);
         }
     }, {
         key: "convertFromString",
@@ -206,6 +219,15 @@ var Date = (function (_PropertyValue4) {
         key: "toString",
         value: function toString() {
             return this.value && this.value.format(Date.__format.date);
+        }
+    }, {
+        key: "setValue",
+        value: function setValue(value) {
+            if (!_moment2["default"].isMoment(value)) {
+                throw new Error("[Date] [setValue()] The value must be an instance of `Moment`");
+            }
+
+            return _get(Object.getPrototypeOf(Date.prototype), "setValue", this).call(this, value);
         }
     }, {
         key: "convertFromString",
@@ -324,6 +346,15 @@ var Float = (function (_PropertyValue7) {
     }
 
     _createClass(Float, [{
+        key: "setValue",
+        value: function setValue(value) {
+            if (typeof value !== "number" && !(value instanceof Number)) {
+                throw new Error("[Float] [setValue()] The value must be an instance of `Number`");
+            }
+
+            return _get(Object.getPrototypeOf(Float.prototype), "setValue", this).call(this, value);
+        }
+    }, {
         key: "convertFromString",
         value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
@@ -426,6 +457,15 @@ var Integer = (function (_PropertyValue9) {
     }
 
     _createClass(Integer, [{
+        key: "setValue",
+        value: function setValue(value) {
+            if (typeof value !== "number" && !(value instanceof Number)) {
+                throw new Error("[Integer] [setValue()] The value must be an instance of `Number`");
+            }
+
+            return _get(Object.getPrototypeOf(Integer.prototype), "setValue", this).call(this, value);
+        }
+    }, {
         key: "convertFromString",
         value: function convertFromString(string) {
             if ((0, _util.isEmptyString)(string)) {
@@ -478,6 +518,17 @@ var Text = (function (_PropertyValue12) {
 
         _get(Object.getPrototypeOf(Text.prototype), "constructor", this).apply(this, arguments);
     }
+
+    _createClass(Text, [{
+        key: "setValue",
+        value: function setValue(value) {
+            if (typeof value !== "string" && !(value instanceof String)) {
+                throw new Error("[Integer] [setValue()] The value must be an instance of `Number`");
+            }
+
+            return _get(Object.getPrototypeOf(Text.prototype), "setValue", this).call(this, value);
+        }
+    }]);
 
     return Text;
 })(PropertyValue);
@@ -573,6 +624,15 @@ var UTCOffset = (function (_PropertyValue15) {
         key: "toString",
         value: function toString() {
             return this.value && this.value.format(UTCOffset.__format.offset);
+        }
+    }, {
+        key: "setValue",
+        value: function setValue(value) {
+            if (!_moment2["default"].isMoment(value)) {
+                throw new Error("[Date] [setValue()] The value must be an instance of `Moment`");
+            }
+
+            return _get(Object.getPrototypeOf(UTCOffset.prototype), "setValue", this).call(this, value);
         }
     }, {
         key: "convertFromString",
