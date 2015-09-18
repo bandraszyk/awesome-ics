@@ -64,7 +64,7 @@ export class Property {
             this.parameters = parameters.slice(1).map(function(paramContent) { return new PropertyParameter().convertFromString(paramContent); });
         }
 
-        this.value = getValue(this.name, this.value, this.parameters);
+        this.value = getValue(this.name, this.value, this.parameters).convertFromString(this.value);
         return this;
     }
     // Sets `Property`'s name that must be an instance of `string`

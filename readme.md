@@ -121,7 +121,6 @@ var fs          = require("fs");
 
 var icsFile  = fs.readFileSync("./ics/my-file.ics", "utf8").trim();
 var calendar = new AwesomeICS.Calendar().convertFromString(icsFile);
-
 ```
 
 As in previous example there is a possibility to convert such object to string or JSON.

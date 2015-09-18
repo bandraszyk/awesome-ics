@@ -81,7 +81,7 @@ var Property = (function () {
                 });
             }
 
-            this.value = (0, _propertyValue.getValue)(this.name, this.value, this.parameters);
+            this.value = (0, _propertyValue.getValue)(this.name, this.value, this.parameters).convertFromString(this.value);
             return this;
         }
     }, {

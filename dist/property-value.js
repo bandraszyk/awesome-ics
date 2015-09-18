@@ -871,8 +871,8 @@ function getValue(propertyName, propertyValue, propertyParameters) {
     mapping = Array.isArray(mapping) ? mapping[0] : mapping;
 
     if (mapping.isMultiple === true && containsMultipleSeparator) {
-        return new PropertyMultipleValue(mapping).convertFromString(propertyValue);
+        return new PropertyMultipleValue(mapping);
     }
 
-    return new mapping().convertFromString(propertyValue);
+    return new mapping();
 }
