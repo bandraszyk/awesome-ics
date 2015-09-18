@@ -5,7 +5,7 @@
 
 import { splitSafe, mapToJSON, mapToString, isEmptyString } from "./util";
 import { PropertyParameter } from "./property-parameter";
-import { getValue, PropertyValue, PropertyMultipleValue } from "./property-value";
+import { getEmptyValue, PropertyValue, PropertyMultipleValue } from "./property-value";
 
 // ### Class: Block
 // > Basic element for building iCalendar objects. It contains type, child blocks and properties.
@@ -64,7 +64,7 @@ export class Property {
             this.parameters = parameters.slice(1).map(function(paramContent) { return new PropertyParameter().convertFromString(paramContent); });
         }
 
-        this.value = getValue(this.name, this.value, this.parameters).convertFromString(this.value);
+        this.value = getEmptyValue(this.name, this.value, this.parameters).convertFromString(this.value);
         return this;
     }
     // Sets `Property`'s name that must be an instance of `string`

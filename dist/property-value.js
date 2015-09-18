@@ -9,7 +9,7 @@ var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_ag
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-exports.getValue = getValue;
+exports.getEmptyValue = getEmptyValue;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -864,7 +864,7 @@ function getValueParameter(propertyParameters) {
     }
 }
 
-function getValue(propertyName, propertyValue, propertyParameters) {
+function getEmptyValue(propertyName, propertyValue, propertyParameters) {
     var mapping = valuePropertyParameterMapping[(getValueParameter(propertyParameters) || {}).value] || valueMapping[propertyName] || valueMapping["DEFAULT"];
     var containsMultipleSeparator = propertyValue && (0, _util.splitSafe)(propertyValue, PropertyMultipleValue.__format.separator).length > 1;
 

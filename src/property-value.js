@@ -556,9 +556,9 @@ function getValueParameter(propertyParameters) {
 }
 
 // ### Function: getValue
-// > Returns an instance of `PropertyValue` or `PropertyMultipleValue` depending on specified parameters.
+// > Returns an instance of empty `PropertyValue` or `PropertyMultipleValue` depending on specified parameters.
 // > The particular type of object is specified by `PropertyParameter` named 'VALUE' or will be mapped from `propertyName`.
-export function getValue(propertyName, propertyValue, propertyParameters) {
+export function getEmptyValue(propertyName, propertyValue, propertyParameters) {
     let mapping = valuePropertyParameterMapping[(getValueParameter(propertyParameters) || {}).value]
         || valueMapping[propertyName]
         || valueMapping["DEFAULT"];
