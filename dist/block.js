@@ -1,3 +1,4 @@
+
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13,6 +14,7 @@ var _property = require("./property");
 var _util = require("./util");
 
 var Block = (function () {
+
     function Block() {
         _classCallCheck(this, Block);
 
@@ -34,10 +36,10 @@ var Block = (function () {
             var blocks = "";
 
             if (this.properties.length) {
-                properties = this.properties.map(_util.mapToString).join(Block.__format.newLine) + Block.__format.newLine;
+                properties = "" + this.properties.map(_util.mapToString).join(Block.__format.newLine) + Block.__format.newLine;
             }
             if (this.blocks.length) {
-                blocks = this.blocks.map(_util.mapToString).join(Block.__format.newLine) + Block.__format.newLine;
+                blocks = "" + this.blocks.map(_util.mapToString).join(Block.__format.newLine) + Block.__format.newLine;
             }
 
             return "" + Block.__format.blockBegin + this.type + Block.__format.newLine + properties + blocks + Block.__format.blockEnd + this.type;
@@ -133,7 +135,6 @@ var Block = (function () {
 })();
 
 exports.Block = Block;
-
 Block.__format = {
     regexBlockBegin: /^BEGIN:/i,
     regexBlockEnd: /^END:/i,

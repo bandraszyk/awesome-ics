@@ -1,3 +1,4 @@
+
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9,10 +10,10 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var _util = require("./util");
-
 var propertyTypes = ["ALTREP", "CN", "CUTYPE", "DELEGATED-FROM", "DELEGATED-TO", "DIR", "ENCODING", "FMTTYPE", "FBTYPE", "LANGUAGE", "MEMBER", "PARTSTAT", "RANGE", "RELATED", "RELTYPE", "ROLE", "RSVP", "SENT-BY", "TZID", "VALUE"];
 
 var PropertyParameter = (function () {
+
     function PropertyParameter() {
         _classCallCheck(this, PropertyParameter);
 
@@ -30,7 +31,7 @@ var PropertyParameter = (function () {
     }, {
         key: "toString",
         value: function toString() {
-            return [this.name, this.value].join(PropertyParameter.__format.separator);
+            return "" + this.name + PropertyParameter.__format.separator + this.value;
         }
     }, {
         key: "toJSON",
@@ -78,7 +79,6 @@ var PropertyParameter = (function () {
 })();
 
 exports.PropertyParameter = PropertyParameter;
-
 PropertyParameter.__format = {
     separator: "="
 };

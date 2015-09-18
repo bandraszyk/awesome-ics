@@ -1,24 +1,37 @@
+//     Awesome ICS v0.1.0
+//     http://bandraszyk.github.io/awesome-ico/
+//     (c) 2015 Bandro
+//     Awesome ICS may be freely distributed under the MIT license.
+
 import { mapToJSON, mapToString, splitSafe, isEmptyString } from "./util";
 import moment from "moment";
 
+// ### Class: PropertyValue
+// > Basic class for every property value used within the module. Defines API for every child class.
 export class PropertyValue {
+    // Initializes the instance with default values
     constructor() {
         this.clear();
     }
-    toString() {
-        return this.value && this.value.toString();
-    }
-    toJSON() {
-        return this.value;
-    }
+    // Clears the `PropertyValue` by setting default values
     clear() {
         this.value = null;
         return this;
     }
+    // Converts `PropertyValue` to string
+    toString() {
+        return this.value && this.value.toString();
+    }
+    // Converts `PropertyValue` to JSON
+    toJSON() {
+        return this.value;
+    }
+    // Sets the value of `PropertyValue`
     setValue(value) {
         this.value = value;
         return this;
     }
+    // Converts `PropertyValue` from string, e.g.: 'PropertyValue'
     convertFromString(string) {
         if (isEmptyString(string)) { return this.clear(); }
 
@@ -26,6 +39,8 @@ export class PropertyValue {
     }
 }
 
+// ### Class: PropertyMultipleValue
+// > Defines a class that allow to have a value as an array of `PropertyValue` objects.
 export class PropertyMultipleValue {
     constructor(mapping) {
         if (!mapping || typeof mapping !== "function" || !(new mapping() instanceof PropertyValue)) {
@@ -63,14 +78,18 @@ export class PropertyMultipleValue {
     }
 }
 
+// ### Static Members for: PropertyMultipleValue
 PropertyMultipleValue.__format = {
     separator: ","
 };
 
-export class Binary extends PropertyValue {
-    // TODO: Implement behaviour, remember to write tests
-}
 
+// ### Class: Binary
+// > __TODO: Implement behaviour, remember to write tests__
+export class Binary extends PropertyValue {}
+
+// ### Class: Boolean
+// > Requires `boolean` as value
 export class Boolean extends PropertyValue {
     toString() {
         if (typeof this.value === "undefined" || this.value === null) { return ""; }
@@ -98,10 +117,12 @@ export class Boolean extends PropertyValue {
     }
 }
 
-export class CalendarUserAddress extends PropertyValue {
-    // TODO: Implement behaviour, remember to write tests
-}
+// ### Class: CalendarUserAddress
+// > __TODO: Implement behaviour, remember to write tests__
+export class CalendarUserAddress extends PropertyValue {}
 
+// ### Class: Date
+// > Requires `Moment` (from moment.js library) as value
 export class Date extends PropertyValue {
     toString() {
         return this.value && this.value.format(Date.__format.date);
@@ -129,6 +150,8 @@ Date.__format = {
     date: "YYYYMMDD"
 };
 
+// ### Class: Date
+// > Requires `Date` as value of date and `Time` as value of Time
 export class DateTime extends PropertyValue {
     constructor(content) {
         super(content);
@@ -208,10 +231,11 @@ DateTime.__format = {
     separator: "T"
 };
 
-export class Duration extends PropertyValue {
-    // TODO: Implement behaviour, remember to write tests
-}
+// > __TODO: Implement behaviour, remember to write tests__
+export class Duration extends PropertyValue {}
 
+// ### Class: Float
+// > Requires `number` as value
 export class Float extends PropertyValue {
     setValue(value) {
         if (typeof value !== "number" && !(value instanceof Number)) {
@@ -228,6 +252,8 @@ export class Float extends PropertyValue {
     }
 }
 
+// ### Class: Geo
+// > Requires `Float` as longitude and latitude
 export class Geo extends PropertyValue {
     clear() {
         this.value = { latitude: null, longitude: null };
@@ -298,6 +324,8 @@ Geo.__format = {
     separator: ";"
 };
 
+// ### Class: Integer
+// > Requires `number` as value
 export class Integer extends PropertyValue {
     setValue(value) {
         if (typeof value !== "number" && !(value instanceof Number)) {
@@ -314,14 +342,16 @@ export class Integer extends PropertyValue {
     }
 }
 
-export class PeriodOfTime extends PropertyValue {
-    // TODO: Implement behaviour, remember to write tests
-}
+// ### Class: PeriodOfTime
+// > __TODO: Implement behaviour, remember to write tests__
+export class PeriodOfTime extends PropertyValue {}
 
-export class RecurrenceRule extends PropertyValue {
-    // TODO: Implement behaviour, remember to write tests
-}
+// ### Class: RecurrenceRule
+// > __TODO: Implement behaviour, remember to write tests__
+export class RecurrenceRule extends PropertyValue {}
 
+// ### Class: Text
+// > Requires `string` as value
 export class Text extends PropertyValue {
     setValue(value) {
         if (typeof value !== "string" && !(value instanceof String)) {
@@ -332,6 +362,9 @@ export class Text extends PropertyValue {
     }
 }
 
+// ### Class: Time
+// > Requires `Moment` (from moment.js library) as value of time and `boolean` as value of isFixed.
+// > `isFixed` set to `true` means that time is same regardless of time-zone
 export class Time extends PropertyValue {
     clear() {
         this.value = { time: null, isFixed: null };
@@ -365,7 +398,7 @@ export class Time extends PropertyValue {
             throw new Error("[Time] [setValue()] The value must be an instance of `Object`");
         }
 
-        // TODO: object should be cloned
+        // - __TODO: object should be cloned to not modify passed one__
         super.setValue(value);
 
         if (value.time) { this.setTime(value.time); }
@@ -396,10 +429,12 @@ Time.__format = {
     timeUTC : "Z"
 };
 
-export class URI extends PropertyValue {
-    // TODO: Implement behaviour, remember to write tests
-}
+// ### Class: URI
+// > __TODO: Implement behaviour, remember to write tests__
+export class URI extends PropertyValue {}
 
+// ### Class: UTCOffset
+// > Requires `Moment` (from moment.js value) as value
 export class UTCOffset extends PropertyValue {
     toString() {
         return this.value && this.value.format(UTCOffset.__format.offset);
@@ -426,7 +461,8 @@ UTCOffset.__format = {
     offset: "ZZ"
 };
 
-//-- Define multiple values
+// ### Static members for: PropertyValues
+// > Defines `PropertyValue` that can be used as mapping for `PropertyMultipleValue`.
 Date.isMultiple         = true;
 DateTime.isMultiple     = true;
 Duration.isMultiple     = true;
@@ -436,6 +472,8 @@ PeriodOfTime.isMultiple = true;
 Time.isMultiple         = true;
 Text.isMultiple         = false;
 
+// ### Define: Value Mapping
+// > Defines mapping from value of `Property`'s name to `PropertyValue` class
 const valueMapping = {
     "CALSCALE"          : Text,
     "METHOD"            : Text,
@@ -486,18 +524,9 @@ const valueMapping = {
     "DEFAULT"           : Text
 };
 
-const valueMultipleMapping = {
-    "DATE"              : PropertyMultipleValue,
-    "DATE-TIME"         : PropertyMultipleValue,
-    "DURATION"          : PropertyMultipleValue,
-    "FLOAT"             : PropertyMultipleValue,
-    "INTEGER"           : PropertyMultipleValue,
-    "PERIOD"            : PropertyMultipleValue,
-    "TIME"              : PropertyMultipleValue,
-    "TEXT"              : Text
-};
-
-const valueParameterMapping = {
+// ### Define: Property Parameter Mapping
+// > Defines mapping from value of `PropertyParameter` named `VALUE` to `PropertyValue` class
+const valuePropertyParameterMapping = {
     "BINARY"            : Binary,
     "BOOLEAN"           : Boolean,
     "CAL-ADDRESS"       : URI,
@@ -514,6 +543,8 @@ const valueParameterMapping = {
     "UTC-OFFSET"        : UTCOffset
 };
 
+// ### Function: getValueParameter
+// > Tries to find the name of `PropertyParameter` named `VALUE` that contains information about the type of `Property`.
 function getValueParameter(propertyParameters) {
     if (!propertyParameters || !propertyParameters.length) { return; }
 
@@ -524,8 +555,11 @@ function getValueParameter(propertyParameters) {
     }
 }
 
+// ### Function: getValue
+// > Returns an instance of `PropertyValue` or `PropertyMultipleValue` depending on specified parameters.
+// > The particular type of object is specified by `PropertyParameter` named 'VALUE' or will be mapped from `propertyName`.
 export function getValue(propertyName, propertyValue, propertyParameters) {
-    let mapping = valueParameterMapping[(getValueParameter(propertyParameters) || {}).value]
+    let mapping = valuePropertyParameterMapping[(getValueParameter(propertyParameters) || {}).value]
         || valueMapping[propertyName]
         || valueMapping["DEFAULT"];
     let containsMultipleSeparator = propertyValue && splitSafe(propertyValue, (PropertyMultipleValue.__format.separator)).length > 1;

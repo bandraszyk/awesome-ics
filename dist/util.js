@@ -3,29 +3,29 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.trim = trim;
 exports.removePattern = removePattern;
+exports.trim = trim;
 exports.mapToString = mapToString;
 exports.mapToJSON = mapToJSON;
 exports.splitSafe = splitSafe;
 exports.splitSafeLines = splitSafeLines;
 exports.isEmptyString = isEmptyString;
 
+function removePattern(text, regexp) {
+    return text.replace(regexp, "");
+}
+
 function trim(text) {
     var trimmedBeginning = removePattern(text, /^\s+/g);
     return removePattern(trimmedBeginning, /\s+$/g);
 }
 
-function removePattern(text, regexp) {
-    return text.replace(regexp, "");
+function mapToString(object) {
+    return object && object.toString() || "";
 }
 
-function mapToString(entry) {
-    return entry && entry.toString() || "";
-}
-
-function mapToJSON(entry) {
-    return entry && entry.toJSON() || null;
+function mapToJSON(object) {
+    return object && object.toJSON() || null;
 }
 
 function splitSafe(text, separator) {
@@ -43,7 +43,7 @@ function splitSafe(text, separator) {
         if (shouldBeContinued) {
             continue;
         }
-        parts[currentLineIndex] = [line, parts[currentLineIndex + 1]].join(separator);
+        parts[currentLineIndex] = "" + line + separator + parts[currentLineIndex + 1];
         parts.splice(currentLineIndex + 1, 1);
     }
 
@@ -58,7 +58,7 @@ function splitSafeLines(text, format) {
         var isContinuation = line[0] === (format && format.multiLineBegin || " ");
 
         if (isContinuation) {
-            lines[currentLineIndex - 1] = [lines[currentLineIndex - 1], line.slice(1)].join("");
+            lines[currentLineIndex - 1] = "" + lines[currentLineIndex - 1] + line.slice(1);
             lines.splice(currentLineIndex, 1);
             continue;
         }
@@ -71,6 +71,6 @@ function splitSafeLines(text, format) {
     });
 }
 
-function isEmptyString(string) {
-    return string === undefined || string === null || string.trim() === "";
+function isEmptyString(text) {
+    return text === undefined || text === null || text.trim() === "";
 }

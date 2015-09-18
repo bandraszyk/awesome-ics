@@ -1,3 +1,4 @@
+
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15,6 +16,7 @@ var _propertyParameter = require("./property-parameter");
 var _propertyValue = require("./property-value");
 
 var Property = (function () {
+
     function Property() {
         _classCallCheck(this, Property);
 
@@ -36,7 +38,7 @@ var Property = (function () {
 
             if (this.parameters.length) {
                 var parameters = this.parameters.map(_util.mapToString).join(Property.__format.separatorParameter);
-                name = [name, parameters].join(Property.__format.separatorParameter);
+                name = "" + name + Property.__format.separatorParameter + parameters;
             }
 
             var value = "" + name + Property.__format.separatorProperty + (this.value && this.value.toString());
@@ -117,7 +119,6 @@ var Property = (function () {
 })();
 
 exports.Property = Property;
-
 Property.__format = {
     separatorProperty: ":",
     separatorParameter: ";",

@@ -1,3 +1,4 @@
+
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27,7 +28,6 @@ var Calendar = (function (_BlockType) {
         _get(Object.getPrototypeOf(Calendar.prototype), "constructor", this).call(this);
         this.type = "VCALENDAR";
     }
-
     return Calendar;
 })(_block.Block);
 

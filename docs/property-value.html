@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>property-value.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="awesome-ics.html">
+                  awesome-ics.js
+                </a>
+              
+                
+                <a class="source" href="block.html">
+                  block.js
+                </a>
+              
+                
+                <a class="source" href="property-parameter.html">
+                  property-parameter.js
+                </a>
+              
+                
+                <a class="source" href="property-value.html">
+                  property-value.js
+                </a>
+              
+                
+                <a class="source" href="property.html">
+                  property.js
+                </a>
+              
+                
+                <a class="source" href="util.html">
+                  util.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>property-value.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <pre><code>Awesome ICS v0<span class="hljs-number">.1</span><span class="hljs-number">.0</span>
+http:<span class="hljs-comment">//bandraszyk.github.io/awesome-ico/</span>
+(c) <span class="hljs-number">2015</span> Bandro
+Awesome ICS may be freely distributed under the MIT license.
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+import { mapToJSON, mapToString, splitSafe, isEmptyString } from <span class="hljs-string">"./util"</span>;
+import moment from <span class="hljs-string">"moment"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h3 id="class-propertyvalue">Class: PropertyValue</h3>
+<blockquote>
+<p>Basic class for every property value used within the module. Defines API for every child class.</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> PropertyValue {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Initializes the instance with default values</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    constructor() {
+        <span class="hljs-keyword">this</span>.clear();
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Clears the <code>PropertyValue</code> by setting default values</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    clear() {
+        <span class="hljs-keyword">this</span>.value = <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Converts <code>PropertyValue</code> to string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    toString() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.value &amp;&amp; <span class="hljs-keyword">this</span>.value.toString();
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Converts <code>PropertyValue</code> to JSON</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    toJSON() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.value;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Sets the value of <code>PropertyValue</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setValue(value) {
+        <span class="hljs-keyword">this</span>.value = value;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Converts <code>PropertyValue</code> from string, e.g.: ‘PropertyValue’</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    convertFromString(string) {
+        <span class="hljs-keyword">if</span> (isEmptyString(string)) { <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.clear(); }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.setValue(string);
+    }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h3 id="class-propertymultiplevalue">Class: PropertyMultipleValue</h3>
+<blockquote>
+<p>Defines a class that allow to have a value as an array of <code>PropertyValue</code> objects.</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> PropertyMultipleValue {
+    constructor(mapping) {
+        <span class="hljs-keyword">if</span> (!mapping || <span class="hljs-keyword">typeof</span> mapping !== <span class="hljs-string">"function"</span> || !(<span class="hljs-keyword">new</span> mapping() <span class="hljs-keyword">instanceof</span> PropertyValue)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[PropertyMultipleValue] [constructor()] The mapping must be an instance of `PropertyValue`"</span>);
+        }
+
+        <span class="hljs-keyword">this</span>.mapping = mapping;
+        <span class="hljs-keyword">this</span>.clear();
+    }
+    clear() {
+        <span class="hljs-keyword">this</span>.value = [];
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    toString() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.value.map(mapToString).join(PropertyMultipleValue.__format.separator);
+    }
+    toJSON() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.value.map(mapToJSON);
+    }
+    setValue(value) {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">Array</span>.isArray(value)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[PropertyMultipleValue] [setValue()] The value must be an array"</span>);
+        }
+
+        <span class="hljs-keyword">this</span>.value = value;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    convertFromString(string) {
+        <span class="hljs-keyword">if</span> (isEmptyString(string)) { <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.clear(); }
+
+        <span class="hljs-keyword">this</span>.value = splitSafe(string, PropertyMultipleValue.__format.separator)
+            .map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(singleContent)</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span>.mapping().convertFromString(singleContent); }, <span class="hljs-keyword">this</span>);
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h3 id="static-members-for-propertymultiplevalue">Static Members for: PropertyMultipleValue</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>PropertyMultipleValue.__format = {
+    separator: <span class="hljs-string">","</span>
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h3 id="class-binary">Class: Binary</h3>
+<blockquote>
+<p><strong>TODO: Implement behaviour, remember to write tests</strong></p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> Binary extends PropertyValue {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h3 id="class-boolean">Class: Boolean</h3>
+<blockquote>
+<p>Requires <code>boolean</code> as value</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> <span class="hljs-built_in">Boolean</span> extends PropertyValue {
+    toString() {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>.value === <span class="hljs-string">"undefined"</span> || <span class="hljs-keyword">this</span>.value === <span class="hljs-literal">null</span>) { <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>; }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.value.toString().toUpperCase();
+    }
+    setValue(value) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">"boolean"</span> &amp;&amp; !(value <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Boolean</span>)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Boolean] [setValue()] The value must be an instance of `Boolean`"</span>);
+        }
+
+        <span class="hljs-keyword">return</span> super.setValue(value);
+    }
+    convertFromString(string) {
+        <span class="hljs-keyword">if</span> (isEmptyString(string)) { <span class="hljs-keyword">return</span> super.clear(); }
+
+        <span class="hljs-keyword">try</span> {
+            <span class="hljs-keyword">this</span>.value = <span class="hljs-built_in">JSON</span>.parse(string.toLowerCase());
+        }
+        <span class="hljs-keyword">catch</span>(error) {
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.clear();
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h3 id="class-calendaruseraddress">Class: CalendarUserAddress</h3>
+<blockquote>
+<p><strong>TODO: Implement behaviour, remember to write tests</strong></p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> CalendarUserAddress extends PropertyValue {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h3 id="class-date">Class: Date</h3>
+<blockquote>
+<p>Requires <code>Moment</code> (from moment.js library) as value</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> <span class="hljs-built_in">Date</span> extends PropertyValue {
+    toString() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.value &amp;&amp; <span class="hljs-keyword">this</span>.value.format(<span class="hljs-built_in">Date</span>.__format.date);
+    }
+    toJSON() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.value &amp;&amp; <span class="hljs-keyword">this</span>.value.format(<span class="hljs-built_in">Date</span>.__format.date) || <span class="hljs-literal">null</span>;
+    }
+    setValue(value) {
+        <span class="hljs-keyword">if</span> (!moment.isMoment(value)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Date] [setValue()] The value must be an instance of `Moment`"</span>);
+        }
+
+        <span class="hljs-keyword">return</span> super.setValue(value);
+    }
+    convertFromString(string) {
+        <span class="hljs-keyword">if</span> (isEmptyString(string)) { <span class="hljs-keyword">return</span> super.clear(); }
+
+        <span class="hljs-keyword">this</span>.value = moment.utc(string, <span class="hljs-built_in">Date</span>.__format.date);
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+}
+
+<span class="hljs-built_in">Date</span>.__format = {
+    date: <span class="hljs-string">"YYYYMMDD"</span>
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <h3 id="class-date">Class: Date</h3>
+<blockquote>
+<p>Requires <code>Date</code> as value of date and <code>Time</code> as value of Time</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> DateTime extends PropertyValue {
+    constructor(content) {
+        super(content);
+    }
+    clear() {
+        <span class="hljs-keyword">this</span>.value = { date: <span class="hljs-literal">null</span>, time: <span class="hljs-literal">null</span> };
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    toString() {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.value || !<span class="hljs-keyword">this</span>.value.date || !<span class="hljs-keyword">this</span>.value.time) { <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>; }
+
+        <span class="hljs-keyword">return</span> `${<span class="hljs-keyword">this</span>.value.date.toString()}${DateTime.__format.separator}${<span class="hljs-keyword">this</span>.value.time.toString()}`;
+    }
+    toJSON() {
+        <span class="hljs-keyword">return</span> {
+            date: <span class="hljs-keyword">this</span>.value &amp;&amp; <span class="hljs-keyword">this</span>.value.date &amp;&amp; <span class="hljs-keyword">this</span>.value.date.toJSON() || <span class="hljs-literal">null</span>,
+            time: <span class="hljs-keyword">this</span>.value &amp;&amp; <span class="hljs-keyword">this</span>.value.time &amp;&amp; <span class="hljs-keyword">this</span>.value.time.toJSON() || <span class="hljs-literal">null</span>
+        }
+    }
+    convertFromString(string) {
+        <span class="hljs-keyword">if</span> (isEmptyString(string)) { <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.clear(); }
+
+        <span class="hljs-keyword">let</span> parts = string.split(DateTime.__format.separator);
+
+        <span class="hljs-keyword">this</span>.value = {
+            date: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().convertFromString(parts[<span class="hljs-number">0</span>]),
+            time: <span class="hljs-keyword">new</span> Time().convertFromString(parts[<span class="hljs-number">1</span>])
+        };
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setValue(value) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">"object"</span>) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[DateTime] [setValue()] The value must be an instance of `Object`"</span>);
+        }
+
+        super.setValue(value);
+
+        <span class="hljs-keyword">if</span> (value.date) { <span class="hljs-keyword">this</span>.setDate(value.date); }
+        <span class="hljs-keyword">if</span> (value.time) { <span class="hljs-keyword">this</span>.setTime(value.time); }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setDate(date) {
+        <span class="hljs-keyword">if</span> (!(date <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span>)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[DateTime] [setDate()] The date must be an instance of `Date`"</span>);
+        }
+
+        <span class="hljs-keyword">this</span>.value.date = date;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setTime(time) {
+        <span class="hljs-keyword">if</span> (!(time <span class="hljs-keyword">instanceof</span> Time)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[DateTime] [setTime()] The time must be an instance of `Time`"</span>);
+        }
+
+        <span class="hljs-keyword">this</span>.value.time = time;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setDateValue(date) {
+        <span class="hljs-keyword">this</span>.value.date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().setValue(date);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setTimeValue(time) {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.value.time) { <span class="hljs-keyword">this</span>.value.time = <span class="hljs-keyword">new</span> Time(); }
+        <span class="hljs-keyword">this</span>.value.time.setTime(time);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setIsFixedValue(isFixed) {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.value.time) { <span class="hljs-keyword">this</span>.value.time = <span class="hljs-keyword">new</span> Time(); }
+        <span class="hljs-keyword">this</span>.value.time.setIsFixed(isFixed);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+}
+
+DateTime.__format = {
+    separator: <span class="hljs-string">"T"</span>
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <blockquote>
+<p><strong>TODO: Implement behaviour, remember to write tests</strong></p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> Duration extends PropertyValue {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h3 id="class-float">Class: Float</h3>
+<blockquote>
+<p>Requires <code>number</code> as value</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> Float extends PropertyValue {
+    setValue(value) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">"number"</span> &amp;&amp; !(value <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Number</span>)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Float] [setValue()] The value must be an instance of `Number`"</span>);
+        }
+
+        <span class="hljs-keyword">return</span> super.setValue(value);
+    }
+    convertFromString(string) {
+        <span class="hljs-keyword">if</span> (isEmptyString(string)) { <span class="hljs-keyword">return</span> super.clear(); }
+
+        <span class="hljs-keyword">this</span>.value = <span class="hljs-built_in">parseFloat</span>(string);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <h3 id="class-geo">Class: Geo</h3>
+<blockquote>
+<p>Requires <code>Float</code> as longitude and latitude</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> Geo extends PropertyValue {
+    clear() {
+        <span class="hljs-keyword">this</span>.value = { latitude: <span class="hljs-literal">null</span>, longitude: <span class="hljs-literal">null</span> };
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    toString() {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.value || !<span class="hljs-keyword">this</span>.value.latitude || !<span class="hljs-keyword">this</span>.value.latitude) { <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>; }
+
+        <span class="hljs-keyword">return</span> `${<span class="hljs-keyword">this</span>.value.latitude.toString()}${Geo.__format.separator}${<span class="hljs-keyword">this</span>.value.longitude.toString()}`;
+    }
+    toJSON() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.value &amp;&amp; {
+            latitude    : <span class="hljs-keyword">this</span>.value &amp;&amp; <span class="hljs-keyword">this</span>.value.latitude &amp;&amp; <span class="hljs-keyword">this</span>.value.latitude.toJSON() || <span class="hljs-literal">null</span>,
+            longitude   : <span class="hljs-keyword">this</span>.value &amp;&amp; <span class="hljs-keyword">this</span>.value.longitude &amp;&amp; <span class="hljs-keyword">this</span>.value.longitude.toJSON() || <span class="hljs-literal">null</span>
+        }
+    }
+    convertFromString(string) {
+        <span class="hljs-keyword">if</span> (isEmptyString(string)) { <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.clear(); }
+
+        <span class="hljs-keyword">let</span> coordinates = string.split(Geo.__format.separator);
+
+        <span class="hljs-keyword">this</span>.value = {
+            latitude    : <span class="hljs-keyword">new</span> Float().convertFromString(coordinates[<span class="hljs-number">0</span>]),
+            longitude   : <span class="hljs-keyword">new</span> Float().convertFromString(coordinates[<span class="hljs-number">1</span>])
+        };
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setValue(value) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">"object"</span>) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Geo] [setValue()] The value must be an instance of `Object`"</span>);
+        }
+
+        super.setValue(value);
+
+        <span class="hljs-keyword">if</span> (value.latitude) { <span class="hljs-keyword">this</span>.setLatitude(value.latitude); }
+        <span class="hljs-keyword">if</span> (value.longitude) { <span class="hljs-keyword">this</span>.setLatitude(value.longitude); }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setLatitude(latitude) {
+        <span class="hljs-keyword">if</span> (!(latitude <span class="hljs-keyword">instanceof</span> Float)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Geo] [setLatitude()] The latitude must be an instance of `Float`"</span>);
+        }
+
+        <span class="hljs-keyword">this</span>.value.latitude = latitude;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setLongitude(longitude) {
+        <span class="hljs-keyword">if</span> (!(longitude <span class="hljs-keyword">instanceof</span> Float)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Geo] [setLongitude()] The longitude must be an instance of `Float`"</span>);
+        }
+
+        <span class="hljs-keyword">this</span>.value.longitude = longitude;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setLatitudeValue(latitude) {
+        <span class="hljs-keyword">this</span>.value.latitude = <span class="hljs-keyword">new</span> Float().setValue(latitude);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setLongitudeValue(longitude) {
+        <span class="hljs-keyword">this</span>.value.longitude = <span class="hljs-keyword">new</span> Float().setValue(longitude);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+}
+
+Geo.__format = {
+    separator: <span class="hljs-string">";"</span>
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <h3 id="class-integer">Class: Integer</h3>
+<blockquote>
+<p>Requires <code>number</code> as value</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> Integer extends PropertyValue {
+    setValue(value) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">"number"</span> &amp;&amp; !(value <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Number</span>)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Integer] [setValue()] The value must be an instance of `Number`"</span>);
+        }
+
+        <span class="hljs-keyword">return</span> super.setValue(value);
+    }
+    convertFromString(string) {
+        <span class="hljs-keyword">if</span> (isEmptyString(string)) { <span class="hljs-keyword">return</span> super.clear(); }
+
+        <span class="hljs-keyword">this</span>.value = <span class="hljs-built_in">parseInt</span>(string);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <h3 id="class-periodoftime">Class: PeriodOfTime</h3>
+<blockquote>
+<p><strong>TODO: Implement behaviour, remember to write tests</strong></p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> PeriodOfTime extends PropertyValue {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <h3 id="class-recurrencerule">Class: RecurrenceRule</h3>
+<blockquote>
+<p><strong>TODO: Implement behaviour, remember to write tests</strong></p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> RecurrenceRule extends PropertyValue {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <h3 id="class-text">Class: Text</h3>
+<blockquote>
+<p>Requires <code>string</code> as value</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> Text extends PropertyValue {
+    setValue(value) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">"string"</span> &amp;&amp; !(value <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">String</span>)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Integer] [setValue()] The value must be an instance of `Number`"</span>);
+        }
+
+        <span class="hljs-keyword">return</span> super.setValue(value);
+    }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h3 id="class-time">Class: Time</h3>
+<blockquote>
+<p>Requires <code>Moment</code> (from moment.js library) as value of time and <code>boolean</code> as value of isFixed.
+<code>isFixed</code> set to <code>true</code> means that time is same regardless of time-zone</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> Time extends PropertyValue {
+    clear() {
+        <span class="hljs-keyword">this</span>.value = { time: <span class="hljs-literal">null</span>, isFixed: <span class="hljs-literal">null</span> };
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    toString() {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.value || !<span class="hljs-keyword">this</span>.value.time) { <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>; }
+
+        <span class="hljs-keyword">return</span> `${<span class="hljs-keyword">this</span>.value.time.format(Time.__format.time)}${!<span class="hljs-keyword">this</span>.value.isFixed ? Time.__format.timeUTC : <span class="hljs-string">""</span>}`;
+    }
+    toJSON() {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.value) { <span class="hljs-keyword">return</span> { isFixed: <span class="hljs-literal">null</span>, time: <span class="hljs-literal">null</span> }; }
+
+        <span class="hljs-keyword">return</span> {
+            isFixed : <span class="hljs-keyword">this</span>.value.isFixed,
+            time    : <span class="hljs-keyword">this</span>.value.time &amp;&amp; <span class="hljs-keyword">this</span>.value.time.format(Time.__format.time) || <span class="hljs-literal">null</span>
+        }
+    }
+    convertFromString(string) {
+        <span class="hljs-keyword">if</span> (isEmptyString(string)) { <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.clear(); }
+
+        <span class="hljs-keyword">this</span>.value = {
+            time    : moment(string.slice(<span class="hljs-number">0</span>, <span class="hljs-number">6</span>), Time.__format.time),
+            isFixed : string.slice(-<span class="hljs-number">1</span>) !== Time.__format.timeUTC
+        };
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setValue(value) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">'object'</span>) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Time] [setValue()] The value must be an instance of `Object`"</span>);
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <ul>
+<li><strong>TODO: object should be cloned to not modify passed one</strong></li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        super.setValue(value);
+
+        <span class="hljs-keyword">if</span> (value.time) { <span class="hljs-keyword">this</span>.setTime(value.time); }
+        <span class="hljs-keyword">if</span> (value.isFixed) { <span class="hljs-keyword">this</span>.setIsFixed(value.isFixed); }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setTime(time) {
+        <span class="hljs-keyword">if</span> (!moment.isMoment(time)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Time] [setTime()] The time must be an instance of `Moment`"</span>);
+        }
+
+        <span class="hljs-keyword">this</span>.value.time = time;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+    setIsFixed(isFixed) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> isFixed !== <span class="hljs-string">"boolean"</span> &amp;&amp; !(isFixed <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Boolean</span>)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Time] [setIsFixed()] The isFixed must be an instance of `Boolean`"</span>);
+        }
+
+        <span class="hljs-keyword">this</span>.value.isFixed = isFixed;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+}
+
+Time.__format = {
+    time    : <span class="hljs-string">"HHmmSS"</span>,
+    timeUTC : <span class="hljs-string">"Z"</span>
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <h3 id="class-uri">Class: URI</h3>
+<blockquote>
+<p><strong>TODO: Implement behaviour, remember to write tests</strong></p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> URI extends PropertyValue {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <h3 id="class-utcoffset">Class: UTCOffset</h3>
+<blockquote>
+<p>Requires <code>Moment</code> (from moment.js value) as value</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> UTCOffset extends PropertyValue {
+    toString() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.value &amp;&amp; <span class="hljs-keyword">this</span>.value.format(UTCOffset.__format.offset);
+    }
+    toJSON() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.value &amp;&amp; <span class="hljs-keyword">this</span>.value.format(UTCOffset.__format.date) || <span class="hljs-literal">null</span>;
+    }
+    setValue(value) {
+        <span class="hljs-keyword">if</span> (!moment.isMoment(value)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Date] [setValue()] The value must be an instance of `Moment`"</span>);
+        }
+
+        <span class="hljs-keyword">return</span> super.setValue(value);
+    }
+    convertFromString(string) {
+        <span class="hljs-keyword">if</span> (isEmptyString(string)) { <span class="hljs-keyword">return</span> super.clear(); }
+
+        <span class="hljs-keyword">this</span>.value = moment().utcOffset(string);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+}
+
+UTCOffset.__format = {
+    offset: <span class="hljs-string">"ZZ"</span>
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <h3 id="static-members-for-propertyvalues">Static members for: PropertyValues</h3>
+<blockquote>
+<p>Defines <code>PropertyValue</code> that can be used as mapping for <code>PropertyMultipleValue</code>.</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">Date</span>.isMultiple         = <span class="hljs-literal">true</span>;
+DateTime.isMultiple     = <span class="hljs-literal">true</span>;
+Duration.isMultiple     = <span class="hljs-literal">true</span>;
+Float.isMultiple        = <span class="hljs-literal">true</span>;
+Integer.isMultiple      = <span class="hljs-literal">true</span>;
+PeriodOfTime.isMultiple = <span class="hljs-literal">true</span>;
+Time.isMultiple         = <span class="hljs-literal">true</span>;
+Text.isMultiple         = <span class="hljs-literal">false</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <h3 id="define-value-mapping">Define: Value Mapping</h3>
+<blockquote>
+<p>Defines mapping from value of <code>Property</code>‘s name to <code>PropertyValue</code> class</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> valueMapping = {
+    <span class="hljs-string">"CALSCALE"</span>          : Text,
+    <span class="hljs-string">"METHOD"</span>            : Text,
+    <span class="hljs-string">"PRODID"</span>            : Text,
+    <span class="hljs-string">"VERSION"</span>           : Text,
+    <span class="hljs-string">"ATTACH"</span>            : [ URI, Binary ],
+    <span class="hljs-string">"CATEGORIES"</span>        : Text,
+    <span class="hljs-string">"CLASS"</span>             : Text,
+    <span class="hljs-string">"COMMENT"</span>           : Text,
+    <span class="hljs-string">"DESCRIPTION"</span>       : Text,
+    <span class="hljs-string">"GEO"</span>               : Geo,
+    <span class="hljs-string">"LOCATION"</span>          : Text,
+    <span class="hljs-string">"PERCENT-COMPLETE"</span>  : Integer,
+    <span class="hljs-string">"PRIORITY"</span>          : Integer,
+    <span class="hljs-string">"RESOURCES"</span>         : Text,
+    <span class="hljs-string">"STATUS"</span>            : Text,
+    <span class="hljs-string">"SUMMARY"</span>           : Text,
+    <span class="hljs-string">"COMPLETED"</span>         : DateTime,
+    <span class="hljs-string">"DTEND"</span>             : [ DateTime, <span class="hljs-built_in">Date</span> ],
+    <span class="hljs-string">"DUE"</span>               : [ DateTime, <span class="hljs-built_in">Date</span> ],
+    <span class="hljs-string">"DTSTART"</span>           : [ DateTime, <span class="hljs-built_in">Date</span> ],
+    <span class="hljs-string">"DURATION"</span>          : Duration,
+    <span class="hljs-string">"FREEBUSY"</span>          : PeriodOfTime,
+    <span class="hljs-string">"TRANSP"</span>            : Text,
+    <span class="hljs-string">"TZID"</span>              : Text,
+    <span class="hljs-string">"TZNAME"</span>            : Text,
+    <span class="hljs-string">"TZOFFSETFROM"</span>      : UTCOffset,
+    <span class="hljs-string">"TZOFFSETTO"</span>        : UTCOffset,
+    <span class="hljs-string">"TZURL"</span>             : URI,
+    <span class="hljs-string">"ATTENDEE"</span>          : CalendarUserAddress,
+    <span class="hljs-string">"CONTACT"</span>           : Text,
+    <span class="hljs-string">"ORGANIZER"</span>         : CalendarUserAddress,
+    <span class="hljs-string">"RECURRENCE-ID"</span>     : [ DateTime, <span class="hljs-built_in">Date</span> ],
+    <span class="hljs-string">"RELATED-TO"</span>        : Text,
+    <span class="hljs-string">"URL"</span>               : URI,
+    <span class="hljs-string">"UID"</span>               : Text,
+    <span class="hljs-string">"EXDATE"</span>            : [ DateTime, <span class="hljs-built_in">Date</span> ],
+    <span class="hljs-string">"RDATE"</span>             : [ DateTime, <span class="hljs-built_in">Date</span>, PeriodOfTime ],
+    <span class="hljs-string">"RRULE"</span>             : RecurrenceRule,
+    <span class="hljs-string">"ACTION"</span>            : Text,
+    <span class="hljs-string">"REPEAT"</span>            : Integer,
+    <span class="hljs-string">"TRIGGER"</span>           : [ Duration, DateTime ],
+    <span class="hljs-string">"CREATED"</span>           : DateTime,
+    <span class="hljs-string">"DTSTAMP"</span>           : DateTime,
+    <span class="hljs-string">"LAST-MODIFIED"</span>     : DateTime,
+    <span class="hljs-string">"SEQUENCE"</span>          : Integer,
+    <span class="hljs-string">"REQUEST-STATUS"</span>    : Text,
+    <span class="hljs-string">"DEFAULT"</span>           : Text
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <h3 id="define-property-parameter-mapping">Define: Property Parameter Mapping</h3>
+<blockquote>
+<p>Defines mapping from value of <code>PropertyParameter</code> named <code>VALUE</code> to <code>PropertyValue</code> class</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> valuePropertyParameterMapping = {
+    <span class="hljs-string">"BINARY"</span>            : Binary,
+    <span class="hljs-string">"BOOLEAN"</span>           : <span class="hljs-built_in">Boolean</span>,
+    <span class="hljs-string">"CAL-ADDRESS"</span>       : URI,
+    <span class="hljs-string">"DATE"</span>              : <span class="hljs-built_in">Date</span>,
+    <span class="hljs-string">"DATE-TIME"</span>         : DateTime,
+    <span class="hljs-string">"DURATION"</span>          : Duration,
+    <span class="hljs-string">"FLOAT"</span>             : Float,
+    <span class="hljs-string">"INTEGER"</span>           : Integer,
+    <span class="hljs-string">"PERIOD"</span>            : PeriodOfTime,
+    <span class="hljs-string">"RECUR"</span>             : RecurrenceRule,
+    <span class="hljs-string">"TEXT"</span>              : Text,
+    <span class="hljs-string">"TIME"</span>              : Time,
+    <span class="hljs-string">"URI"</span>               : URI,
+    <span class="hljs-string">"UTC-OFFSET"</span>        : UTCOffset
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <h3 id="function-getvalueparameter">Function: getValueParameter</h3>
+<blockquote>
+<p>Tries to find the name of <code>PropertyParameter</code> named <code>VALUE</code> that contains information about the type of <code>Property</code>.</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getValueParameter</span><span class="hljs-params">(propertyParameters)</span> </span>{
+    <span class="hljs-keyword">if</span> (!propertyParameters || !propertyParameters.length) { <span class="hljs-keyword">return</span>; }
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; propertyParameters.length; i++) {
+        <span class="hljs-keyword">if</span> (propertyParameters[i].name === <span class="hljs-string">"VALUE"</span>) {
+            <span class="hljs-keyword">return</span> propertyParameters[i];
+        }
+    }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <h3 id="function-getvalue">Function: getValue</h3>
+<blockquote>
+<p>Returns an instance of <code>PropertyValue</code> or <code>PropertyMultipleValue</code> depending on specified parameters.
+The particular type of object is specified by <code>PropertyParameter</code> named ‘VALUE’ or will be mapped from <code>propertyName</code>.</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getValue</span><span class="hljs-params">(propertyName, propertyValue, propertyParameters)</span> </span>{
+    <span class="hljs-keyword">let</span> mapping = valuePropertyParameterMapping[(getValueParameter(propertyParameters) || {}).value]
+        || valueMapping[propertyName]
+        || valueMapping[<span class="hljs-string">"DEFAULT"</span>];
+    <span class="hljs-keyword">let</span> containsMultipleSeparator = propertyValue &amp;&amp; splitSafe(propertyValue, (PropertyMultipleValue.__format.separator)).length &gt; <span class="hljs-number">1</span>;
+
+    mapping = <span class="hljs-built_in">Array</span>.isArray(mapping) ? mapping[<span class="hljs-number">0</span>] : mapping;
+
+    <span class="hljs-keyword">if</span> (mapping.isMultiple === <span class="hljs-literal">true</span> &amp;&amp; containsMultipleSeparator) {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> PropertyMultipleValue(mapping).convertFromString(propertyValue);
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> mapping().convertFromString(propertyValue);
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

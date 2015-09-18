@@ -1,3 +1,4 @@
+
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23,6 +24,7 @@ var _moment = require("moment");
 var _moment2 = _interopRequireDefault(_moment);
 
 var PropertyValue = (function () {
+
     function PropertyValue() {
         _classCallCheck(this, PropertyValue);
 
@@ -30,6 +32,12 @@ var PropertyValue = (function () {
     }
 
     _createClass(PropertyValue, [{
+        key: "clear",
+        value: function clear() {
+            this.value = null;
+            return this;
+        }
+    }, {
         key: "toString",
         value: function toString() {
             return this.value && this.value.toString();
@@ -38,12 +46,6 @@ var PropertyValue = (function () {
         key: "toJSON",
         value: function toJSON() {
             return this.value;
-        }
-    }, {
-        key: "clear",
-        value: function clear() {
-            this.value = null;
-            return this;
         }
     }, {
         key: "setValue",
@@ -124,7 +126,6 @@ var PropertyMultipleValue = (function () {
 })();
 
 exports.PropertyMultipleValue = PropertyMultipleValue;
-
 PropertyMultipleValue.__format = {
     separator: ","
 };
@@ -137,7 +138,6 @@ var Binary = (function (_PropertyValue) {
 
         _get(Object.getPrototypeOf(Binary.prototype), "constructor", this).apply(this, arguments);
     }
-
     return Binary;
 })(PropertyValue);
 
@@ -200,7 +200,6 @@ var CalendarUserAddress = (function (_PropertyValue3) {
 
         _get(Object.getPrototypeOf(CalendarUserAddress.prototype), "constructor", this).apply(this, arguments);
     }
-
     return CalendarUserAddress;
 })(PropertyValue);
 
@@ -385,7 +384,6 @@ var Duration = (function (_PropertyValue6) {
 
         _get(Object.getPrototypeOf(Duration.prototype), "constructor", this).apply(this, arguments);
     }
-
     return Duration;
 })(PropertyValue);
 
@@ -578,7 +576,6 @@ var PeriodOfTime = (function (_PropertyValue10) {
 
         _get(Object.getPrototypeOf(PeriodOfTime.prototype), "constructor", this).apply(this, arguments);
     }
-
     return PeriodOfTime;
 })(PropertyValue);
 
@@ -592,7 +589,6 @@ var RecurrenceRule = (function (_PropertyValue11) {
 
         _get(Object.getPrototypeOf(RecurrenceRule.prototype), "constructor", this).apply(this, arguments);
     }
-
     return RecurrenceRule;
 })(PropertyValue);
 
@@ -730,7 +726,6 @@ var URI = (function (_PropertyValue14) {
 
         _get(Object.getPrototypeOf(URI.prototype), "constructor", this).apply(this, arguments);
     }
-
     return URI;
 })(PropertyValue);
 
@@ -792,7 +787,6 @@ Integer.isMultiple = true;
 PeriodOfTime.isMultiple = true;
 Time.isMultiple = true;
 Text.isMultiple = false;
-
 var valueMapping = {
     "CALSCALE": Text,
     "METHOD": Text,
@@ -842,19 +836,7 @@ var valueMapping = {
     "REQUEST-STATUS": Text,
     "DEFAULT": Text
 };
-
-var valueMultipleMapping = {
-    "DATE": PropertyMultipleValue,
-    "DATE-TIME": PropertyMultipleValue,
-    "DURATION": PropertyMultipleValue,
-    "FLOAT": PropertyMultipleValue,
-    "INTEGER": PropertyMultipleValue,
-    "PERIOD": PropertyMultipleValue,
-    "TIME": PropertyMultipleValue,
-    "TEXT": Text
-};
-
-var valueParameterMapping = {
+var valuePropertyParameterMapping = {
     "BINARY": Binary,
     "BOOLEAN": Boolean,
     "CAL-ADDRESS": URI,
@@ -870,7 +852,6 @@ var valueParameterMapping = {
     "URI": URI,
     "UTC-OFFSET": UTCOffset
 };
-
 function getValueParameter(propertyParameters) {
     if (!propertyParameters || !propertyParameters.length) {
         return;
@@ -884,7 +865,7 @@ function getValueParameter(propertyParameters) {
 }
 
 function getValue(propertyName, propertyValue, propertyParameters) {
-    var mapping = valueParameterMapping[(getValueParameter(propertyParameters) || {}).value] || valueMapping[propertyName] || valueMapping["DEFAULT"];
+    var mapping = valuePropertyParameterMapping[(getValueParameter(propertyParameters) || {}).value] || valueMapping[propertyName] || valueMapping["DEFAULT"];
     var containsMultipleSeparator = propertyValue && (0, _util.splitSafe)(propertyValue, PropertyMultipleValue.__format.separator).length > 1;
 
     mapping = Array.isArray(mapping) ? mapping[0] : mapping;
