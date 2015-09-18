@@ -8,11 +8,11 @@ export function removePattern(text, regexp) {
 }
 
 export function mapToString(entry) {
-    return entry.toString();
+    return entry && entry.toString() || "";
 }
 
 export function mapToJSON(entry) {
-    return entry.toJSON();
+    return entry && entry.toJSON() || null;
 }
 
 export function splitSafe(text, separator) {

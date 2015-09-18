@@ -25,7 +25,7 @@ var Calendar = (function (_BlockType) {
         _classCallCheck(this, Calendar);
 
         _get(Object.getPrototypeOf(Calendar.prototype), "constructor", this).call(this);
-        this.type = "CALENDAR";
+        this.type = "VCALENDAR";
     }
 
     return Calendar;

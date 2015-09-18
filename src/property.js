@@ -10,12 +10,9 @@ export class Property {
         this.parameters = [];
         this.name       = null;
         this.value      = null;
-        this.error      = undefined;
         return this;
     }
     toString() {
-        if (this.error) { return this.error; }
-
         let name = this.name;
 
         if (this.parameters.length) {
@@ -23,7 +20,7 @@ export class Property {
             name = [ name, parameters ].join(Property.__format.separatorParameter);
         }
 
-        let value = name + Property.__format.separatorProperty + this.value.toString();
+        let value = `${name}${Property.__format.separatorProperty}${this.value && this.value.toString()}`;
         let returnValue = value.slice(0, Property.__format.lineMaxLength);
         let rest = value.slice(Property.__format.lineMaxLength);
 
@@ -36,8 +33,6 @@ export class Property {
         return returnValue;
     }
     toJSON() {
-        if (this.error) { return { error: this.error }; }
-
         return {
             name        : this.name,
             parameters  : this.parameters.map(mapToJSON),

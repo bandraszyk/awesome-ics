@@ -27,16 +27,11 @@ var Property = (function () {
             this.parameters = [];
             this.name = null;
             this.value = null;
-            this.error = undefined;
             return this;
         }
     }, {
         key: "toString",
         value: function toString() {
-            if (this.error) {
-                return this.error;
-            }
-
             var name = this.name;
 
             if (this.parameters.length) {
@@ -44,7 +39,7 @@ var Property = (function () {
                 name = [name, parameters].join(Property.__format.separatorParameter);
             }
 
-            var value = name + Property.__format.separatorProperty + this.value.toString();
+            var value = "" + name + Property.__format.separatorProperty + (this.value && this.value.toString());
             var returnValue = value.slice(0, Property.__format.lineMaxLength);
             var rest = value.slice(Property.__format.lineMaxLength);
 
@@ -59,10 +54,6 @@ var Property = (function () {
     }, {
         key: "toJSON",
         value: function toJSON() {
-            if (this.error) {
-                return { error: this.error };
-            }
-
             return {
                 name: this.name,
                 parameters: this.parameters.map(_util.mapToJSON),

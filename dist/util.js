@@ -21,11 +21,11 @@ function removePattern(text, regexp) {
 }
 
 function mapToString(entry) {
-    return entry.toString();
+    return entry && entry.toString() || "";
 }
 
 function mapToJSON(entry) {
-    return entry.toJSON();
+    return entry && entry.toJSON() || null;
 }
 
 function splitSafe(text, separator) {

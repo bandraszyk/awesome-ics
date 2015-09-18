@@ -9,7 +9,7 @@ import { PropertyValue as PropertyValueType, PropertyMultipleValue, Binary, Bool
 export class Calendar extends BlockType {
     constructor() {
         super();
-        this.type = "CALENDAR";
+        this.type = "VCALENDAR";
     }
 }
 

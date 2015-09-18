@@ -106,6 +106,9 @@ export class Date extends PropertyValue {
     toString() {
         return this.value && this.value.format(Date.__format.date);
     }
+    toJSON() {
+        return this.value && this.value.format(Date.__format.date) || null;
+    }
     setValue(value) {
         if (!moment.isMoment(value)) {
             throw new Error("[Date] [setValue()] The value must be an instance of `Moment`");
@@ -196,7 +199,7 @@ export class DateTime extends PropertyValue {
     }
     setIsFixedValue(isFixed) {
         if (!this.value.time) { this.value.time = new Time(); }
-        this.value.time = new Time().setIsFixed(isFixed);
+        this.value.time.setIsFixed(isFixed);
         return this;
     }
 }
@@ -337,7 +340,15 @@ export class Time extends PropertyValue {
     toString() {
         if (!this.value || !this.value.time) { return ""; }
 
-        return this.value.time.format(Time.__format.time) + (!this.value.isFixed && Time.__format.timeUTC || "");
+        return `${this.value.time.format(Time.__format.time)}${!this.value.isFixed ? Time.__format.timeUTC : ""}`;
+    }
+    toJSON() {
+        if (!this.value) { return { isFixed: null, time: null }; }
+
+        return {
+            isFixed : this.value.isFixed,
+            time    : this.value.time && this.value.time.format(Time.__format.time) || null
+        }
     }
     convertFromString(string) {
         if (isEmptyString(string)) { return this.clear(); }
@@ -392,6 +403,9 @@ export class URI extends PropertyValue {
 export class UTCOffset extends PropertyValue {
     toString() {
         return this.value && this.value.format(UTCOffset.__format.offset);
+    }
+    toJSON() {
+        return this.value && this.value.format(UTCOffset.__format.date) || null;
     }
     setValue(value) {
         if (!moment.isMoment(value)) {

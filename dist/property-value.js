@@ -221,6 +221,11 @@ var Date = (function (_PropertyValue4) {
             return this.value && this.value.format(Date.__format.date);
         }
     }, {
+        key: "toJSON",
+        value: function toJSON() {
+            return this.value && this.value.format(Date.__format.date) || null;
+        }
+    }, {
         key: "setValue",
         value: function setValue(value) {
             if (!_moment2["default"].isMoment(value)) {
@@ -358,7 +363,7 @@ var DateTime = (function (_PropertyValue5) {
             if (!this.value.time) {
                 this.value.time = new Time();
             }
-            this.value.time = new Time().setIsFixed(isFixed);
+            this.value.time.setIsFixed(isFixed);
             return this;
         }
     }]);
@@ -640,7 +645,19 @@ var Time = (function (_PropertyValue13) {
                 return "";
             }
 
-            return this.value.time.format(Time.__format.time) + (!this.value.isFixed && Time.__format.timeUTC || "");
+            return "" + this.value.time.format(Time.__format.time) + (!this.value.isFixed ? Time.__format.timeUTC : "");
+        }
+    }, {
+        key: "toJSON",
+        value: function toJSON() {
+            if (!this.value) {
+                return { isFixed: null, time: null };
+            }
+
+            return {
+                isFixed: this.value.isFixed,
+                time: this.value.time && this.value.time.format(Time.__format.time) || null
+            };
         }
     }, {
         key: "convertFromString",
@@ -732,6 +749,11 @@ var UTCOffset = (function (_PropertyValue15) {
         key: "toString",
         value: function toString() {
             return this.value && this.value.format(UTCOffset.__format.offset);
+        }
+    }, {
+        key: "toJSON",
+        value: function toJSON() {
+            return this.value && this.value.format(UTCOffset.__format.date) || null;
         }
     }, {
         key: "setValue",
