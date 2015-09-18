@@ -4,7 +4,7 @@
 
 The library is designed for developers who want to support iCalendar functionality directly in their nodejs code. The code is written in ES6 and then transformed to ES5 with the use of [Babel](https://babeljs.io/). The objects were designed according to [rfc5545](http://tools.ietf.org/html/rfc5545) standard specification.
 
-The library is covered by 181 jasmine specs splited in 15 suites. Tests are using destination files in ES5.
+The library is covered by 181 jasmine specs splitted in 15 suites. Tests are using destination files written in ES5.
 
 Usage
 -----------------
@@ -12,7 +12,7 @@ Usage
 Installation:
 
 ```
-npm install --safe awesome-ics
+npm install --save awesome-ics
 ```
 
 ### Create Calendar
@@ -41,7 +41,7 @@ var calendar = new AwesomeICS.Calendar()
             .addProperty(new AwesomeICS.Property().setName("SUMMARY").setValue(summary)));
 ```
 
-First basic method allows to return calendar as string that could be saved to a file and share with others, e.g. by email.
+First basic method allows to return calendar as string that could be saved to a file and shared with people, e.g. by email.
 
 ```
 calandar.toString();
@@ -57,7 +57,7 @@ END:VCALENDAR
 */
 ```
 
-Second basic method allows to return calendar as JSON that could give better overview about the structure.
+Second basic method allows to return calendar as JSON that gives better overview about the structure.
 
 ```
 calandar.toJSON();
@@ -109,7 +109,7 @@ calandar.toJSON();
 */
 ```
 
-After sharing the file could be simply added to calendar:
+The final file (saved in string format) could be simply added to calendar:
 
 ![alt Awesome ICS Event in Calendar](http://bandraszyk.github.io/awesome-ics/event.png)
 
@@ -124,12 +124,12 @@ var calendar = new AwesomeICS.Calendar().convertFromString(icsFile);
 
 ```
 
-As in prevoius example there is a possibility to convert to string or JSON.
+As in previous example there is a possibility to convert such object to string or JSON.
 
 Details
 -----------------
 
-### Content
+### Library Content
 
 ```
 var AwesomeICS  = require("awesome-ics");
@@ -202,7 +202,7 @@ Property
 
 ### PropertyParameter
 
-This is an element that needs to be attached to `Property` as one of `parameters`. It defines special options for `Parameter` like encoding, value type, etc. The `PropertyParameter`'s interface is as follows:
+This element needs to be attached to `Property` as one of `parameters`. It defines special options for `Parameter` like encoding, value type, etc. The `PropertyParameter`'s interface is as follows:
 
 ````
 PropertyParameter
@@ -214,35 +214,46 @@ PropertyParameter
 --- convertFromString(string) [method]
 --- setName(name) [method]
 --- setValue(value) [method]
---- ... other methods depend on particular type
 ```
 
 ### PropertyValue
 
-This is an element that needs to be attached to `Property` as `value`. The `PropertyValue`'s interface is as follows:
+This  element needs to be attached to `Property` as `value`. The `PropertyValue`'s interface is as follows:
 
 ````
 PropertyValue
---- name [string]
 --- value [string]
 --- clear() [method]
 --- toString() [method]
 --- toJSON() [method]
 --- convertFromString(string) [method]
---- setName(name) [method]
 --- setValue(value) [method]
+--- ... other methods depend on particular type
 ```
 
-The library includes the following specific `PropertyValues` types implementation: `Binary`, `Boolean`, `CalendarUserAddress`, `Date`, `DateTime`, `Duration`, `PropertyValue.Float`, `Geo`, `PropertyValue.Integer`, `PeriodOfTime`, `RecurrenceRule`, `Text`, `Time`, `URI`, `UTCOffset`
+The library includes the following specific `PropertyValues` types implementation: `Binary`, `Boolean`, `CalendarUserAddress`, `Date`, `DateTime`, `Duration`, `PropertyValue.Float`, `Geo`, `PropertyValue.Integer`, `PeriodOfTime`, `RecurrenceRule`, `Text`, `Time`, `URI`, `UTCOffset`.
 
 ### PropertyMultipleValue
 
+This  element needs to be attached to `Property` as `value`. It contains an array of `PropertyValue`s as value so more than one value of given type can be specified as `Property`\s value.  The `PropertyMultipleValue`'s interface is as follows:
+
+````
+PropertyMultipleValue
+--- value [string]
+--- clear() [method]
+--- toString() [method]
+--- toJSON() [method]
+--- convertFromString(string) [method]
+--- setValue(value) [method]
+```
+
+Only several types support multiple values: `Date`, `DateTime`, `Duration`, `Float`, `Integer`, `PeriodOfTime`, `Time`
 
 ### Other
 
-Every method returns current instance of the object so operations can be chained, except of toString and toJSON that return `string` and `JSON` accordingly. It's recommended to use implemented methods instead or operating directly on class's members because they contain type validation.
+Every method returns __current instance__ of the object so operations can be __chained__, except of `toString` and `toJSON` that return `string` and `JSON` accordingly. It's recommended to use implemented methods instead or operating directly on class's members because they contain type validation.
 
-For more specific details please see Annotated source section, especially for `src/property-value` that contains description of interfeaces for every single `PropertyValue` child class.
+For more specific details please see __Annotated source__ section, especially for `src/property-value` that contains description of every single `PropertyValue` child class.
 
 Annotated source
 -----------------
