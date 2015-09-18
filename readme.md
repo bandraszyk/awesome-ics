@@ -3,14 +3,8 @@
 
 
 The library is designed for developers who want to support iCalendar functionality directly in their nodejs code.
-
-###Code
-
 The code is written in ES6 and then transformed to ES5 with the use of [Babel](https://babeljs.io/).
-
-The object were designed according to [rfc5545](http://tools.ietf.org/html/rfc5545) standard specification.
-
-###Tests
+The objects were designed according to [rfc5545](http://tools.ietf.org/html/rfc5545) standard specification.
 
 The library is covered by 181 jasmine specs splited in 15 suites. Tests are using destination files in ES5.
 
@@ -132,21 +126,48 @@ var calendar = new AwesomeICS.Calendar().convertFromString(icsFile);
 
 ```
 
-As in prevoius example there is a possibility to convert to string of JSON object.
+As in prevoius example there is a possibility to convert to string or JSON.
 
 Details
 -----------------
 
+### Calendar
 
+Calendar is a basic object that you should start from. Behind the scene it's just a `Block` object with `type` set to `VCALENDAR`.
+
+### Block
+
+This is a basic element used to building calendars. The `Block`'s interface is as follows:
+
+````
+Block
+--- properties [Array of Property]
+--- blocks [Array of Block]
+--- type [string]
+--- addBlock(block) [method]
+--- addProperty(property) [method]
+--- setType(type) [method]
+```
+
+Every method returns current instance of the object so operations can be chained.
+
+### Property
+
+### PropertyParameter
+
+### PropertyValue
+
+### PropertyMultipleValue
 
 For more specific details please see Annotated source section.
 
 Annotated source
 -----------------
-[src/awesome-ics.js](http://bandraszyk.github.io/awesome-rating/docs/awesome-ics.html)
-[src/block.js](http://bandraszyk.github.io/awesome-rating/docs/block.html)
-[src/property.js](http://bandraszyk.github.io/awesome-rating/docs/property.html)
-[src/property-parameter.js](http://bandraszyk.github.io/awesome-rating/docs/property-parameter.html)
-[src/property-value.js](http://bandraszyk.github.io/awesome-rating/docs/property-value.html)
-[src/util.js](http://bandraszyk.github.io/awesome-rating/docs/util.html)
+
+- [src/awesome-ics.js](http://bandraszyk.github.io/awesome-rating/docs/awesome-ics.html)
+- [src/block.js](http://bandraszyk.github.io/awesome-rating/docs/block.html)
+- [src/property.js](http://bandraszyk.github.io/awesome-rating/docs/property.html)
+- [src/property-parameter.js](http://bandraszyk.github.io/awesome-rating/docs/property-parameter.html)
+- [src/property-value.js](http://bandraszyk.github.io/awesome-rating/docs/property-value.html)
+- [src/util.js](http://bandraszyk.github.io/awesome-rating/docs/util.html)
 
