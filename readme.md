@@ -2,9 +2,7 @@
 ==============
 
 
-The library is designed for developers who want to support iCalendar functionality directly in their nodejs code.
-The code is written in ES6 and then transformed to ES5 with the use of [Babel](https://babeljs.io/).
-The objects were designed according to [rfc5545](http://tools.ietf.org/html/rfc5545) standard specification.
+The library is designed for developers who want to support iCalendar functionality directly in their nodejs code. The code is written in ES6 and then transformed to ES5 with the use of [Babel](https://babeljs.io/). The objects were designed according to [rfc5545](http://tools.ietf.org/html/rfc5545) standard specification.
 
 The library is covered by 181 jasmine specs splited in 15 suites. Tests are using destination files in ES5.
 
@@ -131,35 +129,120 @@ As in prevoius example there is a possibility to convert to string or JSON.
 Details
 -----------------
 
+### Content
+
+```
+var AwesomeICS  = require("awesome-ics");
+/*
+AwesomeICS.Calendar
+AwesomeICS.Block
+AwesomeICS.Property
+AwesomeICS.PropertyParameter
+AwesomeICS.PropertyValue.Value
+AwesomeICS.PropertyValue.MultipleValue
+AwesomeICS.PropertyValue.Binary
+AwesomeICS.PropertyValue.Boolean
+AwesomeICS.PropertyValue.CalendarUserAddress
+AwesomeICS.PropertyValue.Date
+AwesomeICS.PropertyValue.DateTime
+AwesomeICS.PropertyValue.Duration
+AwesomeICS.PropertyValue.Float
+AwesomeICS.PropertyValue.Geo
+AwesomeICS.PropertyValue.Integer
+AwesomeICS.PropertyValue.PeriodOfTime
+AwesomeICS.PropertyValue.RecurrenceRule
+AwesomeICS.PropertyValue.Text
+AwesomeICS.PropertyValue.Time
+AwesomeICS.PropertyValue.URI
+AwesomeICS.PropertyValue.UTCOffset
+*/
+```
+
 ### Calendar
 
 Calendar is a basic object that you should start from. Behind the scene it's just a `Block` object with `type` set to `VCALENDAR`.
 
 ### Block
 
-This is a basic element used to building calendars. The `Block`'s interface is as follows:
+This element is used to define structure of calendar, can be treated as basic container. The `Block`'s interface is as follows:
 
 ````
 Block
 --- properties [Array of Property]
 --- blocks [Array of Block]
 --- type [string]
+--- clear() [method]
+--- toString() [method]
+--- toJSON() [method]
+--- convertFromString(string) [method]
 --- addBlock(block) [method]
 --- addProperty(property) [method]
 --- setType(type) [method]
 ```
 
-Every method returns current instance of the object so operations can be chained.
-
 ### Property
+
+This element needs to be attached to `Block`. It defines single attribute with `name` and `value`. The `Property`'s interface is as follows:
+
+````
+Property
+--- parameters [Array of PropertyParameter]
+--- blocks [Array of Block]
+--- name [string]
+--- value [PropertyValue or PropertyMultipleValue]
+--- clear() [method]
+--- toString() [method]
+--- toJSON() [method]
+--- convertFromString(string) [method]
+--- addParameter(parameter) [method]
+--- setName(property) [method]
+--- setValue(value) [method]
+
+```
 
 ### PropertyParameter
 
+This is an element that needs to be attached to `Property` as one of `parameters`. It defines special options for `Parameter` like encoding, value type, etc. The `PropertyParameter`'s interface is as follows:
+
+````
+PropertyParameter
+--- name [string]
+--- value [object]
+--- clear() [method]
+--- toString() [method]
+--- toJSON() [method]
+--- convertFromString(string) [method]
+--- setName(name) [method]
+--- setValue(value) [method]
+--- ... other methods depend on particular type
+```
+
 ### PropertyValue
+
+This is an element that needs to be attached to `Property` as `value`. The `PropertyValue`'s interface is as follows:
+
+````
+PropertyValue
+--- name [string]
+--- value [string]
+--- clear() [method]
+--- toString() [method]
+--- toJSON() [method]
+--- convertFromString(string) [method]
+--- setName(name) [method]
+--- setValue(value) [method]
+```
+
+The library includes the following specific `PropertyValues` types implementation: `Binary`, `Boolean`, `CalendarUserAddress`, `Date`, `DateTime`, `Duration`, `PropertyValue.Float`, `Geo`, `PropertyValue.Integer`, `PeriodOfTime`, `RecurrenceRule`, `Text`, `Time`, `URI`, `UTCOffset`
 
 ### PropertyMultipleValue
 
-For more specific details please see Annotated source section.
+
+### Other
+
+Every method returns current instance of the object so operations can be chained, except of toString and toJSON that return `string` and `JSON` accordingly. It's recommended to use implemented methods instead or operating directly on class's members because they contain type validation.
+
+For more specific details please see Annotated source section, especially for `src/property-value` that contains description of interfeaces for every single `PropertyValue` child class.
 
 Annotated source
 -----------------
