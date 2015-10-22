@@ -234,7 +234,7 @@ The library includes the following specific `PropertyValues` types implementatio
 
 ### PropertyMultipleValue
 
-This  element needs to be attached to `Property` as `value`. It contains an array of `PropertyValue`s as value so more than one value of given type can be specified as `Property`\s value.  The `PropertyMultipleValue`'s interface is as follows:
+This  element needs to be attached to `Property` as `value`. It contains an array of `PropertyValue`s as value so more than one value of given type can be specified as `Property`'s value.  The `PropertyMultipleValue`'s interface is as follows:
 
 ````
 PropertyMultipleValue
