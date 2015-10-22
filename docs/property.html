@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>property.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="awesome-ics.html">
+                  awesome-ics.js
+                </a>
+              
+                
+                <a class="source" href="block.html">
+                  block.js
+                </a>
+              
+                
+                <a class="source" href="property-parameter.html">
+                  property-parameter.js
+                </a>
+              
+                
+                <a class="source" href="property-value.html">
+                  property-value.js
+                </a>
+              
+                
+                <a class="source" href="property.html">
+                  property.js
+                </a>
+              
+                
+                <a class="source" href="util.html">
+                  util.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>property.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <pre><code>Awesome ICS v0<span class="hljs-number">.1</span><span class="hljs-number">.0</span>
+http:<span class="hljs-comment">//bandraszyk.github.io/awesome-ico/</span>
+(c) <span class="hljs-number">2015</span> Bandro
+Awesome ICS may be freely distributed under the MIT license.
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+import { splitSafe, mapToJSON, mapToString, isEmptyString } from <span class="hljs-string">"./util"</span>;
+import { PropertyParameter } from <span class="hljs-string">"./property-parameter"</span>;
+import { getValue, PropertyValue, PropertyMultipleValue } from <span class="hljs-string">"./property-value"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h3 id="class-block">Class: Block</h3>
+<blockquote>
+<p>Basic element for building iCalendar objects. It contains type, child blocks and properties.</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-keyword">class</span> Property {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Initializes the instance with default values</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    constructor() {
+        <span class="hljs-keyword">this</span>.clear();
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Clears the <code>Property</code> by setting default values</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    clear() {
+        <span class="hljs-keyword">this</span>.parameters = [];
+        <span class="hljs-keyword">this</span>.name       = <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">this</span>.value      = <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Converts <code>Property</code> to string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    toString() {
+        <span class="hljs-keyword">let</span> name = <span class="hljs-keyword">this</span>.name;
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.parameters.length) {
+            <span class="hljs-keyword">let</span> parameters = <span class="hljs-keyword">this</span>.parameters.map(mapToString).join(Property.__format.separatorParameter);
+            name = `${name}${Property.__format.separatorParameter}${parameters}`;
+        }
+
+        <span class="hljs-keyword">let</span> value = `${name}${Property.__format.separatorProperty}${<span class="hljs-keyword">this</span>.value &amp;&amp; <span class="hljs-keyword">this</span>.value.toString()}`;
+        <span class="hljs-keyword">let</span> returnValue = value.slice(<span class="hljs-number">0</span>, Property.__format.lineMaxLength);
+        <span class="hljs-keyword">let</span> rest = value.slice(Property.__format.lineMaxLength);
+
+        <span class="hljs-keyword">while</span>(rest.length) {
+            rest = ` ${rest}`;
+            returnValue = returnValue.concat(Property.__format.newLine + rest.slice(<span class="hljs-number">0</span>, Property.__format.lineMaxLength));
+            rest = rest.slice(Property.__format.lineMaxLength);
+        }
+
+        <span class="hljs-keyword">return</span> returnValue;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Converts <code>Property</code> to JSON</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    toJSON() {
+        <span class="hljs-keyword">return</span> {
+            name        : <span class="hljs-keyword">this</span>.name,
+            parameters  : <span class="hljs-keyword">this</span>.parameters.map(mapToJSON),
+            value       : mapToJSON(<span class="hljs-keyword">this</span>.value)
+        };
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Converts <code>Block</code> from string, e.g.: ‘PropertyName;PropertyParameter=PropertyParameterValue:PropertyValue’</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    convertFromString(string) {
+        <span class="hljs-keyword">if</span> (isEmptyString(string)) { <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.clear(); }
+
+        <span class="hljs-keyword">this</span>.name       = splitSafe(string, Property.__format.separatorProperty)[<span class="hljs-number">0</span>];
+        <span class="hljs-keyword">this</span>.value      = string.slice(<span class="hljs-keyword">this</span>.name.length + <span class="hljs-number">1</span>);
+
+        <span class="hljs-keyword">let</span> parameters = splitSafe(<span class="hljs-keyword">this</span>.name, Property.__format.separatorParameter);
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.name.indexOf(Property.__format.separatorParameter) !== -<span class="hljs-number">1</span>) {
+            <span class="hljs-keyword">this</span>.name       = parameters[<span class="hljs-number">0</span>];
+            <span class="hljs-keyword">this</span>.parameters = parameters.slice(<span class="hljs-number">1</span>).map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(paramContent)</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> PropertyParameter().convertFromString(paramContent); });
+        }
+
+        <span class="hljs-keyword">this</span>.value = getValue(<span class="hljs-keyword">this</span>.name, <span class="hljs-keyword">this</span>.value, <span class="hljs-keyword">this</span>.parameters);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Sets <code>Property</code>‘s name that must be an instance of <code>string</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setName(name) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> name !== <span class="hljs-string">"string"</span> &amp;&amp; !(name <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">String</span>)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Property] [setName()] The name must be an instance of `String`"</span>);
+        }
+
+        <span class="hljs-keyword">this</span>.name = name;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Sets <code>Property</code>‘s value that must be an instance of <code>PropertyValue</code> or <code>PropertyMultipleValue</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setValue(value) {
+        <span class="hljs-keyword">if</span> (!(value <span class="hljs-keyword">instanceof</span> PropertyValue) &amp;&amp; !(value <span class="hljs-keyword">instanceof</span> PropertyMultipleValue)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Property] [setValue()] The value must be an instance of `PropertyValue` or `PropertyMultipleValue`"</span>);
+        }
+
+        <span class="hljs-keyword">this</span>.value = value;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Adds parameter to <code>Property</code>. The parameter must be an instance of <code>PropertyParameter</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    addParameter(parameter) {
+        <span class="hljs-keyword">if</span> (!(parameter <span class="hljs-keyword">instanceof</span> PropertyParameter)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"[Property] [addParameter()] The parameter must be an instance of `PropertyParameter`"</span>);
+        }
+        <span class="hljs-keyword">this</span>.parameters.push(parameter);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h3 id="static-members-for-property">Static members for: Property</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Property.__format = {
+    separatorProperty   : <span class="hljs-string">":"</span>,
+    separatorParameter  : <span class="hljs-string">";"</span>,
+    lineMaxLength       : <span class="hljs-number">72</span>,
+    newLine             : <span class="hljs-string">"\n"</span>,
+    multiLineBegin      : <span class="hljs-string">" "</span>
+};</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

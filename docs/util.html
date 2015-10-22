@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>util.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="awesome-ics.html">
+                  awesome-ics.js
+                </a>
+              
+                
+                <a class="source" href="block.html">
+                  block.js
+                </a>
+              
+                
+                <a class="source" href="property-parameter.html">
+                  property-parameter.js
+                </a>
+              
+                
+                <a class="source" href="property-value.html">
+                  property-value.js
+                </a>
+              
+                
+                <a class="source" href="property.html">
+                  property.js
+                </a>
+              
+                
+                <a class="source" href="util.html">
+                  util.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>util.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <pre><code>Awesome ICS v0<span class="hljs-number">.1</span><span class="hljs-number">.0</span>
+http:<span class="hljs-comment">//bandraszyk.github.io/awesome-ico/</span>
+(c) <span class="hljs-number">2015</span> Bandro
+Awesome ICS may be freely distributed under the MIT license.
+</code></pre>
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h3 id="function-removepattern">Function: removePattern</h3>
+<blockquote>
+<p>Removes all characters that match the specified regular expression</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removePattern</span><span class="hljs-params">(text, regexp)</span> </span>{
+    <span class="hljs-keyword">return</span> text.replace(regexp, <span class="hljs-string">""</span>);
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h3 id="function-trim">Function: trim</h3>
+<blockquote>
+<p>Removes empty spaces form beginning and ending of specified text</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">trim</span><span class="hljs-params">(text)</span> </span>{
+    <span class="hljs-keyword">let</span> trimmedBeginning = removePattern(text, <span class="hljs-regexp">/^\s+/g</span>);
+    <span class="hljs-keyword">return</span> removePattern(trimmedBeginning, <span class="hljs-regexp">/\s+$/g</span>);
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h3 id="function-maptostring">Function: mapToString</h3>
+<blockquote>
+<p>Calls <code>toSting</code> method on specified object ensuring that it exists</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mapToString</span><span class="hljs-params">(object)</span> </span>{
+    <span class="hljs-keyword">return</span> object &amp;&amp; object.toString() || <span class="hljs-string">""</span>;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h3 id="function-maptojson">Function: mapToJSON</h3>
+<blockquote>
+<p>Calls <code>toJSON</code> method on specified object ensuring that it exists</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mapToJSON</span><span class="hljs-params">(object)</span> </span>{
+    <span class="hljs-keyword">return</span> object &amp;&amp; object.toJSON() || <span class="hljs-literal">null</span>;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h3 id="function-splitsafe">Function: splitSafe</h3>
+<blockquote>
+<p>Splits the specified text with the use of separator taking into consideration quotation marks</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">splitSafe</span><span class="hljs-params">(text, separator)</span> </span>{
+    <span class="hljs-keyword">let</span> parts = text.split(separator);
+
+    <span class="hljs-keyword">if</span> (parts.length === <span class="hljs-number">1</span>) { <span class="hljs-keyword">return</span> parts; }
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> currentLineIndex = <span class="hljs-number">0</span>; currentLineIndex &lt; parts.length - <span class="hljs-number">1</span>; currentLineIndex++) {
+        <span class="hljs-keyword">let</span> line = parts[currentLineIndex];
+        <span class="hljs-keyword">let</span> matchQuotationMarks = line.match(<span class="hljs-regexp">/"/g</span>);
+        <span class="hljs-keyword">let</span> shouldBeContinued = !matchQuotationMarks || (matchQuotationMarks.length % <span class="hljs-number">2</span> === <span class="hljs-number">0</span>);
+
+        <span class="hljs-keyword">if</span> (shouldBeContinued) { <span class="hljs-keyword">continue</span>; }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Merge with previous line and remove from array current element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        parts[currentLineIndex] = `${line}${separator}${parts[currentLineIndex + <span class="hljs-number">1</span>]}`;
+        parts.splice(currentLineIndex + <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);
+    }
+
+    <span class="hljs-keyword">return</span> parts;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h3 id="function-splitsafelines">Function: splitSafeLines</h3>
+<blockquote>
+<p>Splits the specified for lines taking into consideration multi line text that start with empty space</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">splitSafeLines</span><span class="hljs-params">(text, format)</span> </span>{
+    <span class="hljs-keyword">let</span> lines = text.split(format &amp;&amp; format.newLine || <span class="hljs-string">"\n"</span>);
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> currentLineIndex = <span class="hljs-number">1</span>; currentLineIndex &lt; lines.length;) {
+        <span class="hljs-keyword">let</span> line = lines[currentLineIndex];
+        <span class="hljs-keyword">let</span> isContinuation = line[<span class="hljs-number">0</span>] === (format &amp;&amp; format.multiLineBegin || <span class="hljs-string">" "</span>);
+
+        <span class="hljs-keyword">if</span> (isContinuation) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Merge with previous line and remove from array current element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            lines[currentLineIndex - <span class="hljs-number">1</span>] = `${lines[currentLineIndex - <span class="hljs-number">1</span>]}${line.slice(<span class="hljs-number">1</span>)}`;
+            lines.splice(currentLineIndex, <span class="hljs-number">1</span>);
+            <span class="hljs-keyword">continue</span>;
+        }
+
+        currentLineIndex++;
+    }
+
+    <span class="hljs-keyword">return</span> lines.filter(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(line)</span> </span>{ <span class="hljs-keyword">return</span> line; });
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h3 id="function-isemptystring">Function: isEmptyString</h3>
+<blockquote>
+<p>Checks if specified text is an empty string</p>
+</blockquote>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>export <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isEmptyString</span><span class="hljs-params">(text)</span> </span>{
+    <span class="hljs-keyword">return</span> text === <span class="hljs-literal">undefined</span> || text === <span class="hljs-literal">null</span> || text.trim() === <span class="hljs-string">""</span>;
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
