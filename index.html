@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Awesome ICS v0.1.0</title>
+	<link rel="stylesheet" type="text/css" media="all" href="http://fonts.googleapis.com/css?family=Lora:400,700|Josefin+Sans" />
+	<link rel="stylesheet" type="text/css" media="all" href="styles/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" media="all"href="styles/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="styles/prettify.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="styles/prettify-theme.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="styles/styles.css" />
+	<script type="text/javascript" src="javascripts/modernizr.custom.77109.js"></script>
+</head>
+<body class="plugin-page">
+
+	<section class="full-container primary title">
+		<div class="container">
+			<h1>Awesome ICS </h1>
+			<h2>v0.1.0</h2>
+			<div class="rating rating-main"></div>
+			<div class="buttons">
+				<!-- GITHUB LINKS -->
+				<a href="https://github.com/bandraszyk/awesome-ics" target="_blank"><button type="button"><i class="fa fa-github"></i> View On <strong>GitHub</strong></button></a>
+				<a href="https://github.com/bandraszyk/awesome-ics/zipball/master"><button type="button"><i class="fa fa-file-archive-o"></i> Download <strong>ZIP File</strong></button></a>
+				<a href="https://github.com/bandraszyk/awesome-ics/tarball/master"><button type="button"><i class="fa fa-download"></i> Download <strong>TAR Ball</strong></button></a>
+				<!-- GITHUB LINKS -->
+			</div>
+		</div>
+	</section>
+
+	<header>
+		<div class="full-container secondary">
+			<div class="container">
+				<a href="http://www.rspective.com" target="_blank" class="rspective">
+				<span>
+					<object type="image/svg+xml" data="images/rspective.svg" >rspective</object>
+				</span>
+				</a>
+			</div>
+		</div>
+		<div class="full-container default">
+			<div class="container text-center">
+				<nav>
+					<ul>
+						<li>
+							<a href="#section-installation" data-menu-duration="500">Instalation</a>
+						</li>
+                        <li>
+							<a href="#section-usage" data-menu-duration="500">Usage</a>
+						</li>
+                        <li>
+							<a href="#section-details" data-menu-duration="500">Details</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</header>
+
+	<section class="full-container description">
+		<div class="container text-justify">
+			<p>
+				The library is designed for developers who want to support <b>iCalendar</b> functionality directly in their <b>nodejs</b> code. The code is written in ES6 and then transformed to ES5 with the use of Babel. 
+                The objects were designed according to <a href="https://tools.ietf.org/html/rfc5545" target="_blank"><b>rfc5545</b></a> standard specification.
+			</p>
+		</div>
+	</section>
+
+	<section class="full-container" id="section-installation"">
+		<div class="container">
+    		<h2>Installation</h2>
+    		<div class="row">
+				<div class="col-xs-12">
+<pre>
+npm install --save awesome-ics
+</pre>
+				</div>
+			</div>
+		</div>
+	</section>
+    
+    <section class="full-container" id="section-usage">
+		<div class="container">
+    		<h2>Usage</h2>
+    		<div class="row">
+				<div class="col-xs-12">
+					<h3>Create calendar</h3>
+					<p class="description text-justify">
+						
+					</p>
+<pre>
+var AwesomeICS  = require("awesome-ics");
+var moment      = require("moment");
+
+var summary     = new AwesomeICS.PropertyValue.Text().setValue("Christmas Eve");
+var description = new AwesomeICS.PropertyValue.Text().setValue("Please, remember about Christmas Eve");
+var dateStart   = new AwesomeICS.PropertyValue.DateTime().setDateValue(moment("2015-12-24"))
+                    .setTimeValue(moment("18:00", "HH:mm"))
+                    .setIsFixedValue(true);
+var dateEnd     = new AwesomeICS.PropertyValue.DateTime().setDateValue(moment("2015-12-26"))
+                    .setTimeValue(moment("23:59", "HH:mm"))
+                    .setIsFixedValue(true);
+
+
+var calendar = new AwesomeICS.Calendar()
+    .addBlock(
+        new AwesomeICS.Block()
+            .setType("VEVENT")
+            .addProperty(new AwesomeICS.Property().setName("DESCRIPTION").setValue(description))
+            .addProperty(new AwesomeICS.Property().setName("DTSTART").setValue(dateStart))
+            .addProperty(new AwesomeICS.Property().setName("DTEND").setValue(dateEnd))
+            .addProperty(new AwesomeICS.Property().setName("SUMMARY").setValue(summary)));
+</pre>
+				</div>
+                <div class="col-xs-12 col-md-6">
+					<h3>Read from file</h3>
+					<p class="description text-justify">
+						
+					</p>
+<pre>
+var AwesomeICS  = require("awesome-ics");
+var fs          = require("fs");
+
+var icsFile  = fs.readFileSync("./ics/my-file.ics", "utf8").trim();
+var calendar = new AwesomeICS.Calendar().convertFromString(icsFile);
+</pre>
+				</div>
+                <div class="col-xs-12 col-md-6">
+					<h3>calendar.toString()</h3>
+					<p class="description text-justify">
+						
+					</p>
+<pre>
+calandar.toString();
+/*
+BEGIN:VCALENDAR
+BEGIN:VEVENT
+DESCRIPTION:Please, remember about Christmas Eve
+DTSTART:20151224T180000
+DTEND:20151226T235900
+SUMMARY:Christmas Eve
+END:VEVENT
+END:VCALENDAR
+*/
+</pre>
+				</div>
+                <div class="col-xs-12">
+					<h3>calendar.toJSON()</h3>
+					<p class="description text-justify">
+						
+					</p>
+<pre>
+calandar.toJSON();
+/*
+{
+    "type": "VCALENDAR",
+    "properties": [],
+    "blocks": [
+        {
+            "type": "VEVENT",
+            "properties": [
+                {
+                    "name": "DESCRIPTION",
+                    "parameters": [],
+                    "value": "Please, remember about Christmas Eve"
+                },
+                {
+                    "name": "DTSTART",
+                    "parameters": [],
+                    "value": {
+                        "date": "20151224",
+                        "time": {
+                            "isFixed": true,
+                            "time": "180000"
+                        }
+                    }
+                },
+                {
+                    "name": "DTEND",
+                    "parameters": [],
+                    "value": {
+                        "date": "20151226",
+                        "time": {
+                            "isFixed": true,
+                            "time": "235900"
+                        }
+                    }
+                },
+                {
+                    "name": "SUMMARY",
+                    "parameters": [],
+                    "value": "Christmas Eve"
+                }
+            ],
+            "blocks": []
+        }
+    ]
+}
+*/
+</pre>
+				</div>
+			</div>
+		</div>
+	</section>
+    
+    <section class="full-container" id="section-details" data-menu-offset="-100">
+		<div class="container">
+    		<h2>Details</h2>
+    		<div class="row">
+				<div class="col-xs-12 col-md-6">
+					<h3>Library content</h3>
+					<p class="description text-justify">
+					</p>
+<pre>
+var AwesomeICS  = require("awesome-ics");
+/*
+AwesomeICS.Calendar
+AwesomeICS.Block
+AwesomeICS.Property
+AwesomeICS.PropertyParameter
+AwesomeICS.PropertyValue.Value
+AwesomeICS.PropertyValue.MultipleValue
+AwesomeICS.PropertyValue.Binary
+AwesomeICS.PropertyValue.Boolean
+AwesomeICS.PropertyValue.CalendarUserAddress
+AwesomeICS.PropertyValue.Date
+AwesomeICS.PropertyValue.DateTime
+AwesomeICS.PropertyValue.Duration
+AwesomeICS.PropertyValue.Float
+AwesomeICS.PropertyValue.Geo
+AwesomeICS.PropertyValue.Integer
+AwesomeICS.PropertyValue.PeriodOfTime
+AwesomeICS.PropertyValue.RecurrenceRule
+AwesomeICS.PropertyValue.Text
+AwesomeICS.PropertyValue.Time
+AwesomeICS.PropertyValue.URI
+AwesomeICS.PropertyValue.UTCOffset
+*/
+</pre>
+				</div>
+                <div class="col-xs-12 col-md-6">
+					<h3>Documentation</h3>
+					<p class="description text-justify">
+                        <ul class="text-left">
+                            <li><a target="_blank" href="https://github.com/bandraszyk/awesome-ics/blob/master/readme.md">Readme</a></li>
+                            <li>Annotated source: <a target="_blank" href="http://bandraszyk.github.io/awesome-ics/docs/awesome-ics.html">src/awesome-ics.js</a></li>
+                            <li>Annotated source: <a target="_blank" href="http://bandraszyk.github.io/awesome-ics/docs/block.html">src/block.js</a></li>
+                            <li>Annotated source: <a target="_blank" href="http://bandraszyk.github.io/awesome-ics/docs/property.html">src/property.js</a></li>
+                            <li>Annotated source: <a target="_blank" href="http://bandraszyk.github.io/awesome-ics/docs/property-parameter.html">src/property-parameter.js</a></li>
+                            <li>Annotated source: <a target="_blank" href="http://bandraszyk.github.io/awesome-ics/docs/property-value.html">src/property-value.js</a></li>
+                            <li>Annotated source: <a target="_blank" href="http://bandraszyk.github.io/awesome-ics/docs/util.html">src/util.js</a></li>
+                        </ul>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+		
+	<footer>
+	</footer>
+
+	<!-- START Loader -->
+	<div class="loader" id="page-loader">
+	    <div>
+	        <div class="spinner">
+	            <div class="square"></div>
+	            <div class="square"></div>
+	            <div class="square"></div>
+	            <div class="square"></div>
+	        </div>
+	    </div>
+	</div>
+	<!-- END Loader -->
+
+    <script type="text/javascript" src="javascripts/jquery.min.js"></script>
+	<script type="text/javascript" src="javascripts/jquery.sticky.js"></script>
+	<script type="text/javascript" src="javascripts/prettify.js"></script>
+	<script type="text/javascript" src="javascripts/skrollr.min.js"></script>
+	<script type="text/javascript" src="javascripts/skrollr.menu.min.js"></script>
+	<script type="text/javascript" src="javascripts/scripts.js"></script>
+</body>
+</html>
