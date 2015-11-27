@@ -1,4 +1,4 @@
-[Awesome ICS v0.1.2](http://bandraszyk.github.io/awesome-ics/)
+[Awesome ICS v0.1.3](http://bandraszyk.github.io/awesome-ics/)
 ==============
 
 
@@ -257,10 +257,10 @@ For more specific details please see __Annotated source__ section, especially fo
 Annotated source
 -----------------
 
-- [src/awesome-ics.js](http://bandraszyk.github.io/awesome-rating/docs/awesome-ics.html)
-- [src/block.js](http://bandraszyk.github.io/awesome-rating/docs/block.html)
-- [src/property.js](http://bandraszyk.github.io/awesome-rating/docs/property.html)
-- [src/property-parameter.js](http://bandraszyk.github.io/awesome-rating/docs/property-parameter.html)
-- [src/property-value.js](http://bandraszyk.github.io/awesome-rating/docs/property-value.html)
-- [src/util.js](http://bandraszyk.github.io/awesome-rating/docs/util.html)
+- [src/awesome-ics.js](http://bandraszyk.github.io/awesome-ics/docs/awesome-ics.html)
+- [src/block.js](http://bandraszyk.github.io/awesome-ics/docs/block.html)
+- [src/property.js](http://bandraszyk.github.io/awesome-ics/docs/property.html)
+- [src/property-parameter.js](http://bandraszyk.github.io/awesome-ics/docs/property-parameter.html)
+- [src/property-value.js](http://bandraszyk.github.io/awesome-ics/docs/property-value.html)
+- [src/util.js](http://bandraszyk.github.io/awesome-ics/docs/util.html)
 
