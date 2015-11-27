@@ -1,4 +1,4 @@
-[Awesome ICS v0.1.0](http://bandraszyk.github.io/awesome-ics/)
+[Awesome ICS v0.1.2](http://bandraszyk.github.io/awesome-ics/)
 ==============
 
 
