@@ -165,7 +165,7 @@ Calendar is a basic object that you should start from. Behind the scene it's jus
 
 This element is used to define structure of calendar, can be treated as basic container. The `Block`'s interface is as follows:
 
-````
+```
 Block
 --- properties [Array of Property]
 --- blocks [Array of Block]
@@ -183,7 +183,7 @@ Block
 
 This element needs to be attached to `Block`. It defines single attribute with `name` and `value`. The `Property`'s interface is as follows:
 
-````
+```
 Property
 --- parameters [Array of PropertyParameter]
 --- blocks [Array of Block]
@@ -203,7 +203,7 @@ Property
 
 This element needs to be attached to `Property` as one of `parameters`. It defines special options for `Parameter` like encoding, value type, etc. The `PropertyParameter`'s interface is as follows:
 
-````
+```
 PropertyParameter
 --- name [string]
 --- value [object]
@@ -219,7 +219,7 @@ PropertyParameter
 
 This  element needs to be attached to `Property` as `value`. The `PropertyValue`'s interface is as follows:
 
-````
+```
 PropertyValue
 --- value [string]
 --- clear() [method]
@@ -236,7 +236,7 @@ The library includes the following specific `PropertyValues` types implementatio
 
 This  element needs to be attached to `Property` as `value`. It contains an array of `PropertyValue`s as value so more than one value of given type can be specified as `Property`'s value.  The `PropertyMultipleValue`'s interface is as follows:
 
-````
+```
 PropertyMultipleValue
 --- value [string]
 --- clear() [method]
