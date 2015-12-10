@@ -44,7 +44,7 @@ var calendar = new AwesomeICS.Calendar()
 First basic method allows to return calendar as string that could be saved to a file and shared with people, e.g. by email.
 
 ```
-calandar.toString();
+calendar.toString();
 /*
 BEGIN:VCALENDAR
 BEGIN:VEVENT
@@ -60,7 +60,7 @@ END:VCALENDAR
 Second basic method allows to return calendar as JSON that gives better overview about the structure.
 
 ```
-calandar.toJSON();
+calendar.toJSON();
 /*
 {
     "type": "VCALENDAR",
